@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* -------------------- Seleção do desafio -------------------- */
-
   const challengeSelector = document.getElementById('challengeSelector');
   const challengeExperience = document.getElementById('challengeExperience');
   const startChallenge = document.getElementById('startChallenge');
@@ -71,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* -------------------- Seleção do treinamento -------------------- */
-
   const selector = document.getElementById('trainingSelector');
   const experience = document.getElementById('trainingExperience');
   const startTraining = document.getElementById('startTraining');
@@ -79,27 +77,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (startTraining && selector && experience) {
     startTraining.addEventListener('click', function () {
-      selector.style.display = 'none';
+      selector.closest('.training-blue-zone').style.display = 'none';
       experience.style.display = 'block';
       experience.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-      const titulo = document.getElementById('etapaTitulo');
-      if (titulo) {
-        titulo.classList.add('fade-in');
-      }
     });
   }
 
   if (changeTraining && selector && experience) {
     changeTraining.addEventListener('click', function () {
+      selector.closest('.training-blue-zone').style.display = 'block';
       experience.style.display = 'none';
-      selector.style.display = 'block';
-      selector.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
   /* -------------------- Treinamento guiado -------------------- */
-
   const trilha = window.CAIXAVERSO_TRILHA;
   const progressoInicial = window.CAIXAVERSO_PROGRESSO_INICIAL;
 
@@ -118,13 +110,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const titulo = document.getElementById('etapaTitulo');
   const instrucao = document.getElementById('etapaInstrucao');
   const dica = document.getElementById('dicaEtapa');
-  const campoLabel = document.getElementById('campoLabel');
   const contador = document.getElementById('etapaContador');
   const progressBar = document.getElementById('progress-bar');
-
   const acaoEsperadaTexto = document.getElementById('acaoEsperadaTexto');
   const supportFocus = document.getElementById('supportFocus');
   const simStatusBadge = document.getElementById('simStatusBadge');
+  const guidedCalloutTitle = document.getElementById('guidedCalloutTitle');
+  const guidedCalloutText = document.getElementById('guidedCalloutText');
 
   const checkObjetivo = document.getElementById('checkObjetivo');
   const checkCampo = document.getElementById('checkCampo');
@@ -138,19 +130,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const toast = document.getElementById('trainingToast');
   const acaoSimulada = document.getElementById('acaoSimulada');
 
-  const screenTipoConta = document.getElementById('screenTipoConta');
-  const screenDados = document.getElementById('screenDados');
-  const screenAcessibilidade = document.getElementById('screenAcessibilidade');
-  const screenDocumentacao = document.getElementById('screenDocumentacao');
-  const screenStatus = document.getElementById('screenStatus');
-
   function atualizarChecklist(passosConcluidos) {
     const itens = [checkObjetivo, checkCampo, checkAcao, checkConclusao];
 
     itens.forEach(function (item, index) {
-      if (!item) {
-        return;
-      }
+      if (!item) return;
 
       if (index < passosConcluidos) {
         item.classList.add('done');
@@ -160,121 +144,64 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  function limparCamposAtivos() {
+    document.querySelectorAll('.fake-form-field.active-step').forEach(function (el) {
+      el.classList.remove('active-step');
+    });
+  }
+
+  function destacarCampo(targetId) {
+    limparCamposAtivos();
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.classList.add('active-step');
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
   function calcularPercentualVisual() {
     if (!trilha.length) {
       return 0;
     }
-
     return Math.round((etapaIndex / trilha.length) * 100);
-  }
-
-  function atualizarTelaSimulada(etapa) {
-    if (!etapa) {
-      return;
-    }
-
-    if (screenTipoConta) {
-      screenTipoConta.textContent = etapa.ordem >= 1 ? 'Em análise' : 'Pendente';
-    }
-
-    if (screenDados) {
-      screenDados.textContent = etapa.ordem >= 2 ? 'Preenchimento iniciado' : 'Aguardando';
-    }
-
-    if (screenAcessibilidade) {
-      screenAcessibilidade.textContent = etapa.ordem >= 3 ? 'Orientação registrada' : 'Não informado';
-    }
-
-    if (screenDocumentacao) {
-      screenDocumentacao.textContent = etapa.ordem >= 4 ? 'Documentos simulados validados' : 'A validar';
-    }
-
-    if (screenStatus) {
-      if (etapa.ordem >= 6) {
-        screenStatus.textContent = 'Pronta para confirmação';
-      } else if (etapa.ordem >= 5) {
-        screenStatus.textContent = 'Em revisão';
-      } else {
-        screenStatus.textContent = 'Em simulação';
-      }
-    }
   }
 
   function renderEtapa() {
     const etapa = trilha[etapaIndex];
+    if (!etapa) return;
 
-    if (!etapa) {
-      return;
-    }
-
-    if (titulo) {
-      titulo.textContent = etapa.titulo;
-      titulo.classList.remove('fade-in');
-      void titulo.offsetWidth;
-      titulo.classList.add('fade-in');
-    }
-
-    if (instrucao) {
-      instrucao.textContent = etapa.instrucao;
-    }
-
-    if (dica) {
-      dica.textContent = etapa.dica;
-    }
-
-    if (campoLabel) {
-      campoLabel.textContent = etapa.campoSimulado;
-    }
-
-    if (acaoEsperadaTexto) {
-      acaoEsperadaTexto.textContent = etapa.acaoEsperada;
-    }
-
-    if (supportFocus) {
-      supportFocus.textContent = etapa.titulo;
-    }
-
-    if (simStatusBadge) {
-      simStatusBadge.textContent = `Etapa ${etapa.ordem} de ${trilha.length}`;
-    }
-
-    if (contador) {
-      contador.textContent = `${etapa.ordem}/${trilha.length}`;
-    }
+    if (titulo) titulo.textContent = etapa.titulo;
+    if (instrucao) instrucao.textContent = etapa.instrucao;
+    if (dica) dica.textContent = etapa.dica;
+    if (contador) contador.textContent = `${etapa.ordem}/${trilha.length}`;
+    if (acaoEsperadaTexto) acaoEsperadaTexto.textContent = etapa.acaoEsperada;
+    if (supportFocus) supportFocus.textContent = etapa.titulo;
+    if (simStatusBadge) simStatusBadge.textContent = `Etapa ${etapa.ordem} de ${trilha.length}`;
+    if (guidedCalloutTitle) guidedCalloutTitle.textContent = etapa.calloutTitle || etapa.titulo;
+    if (guidedCalloutText) guidedCalloutText.textContent = etapa.calloutText || etapa.instrucao;
 
     if (progressBar) {
-      const percentual = calcularPercentualVisual();
-      progressBar.style.width = `${percentual}%`;
+      progressBar.style.width = `${calcularPercentualVisual()}%`;
     }
 
-    atualizarTelaSimulada(etapa);
+    destacarCampo(etapa.targetId);
     atualizarChecklist(1);
   }
 
   function mostrarToast(html) {
-    if (!toast) {
-      return;
-    }
-
+    if (!toast) return;
     toast.style.display = 'block';
     toast.innerHTML = html;
-    toast.classList.remove('fade-in');
-    void toast.offsetWidth;
-    toast.classList.add('fade-in');
   }
 
   function falarTexto(texto) {
     if (!('speechSynthesis' in window)) {
-      mostrarToast(`
-        <h3>Leitura por voz indisponível</h3>
-        <p>Seu navegador não suporta leitura por voz neste momento.</p>
-      `);
+      mostrarToast('<h3>Leitura por voz indisponível</h3><p>Seu navegador não suporta leitura por voz.</p>');
       return;
     }
 
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = 'pt-BR';
-
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   }
@@ -296,11 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (repeat) {
     repeat.addEventListener('click', function () {
       const etapa = trilha[etapaIndex];
-
-      if (!etapa) {
-        return;
-      }
-
+      if (!etapa) return;
       falarTexto(`${etapa.titulo}. ${etapa.instrucao}. Dica: ${etapa.dica}`);
     });
   }
@@ -308,10 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (acaoSimulada) {
     acaoSimulada.addEventListener('click', function () {
       const etapa = trilha[etapaIndex];
-
-      if (!etapa) {
-        return;
-      }
+      if (!etapa) return;
 
       atualizarChecklist(3);
 
@@ -325,7 +245,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (complete) {
     complete.addEventListener('click', function () {
       atualizarChecklist(4);
-
       complete.disabled = true;
       complete.textContent = 'Salvando...';
 
@@ -336,16 +255,11 @@ document.addEventListener('DOMContentLoaded', function () {
           if (!response.ok) {
             throw new Error('Não foi possível salvar a etapa.');
           }
-
           return response.json();
         })
         .then(function (data) {
           if (progressBar) {
             progressBar.style.width = `${data.progressoPercentual}%`;
-          }
-
-          if (contador) {
-            contador.textContent = `${data.etapaAtual}/${data.totalEtapas}`;
           }
 
           if (data.desafioDesbloqueado) {
@@ -355,26 +269,15 @@ document.addEventListener('DOMContentLoaded', function () {
               <a class="btn btn-primary" href="/desafio">Ir para o quiz</a>
             `);
 
-            if (screenStatus) {
-              screenStatus.textContent = 'Treinamento concluído';
-            }
-
-            if (simStatusBadge) {
-              simStatusBadge.textContent = 'Trilha concluída';
-            }
-
-            if (complete) {
-              complete.textContent = 'Treinamento concluído';
-              complete.disabled = true;
-            }
-
+            if (simStatusBadge) simStatusBadge.textContent = 'Trilha concluída';
+            complete.textContent = 'Treinamento concluído';
+            complete.disabled = true;
             atualizarChecklist(4);
             return;
           }
 
           etapaIndex = Math.min(trilha.length - 1, data.etapaAtual);
           renderEtapa();
-          atualizarChecklist(1);
 
           mostrarToast(`
             <h3>Etapa concluída!</h3>

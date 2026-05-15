@@ -17,4 +17,8 @@ public class BadgeUsuarioRepository implements PanacheRepository<BadgeUsuario> {
     public boolean usuarioPossuiBadge(Usuario usuario, String nome) {
         return count("usuario = ?1 and nome = ?2", usuario, nome) > 0;
     }
+
+    public long apagarPorUsuario(Usuario usuario) {
+        return delete("usuario = ?1", usuario);
+    }
 }

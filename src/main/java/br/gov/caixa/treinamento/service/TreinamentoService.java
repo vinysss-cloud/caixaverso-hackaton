@@ -155,4 +155,31 @@ public class TreinamentoService {
                 .map(p -> Boolean.TRUE.equals(p.desafioDesbloqueado))
                 .orElse(false);
     }
+
+    @Transactional
+    public ProgressoTreinamentoUsuario reiniciarTrilha(String matricula, String codigoTreinamento) {
+        Usuario usuario = usuarioRepository.buscarPorMatricula(matricula)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
+        progressoRepository.apagarPorUsuarioECodigo(usuario, codigoTreinamento);
+
+        TrilhaTreinamentoDTO trilha = buscarTrilhaAberturaConta();
+
+        ProgressoTreinamentoUsuario progresso = new ProgressoTreinamentoUsuario();
+        progresso.usuario = usuario;
+        progresso.codigoTreinamento = codigoTreinamento;
+        progresso.tituloTreinamento = trilha.titulo;
+        progresso.etapaAtual = 0;
+        progresso.totalEtapas = trilha.etapas.size();
+        progresso.progressoPercentual = 0;
+        progresso.concluido = false;
+        progresso.desafioDesbloqueado = false;
+        progresso.desafioRespondido = false;
+        progresso.dataInicio = LocalDateTime.now();
+        progresso.dataConclusao = null;
+
+        progressoRepository.persist(progresso);
+
+        return progresso;
+    }
 }

@@ -206,5 +206,25 @@ public class GamificacaoService {
             usuario.desafiosRespondidos = 0;
         }
     }
+
+    @Transactional
+    public void zerarGamificacaoDoUsuario(String matricula) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.buscarPorMatricula(matricula);
+
+        if (usuarioOpt.isEmpty()) {
+            return;
+        }
+
+        Usuario usuario = usuarioOpt.get();
+
+        atividadeUsuarioRepository.apagarPorUsuario(usuario);
+        badgeUsuarioRepository.apagarPorUsuario(usuario);
+
+        usuario.pontuacaoTotal = 0;
+        usuario.nivel = 1;
+        usuario.progressoPercentual = 0;
+        usuario.trilhasConcluidas = 0;
+        usuario.desafiosRespondidos = 0;
+    }
 }
 

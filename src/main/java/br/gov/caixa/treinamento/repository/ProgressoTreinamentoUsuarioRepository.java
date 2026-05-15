@@ -13,4 +13,12 @@ public class ProgressoTreinamentoUsuarioRepository implements PanacheRepository<
     public Optional<ProgressoTreinamentoUsuario> buscarPorUsuarioECodigo(Usuario usuario, String codigoTreinamento) {
         return find("usuario = ?1 and codigoTreinamento = ?2", usuario, codigoTreinamento).firstResultOptional();
     }
+
+    public long apagarPorUsuarioECodigo(Usuario usuario, String codigoTreinamento) {
+        return delete("usuario = ?1 and codigoTreinamento = ?2", usuario, codigoTreinamento);
+    }
+
+    public long apagarPorUsuario(Usuario usuario) {
+        return delete("usuario = ?1", usuario);
+    }
 }

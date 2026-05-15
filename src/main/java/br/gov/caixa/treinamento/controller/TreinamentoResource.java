@@ -4,7 +4,6 @@ import br.gov.caixa.treinamento.model.ProgressoTreinamentoUsuario;
 import br.gov.caixa.treinamento.service.GamificacaoService;
 import br.gov.caixa.treinamento.service.TreinamentoService;
 import io.quarkus.qute.Template;
-import io.quarkus.qute.TemplateInstance;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.GET;
@@ -37,10 +36,12 @@ public class TreinamentoResource {
         }
 
         var trilha = treinamentoService.buscarTrilhaAberturaConta();
-        ProgressoTreinamentoUsuario progresso =
-                treinamentoService.iniciarOuBuscarProgresso(usuarioLogado, TreinamentoService.CODIGO_ABERTURA_CONTA);
 
-        gamificacaoService.registrarInicioTreinamento(usuarioLogado);
+        ProgressoTreinamentoUsuario progresso =
+                treinamentoService.iniciarOuBuscarProgresso(
+                        usuarioLogado,
+                        TreinamentoService.CODIGO_ABERTURA_CONTA
+                );
 
         return treinamento
                 .data("trilha", trilha)
@@ -56,7 +57,10 @@ public class TreinamentoResource {
         }
 
         ProgressoTreinamentoUsuario progresso =
-                treinamentoService.concluirProximaEtapa(usuarioLogado, TreinamentoService.CODIGO_ABERTURA_CONTA);
+                treinamentoService.concluirProximaEtapa(
+                        usuarioLogado,
+                        TreinamentoService.CODIGO_ABERTURA_CONTA
+                );
 
         gamificacaoService.registrarEtapaConcluida(usuarioLogado);
 
@@ -68,5 +72,22 @@ public class TreinamentoResource {
                 "concluido", progresso.concluido,
                 "desafioDesbloqueado", progresso.desafioDesbloqueado
         )).build();
+    }
+
+    @POST
+    @Path("/refazer")
+    public Response refazerTrilha(@CookieParam("usuarioLogado") String usuarioLogado) {
+        if (usuarioLogado == null || usuarioLogado.isBlank()) {
+            return Response.seeOther(URI.create("/login")).build();
+        }
+
+        gamificacaoService.zerarGamificacaoDoUsuario(usuarioLogado);
+
+        treinamentoService.reiniciarTrilha(
+                usuarioLogado,
+                TreinamentoService.CODIGO_ABERTURA_CONTA
+        );
+
+        return Response.seeOther(URI.create("/treinamento")).build();
     }
 }

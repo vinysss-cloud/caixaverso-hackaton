@@ -13,4 +13,8 @@ public class AtividadeUsuarioRepository implements PanacheRepository<AtividadeUs
     public List<AtividadeUsuario> listarPorUsuario(Usuario usuario) {
         return list("usuario = ?1 order by dataHora desc", usuario);
     }
+
+    public long apagarPorUsuario(Usuario usuario) {
+        return delete("usuario = ?1", usuario);
+    }
 }
