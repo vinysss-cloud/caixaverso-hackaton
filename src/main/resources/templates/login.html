@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Login - CaixaVerso</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="auth-page">
+<main class="auth-container">
+    <section class="auth-panel">
+        <h1>CaixaVerso Treinamento</h1>
+        <p>
+            Ambiente de treinamento acessível, gamificado e interativo para praticar
+            funcionalidades de forma segura.
+        </p>
+        <p><strong>Use apenas dados fictícios neste MVP.</strong></p>
+    </section>
+
+    <section class="auth-card">
+        <h2>Acessar plataforma</h2>
+
+        {#if erro}
+        <div class="alert erro">{erro}</div>
+        {/if}
+
+        {#if sucesso}
+        <div class="alert sucesso">{sucesso}</div>
+        {/if}
+
+        <form method="post" action="/login">
+            <div class="form-group">
+                <label for="matricula">Matrícula</label>
+                <input id="matricula" name="matricula" required>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input id="senha" name="senha" type="password" required>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Entrar</button>
+        </form>
+
+        <p style="margin-top:18px;">
+            Ainda não tem cadastro?
+            <a href="/cadastro"><strong>Criar cadastro</strong></a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

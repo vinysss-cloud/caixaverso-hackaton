@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Treinamento Guiado - CaixaVerso</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<header class="topnav" role="banner">
+    <div class="topnav-inner">
+        <a class="brand" href="/home" aria-label="CaixaVerso - Início">
+            <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
+            <span class="brand-name">CaixaVerso</span>
+        </a>
+
+        <nav class="nav-links" role="navigation" aria-label="Menu principal">
+            <a href="/home">Início</a>
+            <a href="/treinamento">Treinamento Guiado</a>
+            <a href="/desafio">Modo Desafio</a>
+            <a href="/atualizacao">Nova Funcionalidade</a>
+            <a href="/dashboard">Dashboard</a>
+        </nav>
+
+        <a class="nav-action" href="/logout">Sair</a>
+    </div>
+</header>
+
+<main class="container">
+
+    <header class="mission-panel card training-hero">
+        <span class="section-kicker">Central de treinamento</span>
+        <h1>Escolha uma trilha para começar</h1>
+        <p>
+            Selecione uma funcionalidade para iniciar uma simulação guiada.
+            Ao concluir todas as etapas, o quiz associado será desbloqueado.
+        </p>
+    </header>
+
+    <section id="trainingSelector" class="training-selector">
+
+        <div class="section-heading">
+            <span class="section-kicker">Trilhas disponíveis</span>
+            <h2>Qual treinamento você deseja fazer?</h2>
+            <p>
+                Para este MVP, a trilha disponível é abertura de conta bancária.
+                A estrutura já está preparada para novas funcionalidades futuramente.
+            </p>
+        </div>
+
+        <div class="training-choice-grid">
+
+            <article class="training-choice-card available" tabindex="0" aria-label="Selecionar treinamento de abertura de conta bancária">
+                <div class="choice-top">
+                    <span class="feature-icon">🏦</span>
+                    <span class="feature-tag">Disponível</span>
+                </div>
+
+                <h3>{trilha.titulo}</h3>
+
+                <p>
+                    Aprenda o fluxo de criação e abertura de uma conta bancária em ambiente simulado,
+                    com foco em acessibilidade, validação e revisão de dados.
+                </p>
+
+                <div class="choice-meta">
+                    <span>🧭 {trilha.etapas.size} etapas</span>
+                    <span>⭐ {trilha.xpConclusao} XP</span>
+                    <span>🔓 Desbloqueia quiz</span>
+                </div>
+
+                <div class="progress-label">
+                    <span>Seu progresso</span>
+                    <strong>{progresso.progressoPercentual}%</strong>
+                </div>
+
+                <div class="progress-mini">
+                    <i style="width:{progresso.progressoPercentual}%"></i>
+                </div>
+
+                <button type="button" id="startTraining" class="btn btn-primary">
+                    Iniciar treinamento
+                </button>
+            </article>
+
+            <article class="training-choice-card locked" aria-label="Treinamento em breve">
+                <div class="choice-top">
+                    <span class="feature-icon">💳</span>
+                    <span class="feature-tag">Em breve</span>
+                </div>
+
+                <h3>Cartões e serviços</h3>
+
+                <p>
+                    Simulação futura para treinamento sobre solicitação de cartão,
+                    validações e orientações de atendimento.
+                </p>
+
+                <div class="choice-meta">
+                    <span>🔒 Bloqueado no MVP</span>
+                </div>
+
+                <button type="button" class="btn btn-secondary" disabled>
+                    Em breve
+                </button>
+            </article>
+
+            <article class="training-choice-card locked" aria-label="Treinamento em breve">
+                <div class="choice-top">
+                    <span class="feature-icon">📄</span>
+                    <span class="feature-tag">Em breve</span>
+                </div>
+
+                <h3>Atualização cadastral</h3>
+
+                <p>
+                    Simulação futura para revisão de dados, atualização de informações
+                    e validação de campos obrigatórios.
+                </p>
+
+                <div class="choice-meta">
+                    <span>🔒 Bloqueado no MVP</span>
+                </div>
+
+                <button type="button" class="btn btn-secondary" disabled>
+                    Em breve
+                </button>
+            </article>
+
+        </div>
+    </section>
+
+    <div class="training-started-header">
+        <div>
+            <span class="section-kicker">Treinamento selecionado</span>
+            <h2>{trilha.titulo}</h2>
+            <p>{trilha.descricao}</p>
+        </div>
+
+        <button type="button" id="changeTraining" class="btn btn-secondary">
+            Trocar treinamento
+        </button>
+    </div>
+
+    <section class="training-layout training-layout-immersive">
+
+        <div class="training-main-stack">
+
+            <article class="card training-coach-card">
+                <div class="coach-top">
+                    <div>
+                        <span class="section-kicker">Etapa atual</span>
+                        <h2 id="etapaTitulo">Carregando etapa...</h2>
+                    </div>
+
+                    <div class="training-counter">
+                        <span id="etapaContador">{progresso.etapaAtual}/{progresso.totalEtapas}</span>
+                    </div>
+                </div>
+
+                <div class="progress progress-lg" aria-label="Progresso do treinamento">
+                    <div id="progress-bar" class="progress-bar" style="width: {progresso.progressoPercentual}%"></div>
+                </div>
+
+                <div class="coach-grid">
+                    <div class="coach-block coach-objective">
+                        <span class="coach-label">Objetivo da etapa</span>
+                        <p id="etapaInstrucao" class="training-instruction">
+                            A instrução da etapa será exibida aqui.
+                        </p>
+                    </div>
+
+                    <div class="coach-block coach-tip">
+                        <span class="coach-label">Dica de acessibilidade</span>
+                        <p id="dicaEtapa" class="coach-tip-text">
+                            Dica de acessibilidade da etapa.
+                        </p>
+                    </div>
+
+                    <div class="coach-block coach-action">
+                        <span class="coach-label">Ação esperada</span>
+                        <p id="acaoEsperadaTexto">
+                            Execute a próxima ação da simulação.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="training-actions training-actions-highlight">
+                    <button type="button" class="btn btn-secondary" id="prev">Anterior</button>
+                    <button type="button" class="btn btn-secondary" id="repeatInstruction">Ouvir instrução</button>
+                    <button type="button" class="btn btn-secondary" id="next">Próximo passo</button>
+                    <button type="button" class="btn btn-primary" id="completeStep">Concluir etapa</button>
+                </div>
+            </article>
+
+            <article class="card bank-simulation training-simulation-card" id="simulacao-area" tabindex="0" aria-label="Área simulada de abertura de conta">
+                <div class="sim-header">
+                    <div>
+                        <strong>Sistema Simulado de Abertura de Conta</strong>
+                        <span>Ambiente fictício e seguro para prática</span>
+                    </div>
+
+                    <div class="sim-badge" id="simStatusBadge">Em execução</div>
+                </div>
+
+                <div class="sim-body">
+                    <div class="simulation-highlight">
+                        <div class="highlight-title">Campo principal da etapa</div>
+                        <label id="campoLabel" for="campoSimulado">Campo da etapa</label>
+                        <input id="campoSimulado" placeholder="Preenchimento simulado">
+                        <button type="button" class="btn btn-secondary" id="acaoSimulada">
+                            Executar ação simulada
+                        </button>
+                    </div>
+
+                    <div class="simulated-screen">
+                        <div class="screen-line active">
+                            <span>Tipo de conta</span>
+                            <strong id="screenTipoConta">Pendente</strong>
+                        </div>
+
+                        <div class="screen-line">
+                            <span>Dados cadastrais</span>
+                            <strong id="screenDados">Aguardando</strong>
+                        </div>
+
+                        <div class="screen-line">
+                            <span>Acessibilidade</span>
+                            <strong id="screenAcessibilidade">Não informado</strong>
+                        </div>
+
+                        <div class="screen-line">
+                            <span>Documentação</span>
+                            <strong id="screenDocumentacao">A validar</strong>
+                        </div>
+
+                        <div class="screen-line">
+                            <span>Status da proposta</span>
+                            <strong id="screenStatus">Em simulação</strong>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <div id="trainingToast" class="feedback-card training-toast" style="display:none;"></div>
+
+            {#if progresso.desafioDesbloqueado}
+            <div class="feedback-card training-unlock-card">
+                <h3>Quiz desbloqueado!</h3>
+                <p>
+                    Você concluiu o treinamento de abertura de conta.
+                    Agora pode responder o desafio associado.
+                </p>
+                <a href="/desafio" class="btn btn-primary">Ir para o quiz</a>
+            </div>
+            {/if}
+
+        </div>
+
+        <aside class="training-side-stack">
+
+            <article class="card support-card">
+                <h3>Seu apoio na etapa</h3>
+                <div class="support-item">
+                    <span class="support-label">Foco do momento</span>
+                    <strong id="supportFocus">Executar a etapa atual</strong>
+                </div>
+
+                <div class="support-item">
+                    <span class="support-label">Progresso salvo</span>
+                    <strong>{progresso.progressoPercentual}%</strong>
+                </div>
+
+                <div class="support-item">
+                    <span class="support-label">Recompensa da trilha</span>
+                    <strong>{trilha.xpConclusao} XP + desbloqueio do quiz</strong>
+                </div>
+            </article>
+
+            <article class="card checklist-card">
+                <h3>Checklist da etapa</h3>
+
+                <ul class="step-checklist">
+                    <li id="checkObjetivo" class="done">Ler o objetivo da etapa</li>
+                    <li id="checkCampo">Interagir com o campo principal</li>
+                    <li id="checkAcao">Executar a ação simulada</li>
+                    <li id="checkConclusao">Marcar a etapa como concluída</li>
+                </ul>
+            </article>
+
+            <article class="card training-side">
+                <h2>Jornada da trilha</h2>
+
+                <ol class="timeline">
+                    {#for etapa in trilha.etapas}
+                    <li>
+                        <strong>{etapa.ordem}. {etapa.titulo}</strong>
+                        <span>{etapa.acaoEsperada}</span>
+                    </li>
+                    {/for}
+                </ol>
+            </article>
+
+        </aside>
+
+    </section>
+</main>
+
+<div class="accessibility-toolbar" aria-label="Ferramentas de acessibilidade">
+    <button type="button" id="fontPlus">A+</button>
+    <button type="button" id="fontMinus">A-</button>
+    <button type="button" id="contrastToggle">Alto contraste</button>
+</div>
+
+<script>
+    window.CAIXAVERSO_TRILHA = [
+      {
+        ordem: 1,
+        titulo: "Identificar o tipo de conta",
+        instrucao: "Escolha o tipo de conta mais adequado para o perfil do cliente fictício.",
+        dica: "Use TAB para navegar entre as opções e Enter para selecionar.",
+        campoSimulado: "Tipo de conta",
+        acaoEsperada: "Selecionar Conta Corrente ou Conta Poupança"
+      },
+      {
+        ordem: 2,
+        titulo: "Preencher dados cadastrais",
+        instrucao: "Preencha os dados básicos fictícios do cliente, como nome e data de nascimento.",
+        dica: "Não use dados reais. Este é um ambiente de treinamento.",
+        campoSimulado: "Dados cadastrais",
+        acaoEsperada: "Preencher campos obrigatórios"
+      },
+      {
+        ordem: 3,
+        titulo: "Informar necessidades de acessibilidade",
+        instrucao: "Registre se o cliente fictício possui alguma necessidade de acessibilidade para adaptar o atendimento.",
+        dica: "As informações são usadas apenas para simulação e adaptação do fluxo.",
+        campoSimulado: "Acessibilidade",
+        acaoEsperada: "Selecionar necessidade, se houver"
+      },
+      {
+        ordem: 4,
+        titulo: "Validar documentação",
+        instrucao: "Confira se todos os documentos fictícios obrigatórios foram informados antes de avançar.",
+        dica: "Observe os alertas visuais e mensagens de erro da tela.",
+        campoSimulado: "Documentação",
+        acaoEsperada: "Validar documentos simulados"
+      },
+      {
+        ordem: 5,
+        titulo: "Revisar proposta de abertura",
+        instrucao: "Revise os dados preenchidos antes de concluir a abertura da conta.",
+        dica: "A revisão evita retrabalho e inconsistências.",
+        campoSimulado: "Resumo da proposta",
+        acaoEsperada: "Conferir informações"
+      },
+      {
+        ordem: 6,
+        titulo: "Confirmar abertura da conta",
+        instrucao: "Finalize a simulação de abertura de conta e libere o quiz associado.",
+        dica: "Após concluir esta etapa, o desafio será desbloqueado.",
+        campoSimulado: "Confirmação",
+        acaoEsperada: "Concluir treinamento"
+      }
+    ];
+
+    window.CAIXAVERSO_PROGRESSO_INICIAL = {
+      etapaAtual: {progresso.etapaAtual},
+      totalEtapas: {progresso.totalEtapas},
+      progressoPercentual: {progresso.progressoPercentual},
+      desafioDesbloqueado: {progresso.desafioDesbloqueado}
+    };
+</script>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Cadastro - CaixaVerso</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="auth-page">
+
+<main class="auth-container cadastro-container">
+
+    <section class="auth-panel cadastro-panel">
+        <a class="brand auth-brand" href="/login" aria-label="CaixaVerso">
+            <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
+            <span class="brand-name">CaixaVerso</span>
+        </a>
+
+        <div class="auth-panel-content">
+            <span class="hero-badge-auth">Cadastro acessível</span>
+
+            <h1>Crie sua jornada de treinamento</h1>
+
+            <p>
+                Cadastre-se para acessar simulações guiadas, desafios, pontuação,
+                níveis e acompanhamento da sua evolução.
+            </p>
+
+            <div class="auth-benefits">
+                <div>
+                    <strong>🎯 Treinamento guiado</strong>
+                    <span>Aprenda funcionalidades passo a passo.</span>
+                </div>
+
+                <div>
+                    <strong>⚡ Desafios práticos</strong>
+                    <span>Ganhe pontos ao responder missões.</span>
+                </div>
+
+                <div>
+                    <strong>♿ Experiência acessível</strong>
+                    <span>Adapte sua jornada conforme sua necessidade.</span>
+                </div>
+            </div>
+
+            <p class="privacy-note auth-privacy">
+                As informações de acessibilidade são usadas apenas para adaptar a experiência
+                de treinamento neste MVP.
+            </p>
+        </div>
+    </section>
+
+    <section class="auth-card cadastro-card">
+        <div class="auth-card-header">
+            <span class="auth-icon">📝</span>
+            <div>
+                <h2>Cadastro de usuário</h2>
+                <p>Use dados fictícios para criar sua conta de treinamento.</p>
+            </div>
+        </div>
+
+        {#if erro}
+        <div class="alert erro">{erro}</div>
+        {/if}
+
+        <form method="post" action="/cadastro" class="cadastro-form">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nome">Nome completo</label>
+                    <input id="nome" name="nome" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="matricula">Matrícula</label>
+                    <input id="matricula" name="matricula" required autocomplete="username">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="idade">Idade</label>
+                <input id="idade" name="idade" type="number" min="14" required>
+            </div>
+
+            <fieldset class="accessibility-fieldset">
+                <legend>Necessidade de acessibilidade <span>(opcional)</span></legend>
+
+                <div class="checkbox-grid cadastro-checkbox-grid">
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Visual">
+                        <span>Deficiência visual</span>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Auditiva">
+                        <span>Deficiência auditiva</span>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Motora">
+                        <span>Deficiência motora</span>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Intelectual/Cognitiva">
+                        <span>Deficiência intelectual/cognitiva</span>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Neurodivergência">
+                        <span>Neurodivergência</span>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Baixa visão">
+                        <span>Baixa visão</span>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Outra necessidade de acessibilidade">
+                        <span>Outra necessidade de acessibilidade</span>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="deficiencias" value="Prefiro não informar">
+                        <span>Prefiro não informar</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input id="senha" name="senha" type="password" required autocomplete="new-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="repetirSenha">Repetir senha</label>
+                    <input id="repetirSenha" name="repetirSenha" type="password" required autocomplete="new-password">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Cadastrar</button>
+                <a href="/login" class="btn-link">Já tenho cadastro</a>
+            </div>
+
+        </form>
+    </section>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Maven
+target/
+*.class
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Logs
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Configurações sensíveis
+.env
+.env.*
+application-secret.properties
+
+# Quarkus
+.quarkus/

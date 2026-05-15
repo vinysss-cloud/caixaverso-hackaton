@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Dashboard do Gestor</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="topnav" role="navigation" aria-label="Menu principal">
+    <div class="brand"><span class="brand-symbol" aria-hidden="true"></span><span style="margin-left:0.5rem;font-weight:900;color:#fff">CaixaVerso</span></div>
+    <div class="nav-links"><a href="/home">Início</a><a href="/treinamento">Treinamento Guiado</a><a href="/desafio">Modo Desafio</a><a href="/atualizacao">Nova Funcionalidade</a><a href="/dashboard">Dashboard</a></div>
+    <a class="nav-action" href="/logout">Sair</a>
+</nav>
+
+<main class="container">
+    <header class="mission-panel">
+      <h1 class="hero-title">Dashboard do Gestor</h1>
+      <p class="hero-subtitle">Visão geral das trilhas e engajamento</p>
+    </header>
+
+    <div class="dashboard-cards" style="margin-top:0.8rem">
+        <div class="metric-card kpi">
+            <div class="label">Usuários treinados</div>
+            <div class="number">{dados.usuariosSimulados}</div>
+        </div>
+
+        <div class="metric-card kpi">
+            <div class="label">Trilhas concluídas</div>
+            <div class="number">{dados.trilhasConcluidas}</div>
+        </div>
+
+        <div class="metric-card kpi">
+            <div class="label">Média de pontuação</div>
+            <div class="number">{dados.mediaPontuacao}</div>
+        </div>
+
+        <div class="metric-card kpi">
+            <div class="label">Módulos disponíveis</div>
+            <div class="number">{dados.modulosDisponiveis}</div>
+        </div>
+    </div>
+
+    <section style="margin-top:1rem" class="card">
+        <h3>Engajamento</h3>
+        <div class="chart-spark" aria-hidden="true">
+            <span style="height:18%"></span>
+            <span style="height:48%"></span>
+            <span style="height:32%"></span>
+            <span style="height:72%"></span>
+            <span style="height:56%"></span>
+            <span style="height:84%"></span>
+        </div>
+
+        <h4 style="margin-top:0.8rem">Módulos mais acessados</h4>
+        <ul>
+            {#for m in dados.modulosDisponiveis}
+            <li>{m}</li>
+            {/for}
+        </ul>
+
+        <h4 style="margin-top:0.6rem">Ranking de trilhas</h4>
+        <ol>
+            <li>Trilha A - 78%</li>
+            <li>Trilha B - 64%</li>
+            <li>Trilha C - 51%</li>
+        </ol>
+    </section>
+
+    {#if resumo}
+    <section style="margin-top:1rem" class="card">
+        <h3>Seu resumo</h3>
+        <div class="stat"><span>Nível</span><strong>{resumo.nivel}</strong></div>
+        <div class="stat"><span>Pontos</span><strong>{resumo.pontuacaoTotal} XP</strong></div>
+        <div class="stat"><span>Progresso</span><strong>{resumo.progressoPercentual}%</strong></div>
+
+        <h4 style="margin-top:0.6rem">Badges</h4>
+        <div>
+          {#if resumo.badges}
+            {#for badge in resumo.badges}
+              <div class="badge">{badge.icone} {badge.nome}</div>
+            {/for}
+          {/if}
+        </div>
+
+        <h4 style="margin-top:0.6rem">Últimas atividades</h4>
+        <ul>
+          {#if resumo.atividades}
+            {#for atividade in resumo.atividades}
+              <li>{atividade.dataHora}: {atividade.descricao} - +{atividade.pontosGanhos} XP</li>
+            {/for}
+          {/if}
+        </ul>
+    </section>
+    {/if}
+</main>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
