@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class Usuario extends PanacheEntity {
 
     @Column(nullable = false)
     public String senhaHash;
+
+    @Column(length = 120)
+    public String sessaoTokenHash;
+
+    public LocalDateTime sessaoExpiraEm;
 
     // Gamification fields
     public Integer pontuacaoTotal = 0;

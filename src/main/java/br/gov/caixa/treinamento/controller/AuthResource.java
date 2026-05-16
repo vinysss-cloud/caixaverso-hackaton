@@ -2,11 +2,13 @@ package br.gov.caixa.treinamento.controller;
 
 import br.gov.caixa.treinamento.dto.CadastroUsuarioDTO;
 import br.gov.caixa.treinamento.model.Usuario;
+import br.gov.caixa.treinamento.security.AuthFilter;
 import br.gov.caixa.treinamento.service.AuthService;
+import br.gov.caixa.treinamento.service.GamificacaoService;
 import io.quarkus.qute.Template;
-import io.quarkus.qute.TemplateInstance;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -33,14 +35,13 @@ public class AuthResource {
     AuthService authService;
 
     @Inject
-    br.gov.caixa.treinamento.service.GamificacaoService gamificacaoService;
+    GamificacaoService gamificacaoService;
 
     @GET
     @Path("/login")
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance login() {
-        return login.data("erro", null)
-                    .data("sucesso", null);
+    public Response login() {
+        return renderLogin(null, null);
     }
 
     @POST
@@ -49,27 +50,27 @@ public class AuthResource {
     public Response autenticar(@FormParam("matricula") String matricula,
                                @FormParam("senha") String senha) {
 
+        if (matricula == null || matricula.isBlank() || senha == null || senha.isBlank()) {
+            return renderLogin("Informe sua matrícula e senha para acessar a plataforma.", null);
+        }
+
+        if (!authService.existeMatricula(matricula)) {
+            return renderLogin("Não encontramos cadastro para esta matrícula. Confira se digitou corretamente ou clique em Criar cadastro.", null);
+        }
+
         Optional<Usuario> usuario = authService.autenticar(matricula, senha);
 
         if (usuario.isEmpty()) {
-            return Response.ok(login.data("erro", "Matrícula ou senha inválidos.")
-                                    .data("sucesso", null))
-                    .type(MediaType.TEXT_HTML)
-                    .build();
+            return renderLogin("Senha incorreta. Verifique a senha cadastrada e tente novamente.", null);
         }
 
-        NewCookie cookie = new NewCookie.Builder("usuarioLogado")
-                .value(usuario.get().matricula)
-                .path("/")
-                .httpOnly(true)
-                .maxAge(3600)
-                .build();
+        String tokenSessao = authService.criarSessao(usuario.get());
+        NewCookie cookie = criarCookieSessao(tokenSessao, 7200);
 
-        // registrar atividade de login e pontos
         try {
             gamificacaoService.registrarLogin(usuario.get().matricula);
         } catch (Exception e) {
-            // não impedir login em caso de erro no gamification
+            // Não impedir login em caso de erro na gamificação.
         }
 
         return Response.seeOther(URI.create("/home"))
@@ -80,8 +81,11 @@ public class AuthResource {
     @GET
     @Path("/cadastro")
     @Produces(MediaType.TEXT_HTML)
-    public TemplateInstance cadastro() {
-        return cadastro.data("erro", null);
+    public Response cadastro() {
+        return Response.ok(cadastro.data("erro", null))
+                .type(MediaType.TEXT_HTML)
+                .header("Cache-Control", "no-store")
+                .build();
     }
 
     @POST
@@ -104,30 +108,39 @@ public class AuthResource {
 
         try {
             authService.cadastrarUsuario(dto);
-            return Response.ok(login.data("erro", null)
-                                    .data("sucesso", "Cadastro realizado com sucesso. Faça login para continuar."))
-                    .type(MediaType.TEXT_HTML)
-                    .build();
+            return renderLogin(null, "Cadastro realizado com sucesso. Agora faça login com sua matrícula e senha.");
         } catch (IllegalArgumentException e) {
             return Response.ok(cadastro.data("erro", e.getMessage()))
                     .type(MediaType.TEXT_HTML)
+                    .header("Cache-Control", "no-store")
                     .build();
         }
     }
 
     @GET
     @Path("/logout")
-    public Response logout() {
-        NewCookie cookie = new NewCookie.Builder("usuarioLogado")
-                .value("")
-                .path("/")
-                .httpOnly(true)
-                .maxAge(0)
-                .build();
+    public Response logout(@CookieParam(AuthFilter.COOKIE_SESSAO) String tokenSessao) {
+        authService.encerrarSessao(tokenSessao);
 
         return Response.seeOther(URI.create("/login"))
-                .cookie(cookie)
+                .cookie(criarCookieSessao("", 0))
+                .build();
+    }
+
+    private Response renderLogin(String erro, String sucesso) {
+        return Response.ok(login.data("erro", erro).data("sucesso", sucesso))
+                .type(MediaType.TEXT_HTML)
+                .header("Cache-Control", "no-store")
+                .build();
+    }
+
+    private NewCookie criarCookieSessao(String valor, int maxAge) {
+        return new NewCookie.Builder(AuthFilter.COOKIE_SESSAO)
+                .value(valor)
+                .path("/")
+                .httpOnly(true)
+                .sameSite(NewCookie.SameSite.STRICT)
+                .maxAge(maxAge)
                 .build();
     }
 }
-

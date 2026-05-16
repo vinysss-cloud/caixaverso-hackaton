@@ -1,6 +1,7 @@
 package br.gov.caixa.treinamento.controller;
 
 import br.gov.caixa.treinamento.model.ResultadoDesafio;
+import br.gov.caixa.treinamento.security.UsuarioLogadoService;
 import br.gov.caixa.treinamento.service.DesafioService;
 import br.gov.caixa.treinamento.service.GamificacaoService;
 import br.gov.caixa.treinamento.service.TreinamentoService;
@@ -32,9 +33,14 @@ public class DesafioResource {
     @Inject
     GamificacaoService gamificacaoService;
 
+    @Inject
+    UsuarioLogadoService usuarioLogadoService;
+
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Object desafio(@CookieParam("usuarioLogado") String usuarioLogado) {
+    public Object desafio(@CookieParam("CAIXAVERSO_SESSION") String tokenSessao) {
+        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);
+
         if (usuarioLogado == null || usuarioLogado.isBlank()) {
             return Response.seeOther(URI.create("/login")).build();
         }
@@ -54,8 +60,10 @@ public class DesafioResource {
     @POST
     @Path("/responder")
     @Produces(MediaType.TEXT_HTML)
-    public Object responder(@CookieParam("usuarioLogado") String usuarioLogado,
+    public Object responder(@CookieParam("CAIXAVERSO_SESSION") String tokenSessao,
                             @FormParam("resposta") String resposta) {
+        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);
+
         if (usuarioLogado == null || usuarioLogado.isBlank()) {
             return Response.seeOther(URI.create("/login")).build();
         }

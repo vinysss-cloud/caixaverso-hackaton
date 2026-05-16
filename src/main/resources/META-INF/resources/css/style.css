@@ -525,7 +525,7 @@ textarea {
 
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
@@ -4813,4 +4813,663 @@ html body.high-contrast .user-progress-card .badge-area span,
 html body.high-contrast .user-progress-card .badge-area strong {
     color: #002F6C !important;
     opacity: 1 !important;
+}
+/* ==========================================================
+   DASHBOARD GAMIFICADO - CaixaVerso
+   ========================================================== */
+
+.dashboard-game-page {
+    width: 100%;
+    padding: 32px 0 72px;
+}
+
+.dashboard-hero,
+.dashboard-kpi-grid,
+.dashboard-grid-main,
+.dashboard-grid-secondary {
+    width: min(1280px, calc(100% - 48px));
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dashboard-hero {
+    min-height: 430px;
+    padding: clamp(30px, 4vw, 56px);
+    border-radius: 34px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) 410px;
+    gap: 42px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 86% 12%, rgba(0, 166, 214, .42), transparent 27rem),
+        linear-gradient(135deg, rgba(0, 47, 108, .98), rgba(0, 92, 169, .96) 55%, rgba(0, 166, 214, .92));
+    box-shadow: var(--sombra);
+}
+
+.dashboard-hero::before {
+    content: "";
+    position: absolute;
+    width: 680px;
+    height: 680px;
+    right: -250px;
+    top: -260px;
+    border-radius: 90px;
+    background: rgba(255, 255, 255, .10);
+    transform: rotate(38deg);
+}
+
+.dashboard-hero-copy,
+.dashboard-player-card {
+    position: relative;
+    z-index: 2;
+}
+
+.dashboard-hero-copy h1 {
+    margin: 8px 0 16px;
+    color: #FFFFFF;
+    font-size: clamp(2.8rem, 5vw, 5.4rem);
+    line-height: .95;
+    letter-spacing: -0.06em;
+}
+
+.dashboard-hero-copy p {
+    max-width: 760px;
+    margin: 0;
+    color: rgba(255, 255, 255, .92);
+    font-size: 1.16rem;
+}
+
+.dashboard-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.audio-help-button,
+.audio-icon-button,
+.audio-mini-button {
+    border: 0;
+    cursor: pointer;
+    font-weight: 900;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.audio-help-button {
+    min-height: 52px;
+    padding: .85rem 1.1rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .14);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, .28);
+}
+
+.audio-help-button:hover,
+.audio-icon-button:hover,
+.audio-mini-button:hover {
+    transform: translateY(-2px);
+}
+
+.dashboard-player-card {
+    background: rgba(255, 255, 255, .96);
+    border: 1px solid rgba(255, 255, 255, .48);
+    border-radius: 30px;
+    padding: 28px;
+    box-shadow: 0 26px 70px rgba(0, 0, 0, .22);
+}
+
+.dashboard-player-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.dashboard-avatar {
+    width: 54px;
+    height: 54px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: var(--azul-claro);
+    font-size: 1.6rem;
+}
+
+.dashboard-player-top span,
+.dashboard-player-name span,
+.dashboard-progress-line span,
+.dashboard-progress-line small,
+.dashboard-kpi-card span,
+.dashboard-kpi-card small {
+    color: var(--muted);
+}
+
+.dashboard-player-top strong,
+.dashboard-player-name strong {
+    display: block;
+    color: var(--azul-profundo);
+}
+
+.dashboard-player-name {
+    padding: 16px;
+    border-radius: 18px;
+    background: #F8FBFF;
+    border: 1px solid var(--borda);
+    margin-bottom: 16px;
+}
+
+.dashboard-level-panel {
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 16px;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, var(--azul-profundo), var(--azul-caixa));
+}
+
+.dashboard-level-panel span {
+    display: block;
+    font-size: .78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: rgba(255, 255, 255, .82);
+}
+
+.dashboard-level-panel strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.dashboard-progress-line > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.dashboard-progress-line strong {
+    color: var(--azul-caixa);
+}
+
+.dashboard-progress-track,
+.medal-progress-track {
+    height: 12px;
+    border-radius: 999px;
+    background: #E5EDF5;
+    overflow: hidden;
+}
+
+.dashboard-progress-track i,
+.medal-progress-track i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--ciano), var(--laranja));
+}
+
+.dashboard-progress-line small {
+    display: block;
+    margin-top: 8px;
+}
+
+.dashboard-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.dashboard-kpi-card,
+.dashboard-card {
+    background: #FFFFFF;
+    border: 1px solid var(--borda);
+    border-radius: 26px;
+    box-shadow: var(--sombra-card);
+}
+
+.dashboard-kpi-card {
+    padding: 22px;
+    min-height: 142px;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-kpi-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 5px;
+    background: linear-gradient(90deg, var(--azul-caixa), var(--laranja));
+}
+
+.dashboard-kpi-card span,
+.dashboard-kpi-card strong,
+.dashboard-kpi-card small {
+    display: block;
+}
+
+.dashboard-kpi-card span {
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: .78rem;
+    letter-spacing: .05em;
+}
+
+.dashboard-kpi-card strong {
+    margin: 8px 0 4px;
+    color: var(--azul-profundo);
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.dashboard-grid-main {
+    display: grid;
+    grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.dashboard-grid-secondary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.dashboard-card {
+    padding: 26px;
+}
+
+.dashboard-card-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.dashboard-card-title h2 {
+    margin: 4px 0 0;
+    color: var(--azul-profundo);
+    font-size: clamp(1.45rem, 2vw, 2rem);
+    line-height: 1.05;
+}
+
+.audio-icon-button,
+.audio-mini-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--azul-profundo);
+    background: var(--azul-claro);
+    border: 1px solid rgba(0, 92, 169, .18);
+}
+
+.audio-icon-button {
+    min-width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    font-size: 1.05rem;
+}
+
+.audio-mini-button {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 12px;
+}
+
+.mission-content-box {
+    padding: 22px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #F8FBFF, #E8F3FF);
+    border: 1px solid rgba(0, 92, 169, .14);
+}
+
+.mission-big-icon {
+    width: 62px;
+    height: 62px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background: #FFFFFF;
+    font-size: 1.8rem;
+    box-shadow: 0 12px 28px rgba(0, 47, 108, .10);
+    margin-bottom: 14px;
+}
+
+.mission-content-box p {
+    margin: 0 0 18px;
+    color: var(--texto);
+}
+
+.ranking-list {
+    display: grid;
+    gap: 12px;
+}
+
+.ranking-row {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) 82px 42px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 18px;
+    background: #F8FBFF;
+    border: 1px solid var(--borda);
+}
+
+.ranking-row.current-user {
+    background: #FFF8E8;
+    border: 2px solid var(--laranja);
+    box-shadow: 0 12px 30px rgba(243, 146, 0, .12);
+}
+
+.ranking-position {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: var(--azul-caixa);
+    color: #FFFFFF;
+    font-weight: 900;
+}
+
+.ranking-user strong,
+.ranking-points strong {
+    display: block;
+    color: var(--azul-profundo);
+}
+
+.ranking-user span,
+.ranking-points span {
+    color: var(--muted);
+    font-size: .86rem;
+}
+
+.ranking-points {
+    text-align: right;
+}
+
+.points-rules-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.points-rule-card {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 18px;
+    background: #F8FBFF;
+    border: 1px solid var(--borda);
+}
+
+.rule-icon,
+.medal-icon {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--borda);
+    font-size: 1.25rem;
+}
+
+.points-rule-card strong,
+.medal-info strong {
+    display: block;
+    color: var(--azul-profundo);
+}
+
+.points-rule-card p,
+.medal-info p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: .92rem;
+}
+
+.rule-points {
+    border-radius: 999px;
+    padding: .42rem .65rem;
+    background: #FFF7ED;
+    color: #9A3412;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.medal-rules-list {
+    display: grid;
+    gap: 12px;
+}
+
+.medal-rule {
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 18px;
+    background: #F8FBFF;
+    border: 1px solid var(--borda);
+}
+
+.medal-rule.earned {
+    background: #EEF9F1;
+    border-color: rgba(16, 124, 65, .22);
+}
+
+.medal-info .medal-progress-track {
+    margin-top: 8px;
+    height: 9px;
+}
+
+.medal-status {
+    border-radius: 999px;
+    padding: .42rem .65rem;
+    background: var(--azul-claro);
+    color: var(--azul-profundo);
+    font-weight: 900;
+    font-size: .82rem;
+    white-space: nowrap;
+}
+
+.medal-rule.earned .medal-status {
+    background: #DCFCE7;
+    color: #14532D;
+}
+
+.manager-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.manager-metrics-grid div {
+    padding: 16px;
+    border-radius: 18px;
+    background: #F8FBFF;
+    border: 1px solid var(--borda);
+}
+
+.manager-metrics-grid span,
+.manager-metrics-grid strong {
+    display: block;
+}
+
+.manager-metrics-grid span {
+    color: var(--muted);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    font-size: .78rem;
+}
+
+.manager-metrics-grid strong {
+    color: var(--azul-profundo);
+    font-size: 1.6rem;
+    margin-top: 6px;
+}
+
+.feature-access-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+}
+
+.feature-access-list li {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #F8FBFF;
+    border: 1px solid var(--borda);
+    color: var(--azul-profundo);
+    font-weight: 900;
+}
+
+@media (max-width: 1100px) {
+    .dashboard-hero,
+    .dashboard-grid-main,
+    .dashboard-grid-secondary {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .dashboard-hero,
+    .dashboard-kpi-grid,
+    .dashboard-grid-main,
+    .dashboard-grid-secondary {
+        width: min(100% - 24px, 100%);
+    }
+
+    .dashboard-hero {
+        padding: 24px;
+        border-radius: 24px;
+    }
+
+    .dashboard-kpi-grid,
+    .manager-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ranking-row,
+    .points-rule-card,
+    .medal-rule {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .ranking-points {
+        text-align: left;
+    }
+
+    .dashboard-hero-actions {
+        flex-direction: column;
+    }
+
+    .dashboard-hero-actions .btn,
+    .audio-help-button {
+        width: 100%;
+    }
+}
+
+/* ---------- Alto contraste específico do Dashboard ---------- */
+html body.high-contrast .dashboard-hero {
+    background: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .dashboard-hero-copy h1,
+html body.high-contrast .dashboard-card-title h2,
+html body.high-contrast .dashboard-kpi-card strong {
+    color: #FFFF00 !important;
+}
+
+html body.high-contrast .dashboard-hero-copy p,
+html body.high-contrast .dashboard-player-top span,
+html body.high-contrast .dashboard-progress-line span,
+html body.high-contrast .dashboard-progress-line small,
+html body.high-contrast .dashboard-kpi-card span,
+html body.high-contrast .dashboard-kpi-card small {
+    color: #FFFFFF !important;
+}
+
+html body.high-contrast .dashboard-player-card,
+html body.high-contrast .dashboard-card,
+html body.high-contrast .dashboard-kpi-card {
+    background: #111111 !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .dashboard-player-name,
+html body.high-contrast .ranking-row,
+html body.high-contrast .points-rule-card,
+html body.high-contrast .medal-rule,
+html body.high-contrast .manager-metrics-grid div,
+html body.high-contrast .feature-access-list li,
+html body.high-contrast .mission-content-box {
+    background: #F8FBFF !important;
+    border: 2px solid #FFFFFF !important;
+    color: #002F6C !important;
+}
+
+html body.high-contrast .dashboard-player-name *,
+html body.high-contrast .ranking-row *,
+html body.high-contrast .points-rule-card *,
+html body.high-contrast .medal-rule *,
+html body.high-contrast .manager-metrics-grid div *,
+html body.high-contrast .feature-access-list li,
+html body.high-contrast .mission-content-box * {
+    color: #002F6C !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .dashboard-level-panel {
+    background: #005CA9 !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+html body.high-contrast .dashboard-level-panel,
+html body.high-contrast .dashboard-level-panel * {
+    color: #FFFFFF !important;
+}
+
+html body.high-contrast .dashboard-progress-track,
+html body.high-contrast .medal-progress-track {
+    background: #FFFFFF !important;
+    border: 1px solid #FFFFFF !important;
+}
+
+html body.high-contrast .dashboard-progress-track i,
+html body.high-contrast .medal-progress-track i {
+    background: #FFFF00 !important;
+}
+
+html body.high-contrast .audio-help-button,
+html body.high-contrast .audio-icon-button,
+html body.high-contrast .audio-mini-button {
+    background: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFF00 !important;
 }

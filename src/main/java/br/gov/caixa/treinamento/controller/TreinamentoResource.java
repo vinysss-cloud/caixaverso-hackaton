@@ -1,6 +1,7 @@
 package br.gov.caixa.treinamento.controller;
 
 import br.gov.caixa.treinamento.model.ProgressoTreinamentoUsuario;
+import br.gov.caixa.treinamento.security.UsuarioLogadoService;
 import br.gov.caixa.treinamento.service.GamificacaoService;
 import br.gov.caixa.treinamento.service.TreinamentoService;
 import io.quarkus.qute.Template;
@@ -28,9 +29,14 @@ public class TreinamentoResource {
     @Inject
     GamificacaoService gamificacaoService;
 
+    @Inject
+    UsuarioLogadoService usuarioLogadoService;
+
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Object treinamento(@CookieParam("usuarioLogado") String usuarioLogado) {
+    public Object treinamento(@CookieParam("CAIXAVERSO_SESSION") String tokenSessao) {
+        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);
+
         if (usuarioLogado == null || usuarioLogado.isBlank()) {
             return Response.seeOther(URI.create("/login")).build();
         }
@@ -51,7 +57,9 @@ public class TreinamentoResource {
     @POST
     @Path("/etapa-concluida")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response concluirEtapa(@CookieParam("usuarioLogado") String usuarioLogado) {
+    public Response concluirEtapa(@CookieParam("CAIXAVERSO_SESSION") String tokenSessao) {
+        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);
+
         if (usuarioLogado == null || usuarioLogado.isBlank()) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -76,7 +84,9 @@ public class TreinamentoResource {
 
     @POST
     @Path("/refazer")
-    public Response refazerTrilha(@CookieParam("usuarioLogado") String usuarioLogado) {
+    public Response refazerTrilha(@CookieParam("CAIXAVERSO_SESSION") String tokenSessao) {
+        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);
+        
         if (usuarioLogado == null || usuarioLogado.isBlank()) {
             return Response.seeOther(URI.create("/login")).build();
         }

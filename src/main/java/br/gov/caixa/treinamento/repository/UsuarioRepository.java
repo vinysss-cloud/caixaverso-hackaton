@@ -16,5 +16,8 @@ public class UsuarioRepository implements PanacheRepository<Usuario> {
     public boolean existeMatricula(String matricula) {
         return buscarPorMatricula(matricula).isPresent();
     }
-}
 
+    public Optional<Usuario> buscarPorSessaoTokenHash(String sessaoTokenHash) {
+        return find("sessaoTokenHash", sessaoTokenHash).firstResultOptional();
+    }
+}

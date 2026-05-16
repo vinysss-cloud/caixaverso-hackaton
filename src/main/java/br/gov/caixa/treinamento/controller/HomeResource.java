@@ -1,5 +1,6 @@
 package br.gov.caixa.treinamento.controller;
 
+import br.gov.caixa.treinamento.security.UsuarioLogadoService;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.inject.Inject;
@@ -21,6 +22,9 @@ public class HomeResource {
     @Inject
     br.gov.caixa.treinamento.service.GamificacaoService gamificacaoService;
 
+    @Inject
+    UsuarioLogadoService usuarioLogadoService;
+
     @GET
     public Response index() {
         return Response.seeOther(URI.create("/login")).build();
@@ -29,7 +33,9 @@ public class HomeResource {
     @GET
     @Path("/home")
     @Produces(MediaType.TEXT_HTML)
-    public Object home(@CookieParam("usuarioLogado") String usuarioLogado) {
+    public Object home(@CookieParam("CAIXAVERSO_SESSION") String tokenSessao) {
+        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);
+
         if (usuarioLogado == null || usuarioLogado.isBlank()) {
             return Response.seeOther(URI.create("/login")).build();
         }

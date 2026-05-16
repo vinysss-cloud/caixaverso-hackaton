@@ -7,94 +7,283 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<nav class="topnav" role="navigation" aria-label="Menu principal">
-    <div class="brand"><span class="brand-symbol" aria-hidden="true"></span><span style="margin-left:0.5rem;font-weight:900;color:#fff">CaixaVerso</span></div>
-    <div class="nav-links"><a href="/home">Início</a><a href="/treinamento">Treinamento Guiado</a><a href="/desafio">Modo Desafio</a><a href="/atualizacao">Nova Funcionalidade</a><a href="/dashboard">Dashboard</a></div>
-    <a class="nav-action" href="/logout">Sair</a>
-</nav>
+<header class="topnav" role="banner">
+    <div class="topnav-inner">
+        <a class="brand" href="/home" aria-label="CaixaVerso - Início">
+            <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
+            <span class="brand-name">CaixaVerso</span>
+        </a>
 
-<main class="container">
-    <header class="mission-panel">
-      <h1 class="hero-title">Dashboard do Gestor</h1>
-      <p class="hero-subtitle">Visão geral das trilhas e engajamento</p>
-    </header>
+        <nav class="nav-links" role="navigation" aria-label="Menu principal">
+            <a href="/home">Início</a>
+            <a href="/treinamento">Treinamento Guiado</a>
+            <a href="/desafio">Modo Desafio</a>
+            <a href="/dashboard" aria-current="page">Dashboard</a>
+        </nav>
 
-    <div class="dashboard-cards" style="margin-top:0.8rem">
-        <div class="metric-card kpi">
-            <div class="label">Usuários treinados</div>
-            <div class="number">{dados.usuariosSimulados}</div>
-        </div>
-
-        <div class="metric-card kpi">
-            <div class="label">Trilhas concluídas</div>
-            <div class="number">{dados.trilhasConcluidas}</div>
-        </div>
-
-        <div class="metric-card kpi">
-            <div class="label">Média de pontuação</div>
-            <div class="number">{dados.mediaPontuacao}</div>
-        </div>
-
-        <div class="metric-card kpi">
-            <div class="label">Módulos disponíveis</div>
-            <div class="number">{dados.modulosDisponiveis}</div>
-        </div>
+        <a class="nav-action" href="/logout">Sair</a>
     </div>
+</header>
 
-    <section style="margin-top:1rem" class="card">
-        <h3>Engajamento</h3>
-        <div class="chart-spark" aria-hidden="true">
-            <span style="height:18%"></span>
-            <span style="height:48%"></span>
-            <span style="height:32%"></span>
-            <span style="height:72%"></span>
-            <span style="height:56%"></span>
-            <span style="height:84%"></span>
+<main class="page-shell dashboard-game-page">
+
+    <section class="dashboard-hero" aria-labelledby="dashboard-title">
+        <div class="dashboard-hero-copy">
+            <span class="section-kicker light">Painel gamificado</span>
+            <h1 id="dashboard-title">Dashboard da Jornada</h1>
+            <p>
+                Acompanhe pontuação, nível, medalhas, ranking fictício e próximos passos de aprendizagem.
+                Tudo em uma visão simples, com apoio de áudio para pessoas PCD.
+            </p>
+
+            <div class="dashboard-hero-actions">
+                <button class="audio-help-button" type="button"
+                        data-audio="Dashboard da Jornada. Esta tela mostra sua evolução no CaixaVerso, incluindo pontos, nível, progresso, medalhas conquistadas, regras de pontuação e ranking fictício.">
+                    🔊 Ouvir resumo
+                </button>
+                <a class="btn btn-primary" href="/treinamento">Continuar trilha</a>
+            </div>
         </div>
 
-        <h4 style="margin-top:0.8rem">Módulos mais acessados</h4>
-        <ul>
-            {#for m in dados.modulosDisponiveis}
-            <li>{m}</li>
-            {/for}
-        </ul>
+        <aside class="dashboard-player-card" aria-label="Resumo do usuário logado">
+            <div class="dashboard-player-top">
+                <span class="dashboard-avatar" aria-hidden="true">🏆</span>
+                <div>
+                    <span>Sua posição</span>
+                    <strong>#{dados.posicaoUsuario} de {dados.totalCompetidores}</strong>
+                </div>
+            </div>
 
-        <h4 style="margin-top:0.6rem">Ranking de trilhas</h4>
-        <ol>
-            <li>Trilha A - 78%</li>
-            <li>Trilha B - 64%</li>
-            <li>Trilha C - 51%</li>
-        </ol>
+            <div class="dashboard-player-name">
+                <strong>{dados.nomeUsuario}</strong>
+                <span>Matrícula: {dados.matriculaUsuario}</span>
+            </div>
+
+            <div class="dashboard-level-panel">
+                <span>Nível atual</span>
+                <strong>Nível {dados.nivelUsuario}</strong>
+            </div>
+
+            <div class="dashboard-progress-line">
+                <div>
+                    <span>Progresso até o próximo nível</span>
+                    <strong>{dados.progressoNivel}%</strong>
+                </div>
+                <div class="dashboard-progress-track" aria-label="Progresso para o próximo nível">
+                    <i style="width:{dados.progressoNivel}%"></i>
+                </div>
+                <small>Faltam {dados.xpFaltante} XP para o próximo nível.</small>
+            </div>
+        </aside>
     </section>
 
-    {#if resumo}
-    <section style="margin-top:1rem" class="card">
-        <h3>Seu resumo</h3>
-        <div class="stat"><span>Nível</span><strong>{resumo.nivel}</strong></div>
-        <div class="stat"><span>Pontos</span><strong>{resumo.pontuacaoTotal} XP</strong></div>
-        <div class="stat"><span>Progresso</span><strong>{resumo.progressoPercentual}%</strong></div>
+    <section class="dashboard-kpi-grid" aria-label="Indicadores principais">
+        <article class="dashboard-kpi-card">
+            <span>Pontos atuais</span>
+            <strong>{dados.pontosUsuario} XP</strong>
+            <small>Somatório da sua jornada.</small>
+        </article>
 
-        <h4 style="margin-top:0.6rem">Badges</h4>
-        <div>
-          {#if resumo.badges}
-            {#for badge in resumo.badges}
-              <div class="badge">{badge.icone} {badge.nome}</div>
-            {/for}
-          {/if}
-        </div>
+        <article class="dashboard-kpi-card">
+            <span>Trilhas concluídas</span>
+            <strong>{dados.trilhasUsuario}</strong>
+            <small>Treinamentos finalizados.</small>
+        </article>
 
-        <h4 style="margin-top:0.6rem">Últimas atividades</h4>
-        <ul>
-          {#if resumo.atividades}
-            {#for atividade in resumo.atividades}
-              <li>{atividade.dataHora}: {atividade.descricao} - +{atividade.pontosGanhos} XP</li>
-            {/for}
-          {/if}
-        </ul>
+        <article class="dashboard-kpi-card">
+            <span>Desafios respondidos</span>
+            <strong>{dados.desafiosUsuario}</strong>
+            <small>Missões práticas realizadas.</small>
+        </article>
+
+        <article class="dashboard-kpi-card">
+            <span>Progresso da trilha</span>
+            <strong>{dados.progressoTrilha}%</strong>
+            <small>Abertura de Conta Bancária.</small>
+        </article>
     </section>
-    {/if}
+
+    <section class="dashboard-grid-main">
+
+        <article class="dashboard-card dashboard-mission-card">
+            <div class="dashboard-card-title">
+                <div>
+                    <span class="section-kicker">Próxima missão</span>
+                    <h2>{dados.missaoRecomendada.titulo}</h2>
+                </div>
+                <button class="audio-icon-button" type="button"
+                        data-audio="Próxima missão. {dados.missaoRecomendada.titulo}. {dados.missaoRecomendada.descricao}">
+                    🔊
+                </button>
+            </div>
+
+            <div class="mission-content-box">
+                <span class="mission-big-icon" aria-hidden="true">{dados.missaoRecomendada.icone}</span>
+                <p>{dados.missaoRecomendada.descricao}</p>
+                <a class="btn btn-primary" href="{dados.missaoRecomendada.link}">{dados.missaoRecomendada.acao}</a>
+            </div>
+        </article>
+
+        <article class="dashboard-card dashboard-ranking-card">
+            <div class="dashboard-card-title">
+                <div>
+                    <span class="section-kicker">Competição saudável</span>
+                    <h2>Ranking fictício de pontos</h2>
+                </div>
+                <button class="audio-icon-button" type="button"
+                        data-audio="Ranking fictício de pontos. Sua posição atual é {dados.posicaoUsuario} de {dados.totalCompetidores}. O ranking compara sua pontuação com usuários simulados para deixar a jornada mais gamificada.">
+                    🔊
+                </button>
+            </div>
+
+            <div class="ranking-list" role="list" aria-label="Ranking fictício de usuários por pontuação">
+                {#for item in dados.ranking}
+                <div class="ranking-row {#if item.usuarioLogado}current-user{/if}" role="listitem">
+                    <div class="ranking-position">#{item.posicao}</div>
+                    <div class="ranking-user">
+                        <strong>{item.nome}</strong>
+                        <span>{item.matricula} • Nível {item.nivel} • {item.badges} medalhas</span>
+                    </div>
+                    <div class="ranking-points">
+                        <strong>{item.pontos}</strong>
+                        <span>XP</span>
+                    </div>
+                    <button class="audio-mini-button" type="button"
+                            data-audio="Posição {item.posicao}. {item.nome}. {item.pontos} pontos. {item.descricaoAcessivel}">
+                        🔊
+                    </button>
+                </div>
+                {/for}
+            </div>
+        </article>
+    </section>
+
+    <section class="dashboard-grid-secondary">
+        <article class="dashboard-card">
+            <div class="dashboard-card-title">
+                <div>
+                    <span class="section-kicker">Como ganhar XP</span>
+                    <h2>Regras de pontuação</h2>
+                </div>
+                <button class="audio-icon-button" type="button"
+                        data-audio="Regras de pontuação. Você ganha pontos ao fazer login, iniciar treinamento, concluir etapas e acertar desafios. A pontuação ajuda a subir de nível e liberar medalhas.">
+                    🔊
+                </button>
+            </div>
+
+            <div class="points-rules-grid">
+                {#for regra in dados.regrasPontuacao}
+                <div class="points-rule-card">
+                    <span class="rule-icon" aria-hidden="true">{regra.icone}</span>
+                    <div>
+                        <strong>{regra.titulo}</strong>
+                        <p>{regra.descricao}</p>
+                    </div>
+                    <span class="rule-points">{regra.pontos}</span>
+                </div>
+                {/for}
+            </div>
+        </article>
+
+        <article class="dashboard-card">
+            <div class="dashboard-card-title">
+                <div>
+                    <span class="section-kicker">Medalhas</span>
+                    <h2>Conquistas e critérios</h2>
+                </div>
+                <button class="audio-icon-button" type="button"
+                        data-audio="Medalhas e critérios. Esta área mostra quais medalhas você já conquistou e o que precisa fazer para liberar as próximas conquistas.">
+                    🔊
+                </button>
+            </div>
+
+            <div class="medal-rules-list">
+                {#for medalha in dados.regrasMedalhas}
+                <div class="medal-rule {#if medalha.conquistada}earned{/if}">
+                    <span class="medal-icon" aria-hidden="true">{medalha.icone}</span>
+                    <div class="medal-info">
+                        <strong>{medalha.nome}</strong>
+                        <p>{medalha.criterio}</p>
+                        <div class="medal-progress-track">
+                            <i style="width:{medalha.progresso}%"></i>
+                        </div>
+                    </div>
+                    <span class="medal-status">{medalha.status}</span>
+                </div>
+                {/for}
+            </div>
+        </article>
+    </section>
+
+    <section class="dashboard-grid-secondary bottom-area">
+        <article class="dashboard-card">
+            <div class="dashboard-card-title">
+                <div>
+                    <span class="section-kicker">Gestão</span>
+                    <h2>Indicadores gerais</h2>
+                </div>
+            </div>
+
+            <div class="manager-metrics-grid">
+                <div><span>Usuários treinados</span><strong>{dados.usuariosSimulados}</strong></div>
+                <div><span>Trilhas concluídas</span><strong>{dados.trilhasConcluidasGerais}</strong></div>
+                <div><span>Média de pontuação</span><strong>{dados.mediaPontuacao}</strong></div>
+                <div><span>Funcionalidades ativas</span><strong>{dados.funcionalidadesAtivas}</strong></div>
+            </div>
+        </article>
+
+        <article class="dashboard-card">
+            <div class="dashboard-card-title">
+                <div>
+                    <span class="section-kicker">Acesso rápido</span>
+                    <h2>Funcionalidades mais acessadas</h2>
+                </div>
+            </div>
+
+            <ul class="feature-access-list">
+                {#for funcionalidade in dados.funcionalidadesMaisAcessadas}
+                <li>{funcionalidade}</li>
+                {/for}
+            </ul>
+        </article>
+    </section>
+
 </main>
 
+<div class="accessibility-toolbar" role="group" aria-label="Ferramentas de acessibilidade">
+    <button id="fontPlus" type="button">A+</button>
+    <button id="fontMinus" type="button">A-</button>
+    <button id="contrastToggle" type="button">Alto contraste</button>
+</div>
+
 <script src="/js/app.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const audioButtons = document.querySelectorAll('[data-audio]');
+
+        function falarTexto(texto) {
+            if (!('speechSynthesis' in window)) {
+                alert('Seu navegador não possui suporte nativo para leitura por voz.');
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        audioButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                falarTexto(button.getAttribute('data-audio'));
+            });
+        });
+    });
+</script>
 </body>
 </html>
