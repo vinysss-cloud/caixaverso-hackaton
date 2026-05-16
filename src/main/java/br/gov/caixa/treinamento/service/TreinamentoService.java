@@ -43,14 +43,38 @@ public class TreinamentoService {
                         ),
                         new EtapaTreinamentoDTO(
                                 2,
-                                "Preencher dados cadastrais",
-                                "Preencha os dados básicos fictícios do cliente, como nome, data de nascimento e matrícula simulada.",
+                                "Preencher nome do cliente",
+                                "Preencha o nome completo do cliente fictício.",
                                 "Não use dados reais. Este é um ambiente de treinamento.",
-                                "Dados cadastrais",
-                                "Preencher campos obrigatórios"
+                                "Nome completo",
+                                "Preencher nome e sobrenome"
                         ),
                         new EtapaTreinamentoDTO(
                                 3,
+                                "Validar CPF e data de nascimento",
+                                "Preencha CPF e data de nascimento do cliente fictício.",
+                                "Use CPF com 11 números e data no formato dd/mm/aaaa.",
+                                "CPF e data de nascimento",
+                                "Preencher dados cadastrais"
+                        ),
+                        new EtapaTreinamentoDTO(
+                                4,
+                                "Informar telefone para contato",
+                                "Preencha um telefone de contato fictício para o cliente.",
+                                "Use DDD e número. Exemplo: (21) 99999-9999.",
+                                "Telefone para contato",
+                                "Preencher telefone"
+                        ),
+                        new EtapaTreinamentoDTO(
+                                5,
+                                "Preencher endereço residencial",
+                                "Informe os dados de endereço do cliente fictício.",
+                                "Preencha CEP, endereço, número, bairro, cidade e UF.",
+                                "Endereço residencial",
+                                "Preencher endereço completo"
+                        ),
+                        new EtapaTreinamentoDTO(
+                                6,
                                 "Informar necessidades de acessibilidade",
                                 "Registre se o cliente fictício possui alguma necessidade de acessibilidade para adaptar o atendimento.",
                                 "As informações são usadas apenas para simulação e adaptação do fluxo.",
@@ -58,7 +82,7 @@ public class TreinamentoService {
                                 "Selecionar necessidade, se houver"
                         ),
                         new EtapaTreinamentoDTO(
-                                4,
+                                7,
                                 "Validar documentação",
                                 "Confira se todos os documentos fictícios obrigatórios foram informados antes de avançar.",
                                 "Observe os alertas visuais e mensagens de erro da tela.",
@@ -66,15 +90,7 @@ public class TreinamentoService {
                                 "Validar documentos simulados"
                         ),
                         new EtapaTreinamentoDTO(
-                                5,
-                                "Revisar proposta de abertura",
-                                "Revise os dados preenchidos antes de concluir a abertura da conta.",
-                                "A revisão evita retrabalho e inconsistências.",
-                                "Resumo da proposta",
-                                "Conferir informações"
-                        ),
-                        new EtapaTreinamentoDTO(
-                                6,
+                                8,
                                 "Confirmar abertura da conta",
                                 "Finalize a simulação de abertura de conta e libere o quiz associado.",
                                 "Após concluir esta etapa, o desafio será desbloqueado.",
@@ -96,7 +112,9 @@ public class TreinamentoService {
                 progressoRepository.buscarPorUsuarioECodigo(usuario, codigoTreinamento);
 
         if (progressoExistente.isPresent()) {
-            return progressoExistente.get();
+            ProgressoTreinamentoUsuario progresso = progressoExistente.get();
+            sincronizarTotalEtapas(progresso, trilha.etapas.size());
+            return progresso;
         }
 
         ProgressoTreinamentoUsuario progresso = new ProgressoTreinamentoUsuario();
@@ -114,6 +132,32 @@ public class TreinamentoService {
         progressoRepository.persist(progresso);
 
         return progresso;
+    }
+
+
+    private void sincronizarTotalEtapas(ProgressoTreinamentoUsuario progresso, int totalEtapasAtualizado) {
+        if (progresso.totalEtapas == null || progresso.totalEtapas != totalEtapasAtualizado) {
+            progresso.totalEtapas = totalEtapasAtualizado;
+
+            if (progresso.etapaAtual == null) {
+                progresso.etapaAtual = 0;
+            }
+
+            if (progresso.etapaAtual > totalEtapasAtualizado) {
+                progresso.etapaAtual = totalEtapasAtualizado;
+            }
+
+            if (Boolean.TRUE.equals(progresso.concluido)) {
+                progresso.etapaAtual = totalEtapasAtualizado;
+                progresso.progressoPercentual = 100;
+                progresso.desafioDesbloqueado = true;
+                return;
+            }
+
+            progresso.progressoPercentual = totalEtapasAtualizado == 0
+                    ? 0
+                    : (progresso.etapaAtual * 100) / totalEtapasAtualizado;
+        }
     }
 
     @Transactional

@@ -279,7 +279,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        if (etapa && etapa.ordem === 6) {
+        if (etapa && etapa.ordem === 5) {
+            [
+                'step-target-cep',
+                'step-target-endereco',
+                'step-target-numero',
+                'step-target-bairro',
+                'step-target-cidade',
+                'step-target-uf'
+            ].forEach(function (id) {
+                const enderecoTarget = document.getElementById(id);
+
+                if (enderecoTarget) {
+                    enderecoTarget.classList.add('active-step');
+                    enderecoTarget.setAttribute('aria-current', 'step');
+                }
+            });
+        }
+
+        if (etapa && etapa.ordem === 8) {
             const resumoTarget = document.getElementById('step-target-revisao');
             const confirmacaoTarget = document.getElementById('step-target-confirmacao');
 
@@ -303,10 +321,14 @@ document.addEventListener('DOMContentLoaded', function () {
         let targetParaRolar = target;
 
         if (etapa && etapa.ordem === 5) {
+            targetParaRolar = document.getElementById('step-target-endereco') || target;
+        }
+
+        if (etapa && etapa.ordem === 7) {
             targetParaRolar = document.getElementById('step-target-documentos') || target;
         }
 
-        if (etapa && etapa.ordem === 6) {
+        if (etapa && etapa.ordem === 8) {
             targetParaRolar = document.getElementById('step-target-confirmacao') || target;
         }
 
@@ -350,10 +372,14 @@ document.addEventListener('DOMContentLoaded', function () {
         let referenceTarget = target;
 
         if (etapa && etapa.ordem === 5) {
+            referenceTarget = document.getElementById('step-target-endereco') || target;
+        }
+
+        if (etapa && etapa.ordem === 7) {
             referenceTarget = document.getElementById('step-target-documentos') || target;
         }
 
-        if (etapa && etapa.ordem === 6) {
+        if (etapa && etapa.ordem === 8) {
             referenceTarget = document.getElementById('step-target-confirmacao') || target;
         }
 
@@ -393,6 +419,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (etapa && etapa.ordem === 6) {
+            top = targetRect.top - 10;
+        }
+
+        if (etapa && etapa.ordem === 7) {
+            top = targetRect.top - 10;
+        }
+
+        if (etapa && etapa.ordem === 8) {
             top = targetRect.top - 10;
         }
 
@@ -617,6 +651,24 @@ function dataValidaBasica(valor) {
         ano <= new Date().getFullYear();
 }
 
+function telefoneValidoBasico(valor) {
+    if (!valor) {
+        return false;
+    }
+
+    const numeros = valor.replace(/\D/g, '');
+    return numeros.length === 10 || numeros.length === 11;
+}
+
+function cepValidoBasico(valor) {
+    if (!valor) {
+        return false;
+    }
+
+    const numeros = valor.replace(/\D/g, '');
+    return numeros.length === 8;
+}
+
 function validarEtapaAtual() {
     const etapa = trilha[etapaIndex];
 
@@ -661,13 +713,54 @@ function validarEtapaAtual() {
             return true;
 
         case 4:
+            if (!telefoneValidoBasico(document.getElementById('telefoneFake').value)) {
+                exibirMensagemValidacao('Informe um telefone válido com DDD para avançar.');
+                return false;
+            }
+
+            return true;
+
+        case 5:
+            if (!cepValidoBasico(document.getElementById('cepFake').value)) {
+                exibirMensagemValidacao('Informe um CEP com 8 números para avançar.');
+                return false;
+            }
+
+            if (!campoPreenchidoPorId('enderecoFake')) {
+                exibirMensagemValidacao('Informe o endereço para avançar.');
+                return false;
+            }
+
+            if (!campoPreenchidoPorId('numeroFake')) {
+                exibirMensagemValidacao('Informe o número do endereço para avançar.');
+                return false;
+            }
+
+            if (!campoPreenchidoPorId('bairroFake')) {
+                exibirMensagemValidacao('Informe o bairro para avançar.');
+                return false;
+            }
+
+            if (!campoPreenchidoPorId('cidadeFake')) {
+                exibirMensagemValidacao('Informe a cidade para avançar.');
+                return false;
+            }
+
+            if (!campoPreenchidoPorId('ufFake') || document.getElementById('ufFake').value.trim().length !== 2) {
+                exibirMensagemValidacao('Informe a UF com 2 letras para avançar.');
+                return false;
+            }
+
+            return true;
+
+        case 6:
             if (!algumCheckboxMarcadoPorName('acessibilidadeFake')) {
                 exibirMensagemValidacao('Selecione pelo menos uma opção de acessibilidade para avançar.');
                 return false;
             }
             return true;
 
-        case 5:
+        case 7:
             if (!campoPreenchidoPorId('rgValidadoFake')) {
                 exibirMensagemValidacao('Marque o RG como validado para avançar.');
                 return false;
@@ -685,7 +778,7 @@ function validarEtapaAtual() {
 
             return true;
 
-        case 6:
+        case 8:
             if (!campoPreenchidoPorId('confirmacaoFake')) {
                 exibirMensagemValidacao('Confirme a revisão dos dados para finalizar o treinamento.');
                 return false;
@@ -706,6 +799,15 @@ function validarEtapaAtual() {
 
         const tipoConta = document.getElementById('tipoContaFake')?.value || 'Tipo de conta não selecionado';
         const nome = document.getElementById('nomeFake')?.value || 'Nome não informado';
+        const telefone = document.getElementById('telefoneFake')?.value || 'Telefone não informado';
+
+        const cep = document.getElementById('cepFake')?.value || 'CEP não informado';
+        const endereco = document.getElementById('enderecoFake')?.value || 'Endereço não informado';
+        const numero = document.getElementById('numeroFake')?.value || 's/n';
+        const complemento = document.getElementById('complementoFake')?.value || '';
+        const bairro = document.getElementById('bairroFake')?.value || 'Bairro não informado';
+        const cidade = document.getElementById('cidadeFake')?.value || 'Cidade não informada';
+        const uf = document.getElementById('ufFake')?.value || 'UF não informada';
 
         const acessibilidades = Array.from(document.querySelectorAll('input[name="acessibilidadeFake"]:checked'))
             .map(function (input) {
@@ -716,7 +818,10 @@ function validarEtapaAtual() {
             ? acessibilidades.join(', ')
             : 'Acessibilidade não informada';
 
-        resumo.textContent = `${tipoConta} • ${nome} • ${textoAcessibilidade}`;
+        const textoComplemento = complemento ? ` • ${complemento}` : '';
+
+        resumo.textContent =
+            `${tipoConta} • ${nome} • ${telefone} • ${endereco}, ${numero}${textoComplemento} • ${bairro} • ${cidade}/${uf} • CEP ${cep} • ${textoAcessibilidade}`;
     }
 
     function aplicarMascaraCpf(valor) {
@@ -734,6 +839,27 @@ function validarEtapaAtual() {
             .slice(0, 8)
             .replace(/(\d{2})(\d)/, '$1/$2')
             .replace(/(\d{2})(\d)/, '$1/$2');
+    }
+
+    function aplicarMascaraTelefone(valor) {
+        const numeros = valor.replace(/\D/g, '').slice(0, 11);
+
+        if (numeros.length <= 10) {
+            return numeros
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{4})(\d)/, '$1-$2');
+        }
+
+        return numeros
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{5})(\d)/, '$1-$2');
+    }
+
+    function aplicarMascaraCep(valor) {
+        return valor
+            .replace(/\D/g, '')
+            .slice(0, 8)
+            .replace(/(\d{5})(\d)/, '$1-$2');
     }
 
     function aplicarTamanhoTextoPopup() {
@@ -851,6 +977,9 @@ function validarEtapaAtual() {
 
     const cpfFake = document.getElementById('cpfFake');
     const dataNascimentoFake = document.getElementById('dataNascimentoFake');
+    const telefoneFake = document.getElementById('telefoneFake');
+    const cepFake = document.getElementById('cepFake');
+    const ufFake = document.getElementById('ufFake');
 
     if (cpfFake) {
         cpfFake.addEventListener('input', function () {
@@ -862,6 +991,32 @@ function validarEtapaAtual() {
     if (dataNascimentoFake) {
         dataNascimentoFake.addEventListener('input', function () {
             dataNascimentoFake.value = aplicarMascaraData(dataNascimentoFake.value);
+            atualizarResumoProposta();
+        });
+    }
+
+    if (telefoneFake) {
+        telefoneFake.addEventListener('input', function () {
+            telefoneFake.value = aplicarMascaraTelefone(telefoneFake.value);
+            atualizarResumoProposta();
+        });
+    }
+
+    if (cepFake) {
+        cepFake.addEventListener('input', function () {
+            cepFake.value = aplicarMascaraCep(cepFake.value);
+            atualizarResumoProposta();
+        });
+    }
+
+    if (ufFake) {
+        ufFake.addEventListener('input', function () {
+            ufFake.value = ufFake.value
+                .replace(/[^a-zA-Z]/g, '')
+                .slice(0, 2)
+                .toUpperCase();
+
+            atualizarResumoProposta();
         });
     }
 
@@ -890,24 +1045,6 @@ function validarEtapaAtual() {
     }
 
     function obterTargetDaEtapaAtual() {
-    const etapa = trilha[etapaIndex];
-
-    if (!etapa) {
-        return null;
-    }
-
-    if (etapa.ordem === 5) {
-        return document.getElementById('step-target-documentos') || document.getElementById(etapa.targetId);
-    }
-
-    if (etapa.ordem === 6) {
-        return document.getElementById('step-target-confirmacao') || document.getElementById(etapa.targetId);
-    }
-
-    return document.getElementById(etapa.targetId);
-    }
-
-    function obterTargetDaEtapaAtual() {
         const etapa = trilha[etapaIndex];
 
         if (!etapa) {
@@ -915,11 +1052,19 @@ function validarEtapaAtual() {
         }
 
         if (etapa.ordem === 5) {
-            return document.getElementById('step-target-documentos') || document.getElementById(etapa.targetId);
+            return document.getElementById('step-target-endereco') ||
+                document.getElementById('step-target-cep') ||
+                document.getElementById(etapa.targetId);
         }
 
-        if (etapa.ordem === 6) {
-            return document.getElementById('step-target-confirmacao') || document.getElementById(etapa.targetId);
+        if (etapa.ordem === 7) {
+            return document.getElementById('step-target-documentos') ||
+                document.getElementById(etapa.targetId);
+        }
+
+        if (etapa.ordem === 8) {
+            return document.getElementById('step-target-confirmacao') ||
+                document.getElementById(etapa.targetId);
         }
 
         return document.getElementById(etapa.targetId);

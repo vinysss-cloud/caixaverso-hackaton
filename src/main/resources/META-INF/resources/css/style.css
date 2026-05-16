@@ -18,6 +18,17 @@
   --sucesso-texto: #14532D;
   --sombra: 0 20px 50px rgba(0, 47, 108, .16);
   --sombra-card: 0 14px 34px rgba(0, 47, 108, .11);
+
+  /* Aliases usados pelos patches visuais mais novos */
+  --caixa-blue: var(--azul-caixa);
+  --caixa-blue-dark: var(--azul-profundo);
+  --caixa-blue-soft: var(--azul-claro);
+  --caixa-orange: var(--laranja);
+  --caixa-orange-soft: #FFF8E8;
+  --caixa-green: #107C41;
+  --border: var(--borda);
+  --shadow: var(--sombra-card);
+  --radius-lg: 24px;
 }
 
 * {
@@ -837,7 +848,6 @@ body.high-contrast .step-card {
 }
 
 body.high-contrast p,
-body.high-contrast span,
 body.high-contrast .section-heading p,
 body.high-contrast .feature-card p {
   color: #fff;
@@ -3151,7 +3161,6 @@ body.high-contrast .feature-card p {
 }
 
 .high-contrast .nav-links a,
-.high-contrast .training-choice-card h3,
 .high-contrast .training-section-heading h2,
 .high-contrast .training-started-header h2,
 .high-contrast .cadastro-progress-area strong,
@@ -4282,3 +4291,526 @@ body.high-contrast .feature-card p {
     body > #guidedPopup.coach-docked-panel.is-visible {
         display: block !important;
     }
+
+
+
+/* ==========================================================
+   CORREÇÃO DEFINITIVA - ACESSIBILIDADE E ALTO CONTRASTE
+   Mantido como último bloco para evitar conflito com regras antigas.
+   ========================================================== */
+
+/* ---------- Barra de acessibilidade - modo normal ---------- */
+.accessibility-toolbar,
+div.accessibility-toolbar {
+    position: fixed !important;
+    right: 18px !important;
+    bottom: 18px !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px !important;
+    border-radius: 999px !important;
+    background: #FFFFFF !important;
+    border: 2px solid #DDE7F0 !important;
+    box-shadow: 0 12px 30px rgba(7, 38, 76, 0.18) !important;
+}
+
+.accessibility-toolbar button,
+.accessibility-toolbar #fontPlus,
+.accessibility-toolbar #fontMinus,
+.accessibility-toolbar #contrastToggle,
+button#fontPlus,
+button#fontMinus,
+button#contrastToggle {
+    min-height: 38px !important;
+    padding: 8px 13px !important;
+    border-radius: 999px !important;
+    background: #005CA9 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #005CA9 !important;
+    font-weight: 900 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    cursor: pointer !important;
+}
+
+.accessibility-toolbar button *,
+button#fontPlus *,
+button#fontMinus *,
+button#contrastToggle * {
+    color: inherit !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+.accessibility-toolbar button:hover,
+button#fontPlus:hover,
+button#fontMinus:hover,
+button#contrastToggle:hover {
+    background: #003B73 !important;
+    border-color: #003B73 !important;
+    color: #FFFFFF !important;
+}
+
+/* ---------- Base do alto contraste ---------- */
+html body.high-contrast,
+body.high-contrast {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+}
+
+html body.high-contrast .page-shell,
+html body.high-contrast main,
+html body.high-contrast section {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+}
+
+/* ---------- Navbar ---------- */
+html body.high-contrast .topnav,
+html body.high-contrast .topnav-inner {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .topnav {
+    border-bottom: 2px solid #FFFFFF !important;
+}
+
+html body.high-contrast .brand,
+html body.high-contrast .brand *,
+html body.high-contrast .nav-links a {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .nav-links a {
+    border-left-color: #FFFF00 !important;
+}
+
+html body.high-contrast .nav-links a:hover {
+    background: #FFFF00 !important;
+    color: #000000 !important;
+}
+
+html body.high-contrast .nav-action {
+    background: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFF00 !important;
+    box-shadow: none !important;
+}
+
+/* ---------- Hero ---------- */
+html body.high-contrast .hero-caixa {
+    background: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .hero-caixa h1,
+html body.high-contrast .hero-caixa p,
+html body.high-contrast .hero-caixa span,
+html body.high-contrast .hero-copy,
+html body.high-contrast .hero-copy * {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .hero-kicker span {
+    background: #111111 !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+}
+
+/* ---------- Card Sua Jornada ---------- */
+html body.high-contrast .user-progress-card {
+    background: #111111 !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .user-progress-card h1,
+html body.high-contrast .user-progress-card h2,
+html body.high-contrast .user-progress-card h3,
+html body.high-contrast .user-progress-card p,
+html body.high-contrast .user-progress-card .progress-card-header *,
+html body.high-contrast .user-progress-card .badge-title,
+html body.high-contrast .user-progress-card .progress-label span,
+html body.high-contrast .user-progress-card .progress-label strong {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .user-mini,
+html body.high-contrast .stats-grid div,
+html body.high-contrast .badge,
+html body.high-contrast .badge-empty,
+html body.high-contrast .progress-card-icon {
+    background: #F8FBFF !important;
+    border: 2px solid #FFFFFF !important;
+    color: #002F6C !important;
+}
+
+html body.high-contrast .user-mini *,
+html body.high-contrast .stats-grid div *,
+html body.high-contrast .badge,
+html body.high-contrast .badge *,
+html body.high-contrast .badge-empty,
+html body.high-contrast .progress-card-icon {
+    color: #002F6C !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .level-box {
+    background: #005CA9 !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+html body.high-contrast .level-box,
+html body.high-contrast .level-box * {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .progress-mini {
+    background: #FFFFFF !important;
+    border: 1px solid #FFFFFF !important;
+}
+
+html body.high-contrast .progress-mini i {
+    background: #FFFF00 !important;
+}
+
+/* ---------- Seções da Home ---------- */
+html body.high-contrast .section-wrapper,
+html body.high-contrast .section-heading,
+html body.high-contrast .how-it-works {
+    color: #FFFFFF !important;
+}
+
+html body.high-contrast .section-heading h1,
+html body.high-contrast .section-heading h2,
+html body.high-contrast .section-wrapper h1,
+html body.high-contrast .section-wrapper h2,
+html body.high-contrast .how-it-works h1,
+html body.high-contrast .how-it-works h2 {
+    color: #FFFF00 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .section-heading p,
+html body.high-contrast .section-wrapper p,
+html body.high-contrast .how-it-works p,
+html body.high-contrast .section-kicker {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+/* ---------- Cards: O que você pode fazer ---------- */
+html body.high-contrast .feature-card,
+html body.high-contrast a.feature-card {
+    background: #111111 !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .feature-card::before {
+    background: #FFFF00 !important;
+}
+
+html body.high-contrast .feature-card h3 {
+    color: #FFFF00 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .feature-card p {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .feature-card strong,
+html body.high-contrast .feature-card a,
+html body.high-contrast .feature-card strong *,
+html body.high-contrast .feature-card a * {
+    color: #00E5FF !important;
+    opacity: 1 !important;
+    text-decoration: underline !important;
+}
+
+html body.high-contrast .feature-icon,
+html body.high-contrast .feature-card .feature-icon {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border: 2px solid #FFFF00 !important;
+}
+
+html body.high-contrast .feature-icon *,
+html body.high-contrast .feature-card .feature-icon * {
+    color: #000000 !important;
+}
+
+/* Tags pequenas: Iniciante, Intermediário, Rápido e Gestão */
+html body.high-contrast .feature-card .feature-tag,
+html body.high-contrast .feature-card span.feature-tag,
+html body.high-contrast .training-choice-card .feature-tag,
+html body.high-contrast .training-choice-card span.feature-tag,
+html body.high-contrast .feature-tag,
+html body.high-contrast span.feature-tag,
+html body.high-contrast .feature-tag.soon,
+html body.high-contrast span.feature-tag.soon {
+    background: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFF00 !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .feature-card .feature-tag *,
+html body.high-contrast .training-choice-card .feature-tag *,
+html body.high-contrast .feature-tag * {
+    color: #000000 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+/* ---------- Cards: Como funciona ---------- */
+html body.high-contrast .step-card {
+    background: #111111 !important;
+    border: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .step-card h3 {
+    color: #FFFF00 !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .step-card p {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .step-card span {
+    background: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFF00 !important;
+    opacity: 1 !important;
+}
+
+/* ---------- Treinamento, cards de escolha e áreas internas ---------- */
+html body.high-contrast .training-blue-zone,
+html body.high-contrast .training-selector,
+html body.high-contrast .training-choice-card,
+html body.high-contrast .training-started-header,
+html body.high-contrast .cadastro-simulado-card,
+html body.high-contrast .guided-step-card,
+html body.high-contrast .guided-simulation-card,
+html body.high-contrast .guided-popup,
+html body.high-contrast .feedback-card,
+html body.high-contrast .card,
+html body.high-contrast .metric-card {
+    background: #111111 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .training-choice-card h3,
+html body.high-contrast .training-section-heading h2,
+html body.high-contrast .training-started-header h2,
+html body.high-contrast .guided-top h2,
+html body.high-contrast .guided-popup h3 {
+    color: #FFFF00 !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .training-choice-card p,
+html body.high-contrast .training-section-heading p,
+html body.high-contrast .training-started-header p,
+html body.high-contrast .guided-popup p,
+html body.high-contrast .voice-instruction-box p {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast .choice-meta span,
+html body.high-contrast .coming-soon-box,
+html body.high-contrast .coming-soon-box *,
+html body.high-contrast .linked-training-box,
+html body.high-contrast .linked-training-box * {
+    background: #FFFFFF !important;
+    color: #002F6C !important;
+    border-color: #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+/* ---------- Campo acessibilidade em cadastro/treinamento ---------- */
+html body.high-contrast .accessibility-fieldset,
+html body.high-contrast #step-target-acessibilidade,
+html body.high-contrast .fake-form-field#step-target-acessibilidade {
+    background: #FFFFFF !important;
+    border: 3px solid #FFFF00 !important;
+    color: #002F6C !important;
+}
+
+html body.high-contrast .accessibility-fieldset *,
+html body.high-contrast #step-target-acessibilidade *,
+html body.high-contrast .fake-form-field#step-target-acessibilidade * {
+    color: #002F6C !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .cadastro-checkbox-grid label,
+html body.high-contrast .fake-chip,
+html body.high-contrast .fake-chip * {
+    background: #E8F3FF !important;
+    color: #002F6C !important;
+    border: 2px solid #005CA9 !important;
+    opacity: 1 !important;
+}
+
+/* ---------- Inputs, selects e revisão ---------- */
+html body.high-contrast input,
+html body.high-contrast select,
+html body.high-contrast textarea,
+html body.high-contrast .review-box,
+html body.high-contrast .fake-checklist-mini span,
+html body.high-contrast .voice-instruction-box,
+html body.high-contrast .popup-dica {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border: 2px solid #FFFFFF !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast input::placeholder,
+html body.high-contrast textarea::placeholder {
+    color: #444444 !important;
+}
+
+/* ---------- Botões e links ---------- */
+html body.high-contrast .btn,
+html body.high-contrast .btn-primary,
+html body.high-contrast .btn-secondary,
+html body.high-contrast .nav-action,
+html body.high-contrast button[type="submit"] {
+    background: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFF00 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .btn *,
+html body.high-contrast .btn-primary *,
+html body.high-contrast .btn-secondary *,
+html body.high-contrast .nav-action * {
+    color: #000000 !important;
+    opacity: 1 !important;
+}
+
+html body.high-contrast a:not(.btn):not(.nav-action):not(.feature-card) {
+    color: #00E5FF !important;
+    opacity: 1 !important;
+}
+
+/* ---------- Barra de acessibilidade - alto contraste ---------- */
+html body.high-contrast .accessibility-toolbar,
+html body.high-contrast div.accessibility-toolbar,
+html body.high-contrast .page-shell .accessibility-toolbar {
+    background: #000000 !important;
+    border: 3px solid #FFFFFF !important;
+    box-shadow: 0 0 0 3px #FFFFFF !important;
+}
+
+html body.high-contrast .accessibility-toolbar button,
+html body.high-contrast .accessibility-toolbar button#fontPlus,
+html body.high-contrast .accessibility-toolbar button#fontMinus,
+html body.high-contrast .accessibility-toolbar button#contrastToggle,
+html body.high-contrast button#fontPlus,
+html body.high-contrast button#fontMinus,
+html body.high-contrast button#contrastToggle {
+    background: #FFFF00 !important;
+    color: #000000 !important;
+    border: 2px solid #FFFF00 !important;
+    opacity: 1 !important;
+    font-weight: 900 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+html body.high-contrast .accessibility-toolbar button *,
+html body.high-contrast button#fontPlus *,
+html body.high-contrast button#fontMinus *,
+html body.high-contrast button#contrastToggle * {
+    color: #000000 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+/* ==========================================================
+   PATCH FINAL - Card "Sua jornada" no alto contraste
+   Corrige matrícula e medalhas invisíveis
+   ========================================================== */
+
+/* Caixa do usuário: nome + matrícula */
+html body.high-contrast .user-progress-card .user-mini {
+    background: #F8FBFF !important;
+    border: 2px solid #FFFFFF !important;
+}
+
+html body.high-contrast .user-progress-card .user-mini strong {
+    color: #002F6C !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .user-progress-card .user-mini span {
+    color: #005CA9 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+/* Medalhas */
+html body.high-contrast .user-progress-card .badge-area .badge,
+html body.high-contrast .user-progress-card .badge-area .badge-empty {
+    background: #F8FBFF !important;
+    border: 2px solid #FFFFFF !important;
+    color: #002F6C !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .user-progress-card .badge-area .badge *,
+html body.high-contrast .user-progress-card .badge-area .badge-empty * {
+    color: #002F6C !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .user-progress-card .badge-title {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+html body.high-contrast .user-progress-card .user-mini span,
+html body.high-contrast .user-progress-card .badge-area span,
+html body.high-contrast .user-progress-card .badge-area strong {
+    color: #002F6C !important;
+    opacity: 1 !important;
+}

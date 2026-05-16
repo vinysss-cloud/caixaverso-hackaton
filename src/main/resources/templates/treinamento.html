@@ -240,7 +240,7 @@
                         </div>
 
                         <div class="guided-popup-header">
-                            <span id="popupStepBadge">Etapa 1 de 6</span>
+                            <span id="popupStepBadge">Etapa 1 de 8</span>
 
                             <div class="popup-header-actions">
                                 <button type="button"
@@ -358,6 +358,80 @@
                                    data-required-step="3">
                         </div>
 
+                        <div class="fake-form-field" id="step-target-telefone">
+                            <label for="telefoneFake">Telefone para contato</label>
+
+                            <input id="telefoneFake"
+                                   type="text"
+                                   maxlength="15"
+                                   placeholder="(21) 99999-9999"
+                                   data-required-step="4">
+                        </div>
+
+                        <div class="fake-form-field" id="step-target-cep">
+                            <label for="cepFake">CEP</label>
+
+                            <input id="cepFake"
+                                   type="text"
+                                   maxlength="9"
+                                   placeholder="00000-000"
+                                   data-required-step="5">
+                        </div>
+
+                        <div class="fake-form-field full" id="step-target-endereco">
+                            <label for="enderecoFake">Endereço</label>
+
+                            <input id="enderecoFake"
+                                   type="text"
+                                   placeholder="Rua, avenida ou travessa"
+                                   data-required-step="5">
+                        </div>
+
+                        <div class="fake-form-field" id="step-target-numero">
+                            <label for="numeroFake">Número</label>
+
+                            <input id="numeroFake"
+                                   type="text"
+                                   placeholder="Ex: 123"
+                                   data-required-step="5">
+                        </div>
+
+                        <div class="fake-form-field">
+                            <label for="complementoFake">Complemento</label>
+
+                            <input id="complementoFake"
+                                   type="text"
+                                   placeholder="Bloco, apto, casa...">
+                        </div>
+
+                        <div class="fake-form-field" id="step-target-bairro">
+                            <label for="bairroFake">Bairro</label>
+
+                            <input id="bairroFake"
+                                   type="text"
+                                   placeholder="Bairro"
+                                   data-required-step="5">
+                        </div>
+
+                        <div class="fake-form-field" id="step-target-cidade">
+                            <label for="cidadeFake">Cidade</label>
+
+                            <input id="cidadeFake"
+                                   type="text"
+                                   placeholder="Cidade"
+                                   data-required-step="5">
+                        </div>
+
+                        <div class="fake-form-field" id="step-target-uf">
+                            <label for="ufFake">UF</label>
+
+                            <input id="ufFake"
+                                   type="text"
+                                   maxlength="2"
+                                   placeholder="RJ"
+                                   data-required-step="5">
+                        </div>
+
                         <div class="fake-form-field full" id="step-target-acessibilidade">
                             <label>Necessidade de acessibilidade</label>
 
@@ -366,7 +440,7 @@
                                     <input type="checkbox"
                                            name="acessibilidadeFake"
                                            value="Deficiência visual"
-                                           data-required-step="4">
+                                           data-required-step="6">
                                     Deficiência visual
                                 </label>
 
@@ -374,7 +448,7 @@
                                     <input type="checkbox"
                                            name="acessibilidadeFake"
                                            value="Deficiência auditiva"
-                                           data-required-step="4">
+                                           data-required-step="6">
                                     Deficiência auditiva
                                 </label>
 
@@ -382,7 +456,7 @@
                                     <input type="checkbox"
                                            name="acessibilidadeFake"
                                            value="Mobilidade reduzida"
-                                           data-required-step="4">
+                                           data-required-step="6">
                                     Mobilidade reduzida
                                 </label>
 
@@ -390,7 +464,7 @@
                                     <input type="checkbox"
                                            name="acessibilidadeFake"
                                            value="Nenhuma necessidade informada"
-                                           data-required-step="4">
+                                           data-required-step="6">
                                     Nenhuma necessidade informada
                                 </label>
                             </div>
@@ -403,21 +477,21 @@
                                 <label class="fake-doc-option">
                                     <input type="checkbox"
                                            id="rgValidadoFake"
-                                           data-required-step="5">
+                                           data-required-step="7">
                                     RG validado
                                 </label>
 
                                 <label class="fake-doc-option">
                                     <input type="checkbox"
                                            id="cpfValidadoFake"
-                                           data-required-step="5">
+                                           data-required-step="7">
                                     CPF validado
                                 </label>
 
                                 <label class="fake-doc-option">
                                     <input type="checkbox"
                                            id="comprovanteValidadoFake"
-                                           data-required-step="5">
+                                           data-required-step="7">
                                     Comprovante de residência validado
                                 </label>
                             </div>
@@ -437,7 +511,7 @@
                             <label class="fake-doc-option confirm-option">
                                 <input type="checkbox"
                                        id="confirmacaoFake"
-                                       data-required-step="6">
+                                       data-required-step="8">
                                 Confirmo que revisei os dados e desejo concluir a abertura simulada da conta.
                             </label>
 
@@ -533,6 +607,30 @@
         },
         {
             ordem: 4,
+            titulo: "Informar telefone para contato",
+            instrucao: "Preencha o telefone de contato do cliente no campo destacado.",
+            dica: "Use DDD e número. Exemplo: (21) 99999-9999.",
+            campoSimulado: "Telefone para contato",
+            acaoEsperada: "Preencher telefone",
+            targetId: "step-target-telefone",
+            calloutTitle: "Informe o telefone",
+            calloutText: "Digite um telefone com DDD para contato com o cliente.",
+            instrucaoVoz: "Etapa 4. Informe o telefone de contato do cliente com DDD."
+        },
+        {
+            ordem: 5,
+            titulo: "Preencher endereço residencial",
+            instrucao: "Preencha os campos de endereço do cliente.",
+            dica: "Informe CEP, endereço, número, bairro, cidade e UF.",
+            campoSimulado: "Endereço residencial",
+            acaoEsperada: "Preencher endereço completo",
+            targetId: "step-target-endereco",
+            calloutTitle: "Preencha o endereço",
+            calloutText: "Informe CEP, endereço, número, bairro, cidade e UF antes de avançar.",
+            instrucaoVoz: "Etapa 5. Preencha o endereço residencial. Informe CEP, endereço, número, bairro, cidade e UF."
+        },
+        {
+            ordem: 6,
             titulo: "Registrar necessidade de acessibilidade",
             instrucao: "Selecione a necessidade de acessibilidade informada no atendimento.",
             dica: "Esse registro ajuda o banco a adaptar o atendimento para o cliente PCD.",
@@ -541,10 +639,10 @@
             targetId: "step-target-acessibilidade",
             calloutTitle: "Registre a acessibilidade",
             calloutText: "Escolha pelo menos uma opção de acessibilidade ou marque que nenhuma necessidade foi informada.",
-            instrucaoVoz: "Etapa 4. Selecione a necessidade de acessibilidade informada pelo cliente. Caso não exista necessidade, marque nenhuma necessidade informada."
+            instrucaoVoz: "Etapa 6. Selecione a necessidade de acessibilidade informada pelo cliente. Caso não exista necessidade, marque nenhuma necessidade informada."
         },
         {
-            ordem: 5,
+            ordem: 7,
             titulo: "Conferir documentação",
             instrucao: "Marque os documentos que foram validados.",
             dica: "Para avançar, todos os documentos obrigatórios precisam estar validados.",
@@ -553,10 +651,10 @@
             targetId: "step-target-documentos",
             calloutTitle: "Valide os documentos",
             calloutText: "Marque RG, CPF e comprovante de residência como validados.",
-            instrucaoVoz: "Etapa 5. Confira a documentação. Marque RG, CPF e comprovante de residência como validados para continuar."
+            instrucaoVoz: "Etapa 7. Confira a documentação. Marque RG, CPF e comprovante de residência como validados para continuar."
         },
         {
-            ordem: 6,
+            ordem: 8,
             titulo: "Confirmar abertura da conta",
             instrucao: "Revise a proposta e confirme a conclusão da abertura simulada.",
             dica: "Ao concluir esta etapa, o desafio será desbloqueado.",
@@ -565,7 +663,7 @@
             targetId: "step-target-confirmacao",
             calloutTitle: "Finalize a abertura",
             calloutText: "Leia o resumo, confirme a revisão dos dados e conclua a simulação.",
-            instrucaoVoz: "Etapa 6. Revise os dados da proposta. Depois marque a confirmação e execute a ação simulada para finalizar."
+            instrucaoVoz: "Etapa 8. Revise os dados da proposta. Depois marque a confirmação e execute a ação simulada para finalizar."
         }
     ];
 
