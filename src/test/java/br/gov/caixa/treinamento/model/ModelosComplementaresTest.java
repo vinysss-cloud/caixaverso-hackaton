@@ -110,7 +110,7 @@ class ModelosComplementaresTest {
 
         progresso.usuario = usuario;
         progresso.codigoTreinamento = "abertura-conta";
-        progresso.tituloTreinamento = "Conta Fácil: Jornada Assistiva PcD";
+        progresso.tituloTreinamento = "Abertura de Conta Fácil: Jornada Assistiva PcD";
         progresso.etapaAtual = 5;
         progresso.totalEtapas = 5;
         progresso.progressoPercentual = 100;
@@ -138,7 +138,7 @@ class ModelosComplementaresTest {
     void usuario_deveIniciarGamificacaoComDefaults() {
         Usuario usuario = new Usuario();
 
-        assertThat(usuario.deficiencias).isEmpty();
+        assertThat(usuario.preferenciasAcessibilidade).isEmpty();
         assertThat(usuario.pontuacaoTotal).isZero();
         assertThat(usuario.nivel).isEqualTo(1);
         assertThat(usuario.progressoPercentual).isZero();

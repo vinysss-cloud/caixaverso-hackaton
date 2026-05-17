@@ -1,0 +1,16 @@
+br\gov\caixa\treinamento\bootstrap\DataLoaderTest.class
+br\gov\caixa\treinamento\dto\CadastroUsuarioDTOTest.class
+br\gov\caixa\treinamento\controller\ControllersCoberturaAltaTest.class
+br\gov\caixa\treinamento\security\CsrfServiceTest.class
+br\gov\caixa\treinamento\model\ModelosComplementaresTest.class
+br\gov\caixa\treinamento\dto\DTOsComplementaresTest.class
+br\gov\caixa\treinamento\security\SecurityCoberturaAltaTest.class
+br\gov\caixa\treinamento\repository\RepositoriesCoberturaAltaTest.class
+br\gov\caixa\treinamento\service\DashboardServiceTest.class
+br\gov\caixa\treinamento\service\GamificacaoServiceTest.class
+br\gov\caixa\treinamento\repository\UsuarioRepositoryTest.class
+br\gov\caixa\treinamento\service\AuthServiceTest.class
+br\gov\caixa\treinamento\service\DesafioServiceTest.class
+br\gov\caixa\treinamento\model\DesafioTest.class
+br\gov\caixa\treinamento\model\ResultadoDesafioTest.class
+br\gov\caixa\treinamento\service\TreinamentoServiceTest.class

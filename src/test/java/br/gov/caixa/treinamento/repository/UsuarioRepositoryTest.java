@@ -98,10 +98,10 @@ class UsuarioRepositoryTest {
     @Test
     @DisplayName("Usuario deve poder ter deficiências")
     void testUsuarioComDeficiencias() {
-        usuarioExemplo.deficiencias.add("visual");
-        usuarioExemplo.deficiencias.add("auditiva");
+        usuarioExemplo.preferenciasAcessibilidade.add("visual");
+        usuarioExemplo.preferenciasAcessibilidade.add("auditiva");
 
-        assertThat(usuarioExemplo.deficiencias)
+        assertThat(usuarioExemplo.preferenciasAcessibilidade)
                 .hasSize(2)
                 .contains("visual", "auditiva");
     }
@@ -109,7 +109,7 @@ class UsuarioRepositoryTest {
     @Test
     @DisplayName("Usuario pode não ter deficiências")
     void testUsuarioSemDeficiencias() {
-        assertThat(usuarioExemplo.deficiencias).isEmpty();
+        assertThat(usuarioExemplo.preferenciasAcessibilidade).isEmpty();
     }
 }
 

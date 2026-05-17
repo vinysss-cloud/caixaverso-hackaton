@@ -7,7 +7,7 @@ public class CadastroUsuarioDTO {
     public String nome;
     public String matricula;
     public Integer idade;
-    public List<String> deficiencias;
+    public List<String> preferenciasAcessibilidade;
     public String senha;
     public String repetirSenha;
 }

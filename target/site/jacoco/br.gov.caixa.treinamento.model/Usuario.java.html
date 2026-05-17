@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Usuario.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.model</a> &gt; <span class="el_source">Usuario.java</span></div><h1>Usuario.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.model;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Table;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = &quot;usuarios&quot;)
+<span class="fc" id="L16">public class Usuario extends PanacheEntity {</span>
+
+    @Column(nullable = false)
+    public String nome;
+
+    @Column(nullable = false, unique = true)
+    public String matricula;
+
+    @Column(nullable = false)
+    public Integer idade;
+
+<span class="fc" id="L27">    @ElementCollection(fetch = FetchType.EAGER)</span>
+    public List&lt;String&gt; preferenciasAcessibilidade = new ArrayList&lt;&gt;();
+
+    @Column(nullable = false)
+    public String senhaHash;
+
+    @Column(length = 120)
+    public String sessaoTokenHash;
+
+    public LocalDateTime sessaoExpiraEm;
+
+    // Gamification fields
+<span class="fc" id="L39">    public Integer pontuacaoTotal = 0;</span>
+
+<span class="fc" id="L41">    public Integer nivel = 1;</span>
+
+<span class="fc" id="L43">    public Integer progressoPercentual = 0;</span>
+
+<span class="fc" id="L45">    public Integer trilhasConcluidas = 0;</span>
+
+<span class="fc" id="L47">    public Integer desafiosRespondidos = 0;</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

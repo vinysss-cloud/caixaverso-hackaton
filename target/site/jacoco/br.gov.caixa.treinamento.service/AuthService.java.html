@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.service</a> &gt; <span class="el_source">AuthService.java</span></div><h1>AuthService.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.service;
+
+import br.gov.caixa.treinamento.dto.CadastroUsuarioDTO;
+import br.gov.caixa.treinamento.logging.AuditLogService;
+import br.gov.caixa.treinamento.model.Usuario;
+import br.gov.caixa.treinamento.repository.UsuarioRepository;
+import br.gov.caixa.treinamento.util.LoggerFactory;
+import io.quarkus.elytron.security.common.BcryptUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import org.jboss.logging.Logger;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HexFormat;
+import java.util.Optional;
+
+@ApplicationScoped
+<span class="fc" id="L24">public class AuthService {</span>
+
+<span class="fc" id="L26">    private static final Logger logger = LoggerFactory.getSecurityLogger();</span>
+<span class="fc" id="L27">    private static final Logger auditLogger = LoggerFactory.getAuditLogger();</span>
+
+    private static final int TEMPO_SESSAO_HORAS = 2;
+    private static final String LEGACY_SALT = &quot;caixaverso-salt-&quot;;
+
+    @Inject
+    UsuarioRepository usuarioRepository;
+
+    @Inject
+    AuditLogService auditLogService;
+
+    @Transactional
+    public void cadastrarUsuario(CadastroUsuarioDTO dto) {
+<span class="fc" id="L40">        validarCadastro(dto);</span>
+
+<span class="fc" id="L42">        Usuario usuario = new Usuario();</span>
+<span class="fc" id="L43">        usuario.nome = dto.nome.trim();</span>
+<span class="fc" id="L44">        usuario.matricula = normalizarMatricula(dto.matricula);</span>
+<span class="fc" id="L45">        usuario.idade = dto.idade;</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        usuario.preferenciasAcessibilidade = dto.preferenciasAcessibilidade != null ? dto.preferenciasAcessibilidade : new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L47">        usuario.senhaHash = BcryptUtil.bcryptHash(dto.senha);</span>
+
+<span class="fc" id="L49">        normalizarCamposGamificacao(usuario);</span>
+<span class="fc" id="L50">        usuarioRepository.persist(usuario);</span>
+        
+<span class="fc" id="L52">        auditLogger.infof(&quot;evento=USUARIO_CADASTRADO matricula=%s&quot;, usuario.matricula);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (auditLogService != null) {</span>
+<span class="nc" id="L54">            auditLogService.usuarioCadastrado(usuario.matricula);</span>
+        }
+<span class="fc" id="L56">    }</span>
+
+    @Transactional
+    public Optional&lt;Usuario&gt; autenticar(String matricula, String senha) {
+<span class="fc bfc" id="L60" title="All 8 branches covered.">        if (matricula == null || matricula.isBlank() || senha == null || senha.isBlank()) {</span>
+<span class="fc" id="L61">            logger.warn(&quot;Tentativa de autenticação com credenciais vazias&quot;);</span>
+<span class="fc" id="L62">            return Optional.empty();</span>
+        }
+
+<span class="fc" id="L65">        String matriculaNormalizada = normalizarMatricula(matricula);</span>
+<span class="fc" id="L66">        Optional&lt;Usuario&gt; usuarioOpt = usuarioRepository.buscarPorMatricula(matriculaNormalizada);</span>
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (usuarioOpt.isEmpty()) {</span>
+<span class="fc" id="L69">            logger.warnf(&quot;evento=AUTENTICACAO_FALHA matricula=%s motivo=MATRICULA_INEXISTENTE&quot;, matriculaNormalizada);</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (auditLogService != null) {</span>
+<span class="nc" id="L71">                auditLogService.falhaAutenticacao(matriculaNormalizada, &quot;Matrícula inexistente&quot;);</span>
+            }
+<span class="fc" id="L73">            return Optional.empty();</span>
+        }
+
+<span class="fc" id="L76">        Usuario usuario = usuarioOpt.get();</span>
+
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (senhaConfere(usuario, senha)) {</span>
+<span class="fc" id="L79">            normalizarCamposGamificacao(usuario);</span>
+<span class="fc" id="L80">            auditLogger.infof(&quot;evento=AUTENTICACAO_SUCESSO matricula=%s&quot;, matriculaNormalizada);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (auditLogService != null) {</span>
+<span class="nc" id="L82">                auditLogService.usuarioAutenticado(matriculaNormalizada);</span>
+            }
+<span class="fc" id="L84">            return Optional.of(usuario);</span>
+        }
+
+<span class="fc" id="L87">        logger.warnf(&quot;evento=AUTENTICACAO_FALHA matricula=%s motivo=SENHA_INVALIDA&quot;, matriculaNormalizada);</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (auditLogService != null) {</span>
+<span class="nc" id="L89">            auditLogService.falhaAutenticacao(matriculaNormalizada, &quot;Senha inválida&quot;);</span>
+        }
+<span class="fc" id="L91">        return Optional.empty();</span>
+    }
+
+    public boolean existeMatricula(String matricula) {
+<span class="fc bfc" id="L95" title="All 4 branches covered.">        if (matricula == null || matricula.isBlank()) {</span>
+<span class="fc" id="L96">            return false;</span>
+        }
+
+<span class="fc" id="L99">        return usuarioRepository.existeMatricula(normalizarMatricula(matricula));</span>
+    }
+
+    @Transactional
+    public String criarSessao(Usuario usuario) {
+<span class="fc bfc" id="L104" title="All 4 branches covered.">        if (usuario == null || usuario.id == null) {</span>
+<span class="fc" id="L105">            throw new IllegalArgumentException(&quot;Usuário inválido para criação de sessão.&quot;);</span>
+        }
+
+<span class="fc" id="L108">        Usuario usuarioGerenciado = usuarioRepository.findById(usuario.id);</span>
+
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (usuarioGerenciado == null) {</span>
+<span class="nc" id="L111">            throw new IllegalStateException(&quot;Usuário não encontrado para criação da sessão.&quot;);</span>
+        }
+
+<span class="fc" id="L114">        String token = gerarTokenSeguro();</span>
+
+<span class="fc" id="L116">        usuarioGerenciado.sessaoTokenHash = gerarHashToken(token);</span>
+<span class="fc" id="L117">        usuarioGerenciado.sessaoExpiraEm = LocalDateTime.now().plusHours(TEMPO_SESSAO_HORAS);</span>
+
+<span class="fc" id="L119">        return token;</span>
+    }
+
+    public Optional&lt;Usuario&gt; buscarUsuarioPorTokenSessao(String token) {
+<span class="pc bpc" id="L123" title="1 of 4 branches missed.">        if (token == null || token.isBlank()) {</span>
+<span class="fc" id="L124">            return Optional.empty();</span>
+        }
+
+<span class="fc" id="L127">        String tokenHash = gerarHashToken(token);</span>
+<span class="fc" id="L128">        Optional&lt;Usuario&gt; usuarioOpt = usuarioRepository.buscarPorSessaoTokenHash(tokenHash);</span>
+
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (usuarioOpt.isEmpty()) {</span>
+<span class="nc" id="L131">            return Optional.empty();</span>
+        }
+
+<span class="fc" id="L134">        Usuario usuario = usuarioOpt.get();</span>
+
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">        if (usuario.sessaoExpiraEm == null || usuario.sessaoExpiraEm.isBefore(LocalDateTime.now())) {</span>
+<span class="fc" id="L137">            return Optional.empty();</span>
+        }
+
+<span class="fc" id="L140">        return Optional.of(usuario);</span>
+    }
+
+    @Transactional
+    public void encerrarSessao(String token) {
+<span class="pc bpc" id="L145" title="1 of 4 branches missed.">        if (token == null || token.isBlank()) {</span>
+<span class="fc" id="L146">            return;</span>
+        }
+
+<span class="fc" id="L149">        String tokenHash = gerarHashToken(token);</span>
+
+<span class="fc" id="L151">        usuarioRepository.buscarPorSessaoTokenHash(tokenHash).ifPresent(usuario -&gt; {</span>
+<span class="fc" id="L152">            usuario.sessaoTokenHash = null;</span>
+<span class="fc" id="L153">            usuario.sessaoExpiraEm = null;</span>
+<span class="fc" id="L154">        });</span>
+<span class="fc" id="L155">    }</span>
+
+    private boolean senhaConfere(Usuario usuario, String senha) {
+<span class="pc bpc" id="L158" title="2 of 4 branches missed.">        if (usuario.senhaHash == null || usuario.senhaHash.isBlank()) {</span>
+<span class="nc" id="L159">            return false;</span>
+        }
+
+<span class="pc bpc" id="L162" title="5 of 6 branches missed.">        if (usuario.senhaHash.startsWith(&quot;$2a$&quot;) || usuario.senhaHash.startsWith(&quot;$2b$&quot;) || usuario.senhaHash.startsWith(&quot;$2y$&quot;)) {</span>
+<span class="fc" id="L163">            return BcryptUtil.matches(senha, usuario.senhaHash);</span>
+        }
+
+        // Compatibilidade com usuários antigos criados antes do BCrypt.
+<span class="nc" id="L167">        String legado = gerarHashSenhaLegado(senha);</span>
+<span class="nc" id="L168">        boolean senhaLegadaConfere = legado.equals(usuario.senhaHash);</span>
+
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (senhaLegadaConfere) {</span>
+<span class="nc" id="L171">            usuario.senhaHash = BcryptUtil.bcryptHash(senha);</span>
+        }
+
+<span class="nc" id="L174">        return senhaLegadaConfere;</span>
+    }
+
+    private void validarCadastro(CadastroUsuarioDTO dto) {
+<span class="fc bfc" id="L178" title="All 4 branches covered.">        if (dto.nome == null || dto.nome.isBlank()) {</span>
+<span class="fc" id="L179">            throw new IllegalArgumentException(&quot;Nome é obrigatório.&quot;);</span>
+        }
+
+<span class="pc bpc" id="L182" title="1 of 4 branches missed.">        if (dto.matricula == null || dto.matricula.isBlank()) {</span>
+<span class="fc" id="L183">            throw new IllegalArgumentException(&quot;Matrícula é obrigatória.&quot;);</span>
+        }
+
+<span class="pc bpc" id="L186" title="1 of 4 branches missed.">        if (dto.idade == null || dto.idade &lt; 14) {</span>
+<span class="fc" id="L187">            throw new IllegalArgumentException(&quot;Idade inválida. Informe uma idade igual ou maior que 14 anos.&quot;);</span>
+        }
+
+<span class="fc" id="L190">        validarSenhaForte(dto.senha);</span>
+
+<span class="pc bpc" id="L192" title="1 of 4 branches missed.">        if (dto.repetirSenha == null || !dto.senha.equals(dto.repetirSenha)) {</span>
+<span class="fc" id="L193">            throw new IllegalArgumentException(&quot;As senhas não conferem. Digite a mesma senha nos dois campos.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (usuarioRepository.existeMatricula(normalizarMatricula(dto.matricula))) {</span>
+<span class="fc" id="L197">            throw new IllegalArgumentException(&quot;Já existe cadastro para esta matrícula. Volte para a tela de login para acessar sua conta.&quot;);</span>
+        }
+<span class="fc" id="L199">    }</span>
+
+    private void validarSenhaForte(String senha) {
+<span class="pc bpc" id="L202" title="2 of 4 branches missed.">        if (senha == null || senha.isBlank()) {</span>
+<span class="nc" id="L203">            throw new IllegalArgumentException(&quot;Senha é obrigatória.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (senha.length() &lt; 8) {</span>
+<span class="fc" id="L207">            throw new IllegalArgumentException(&quot;A senha deve ter pelo menos 8 caracteres.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        if (!senha.matches(&quot;.*[A-Z].*&quot;)) {</span>
+<span class="fc" id="L211">            throw new IllegalArgumentException(&quot;A senha deve conter pelo menos uma letra maiúscula.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (!senha.matches(&quot;.*[a-z].*&quot;)) {</span>
+<span class="fc" id="L215">            throw new IllegalArgumentException(&quot;A senha deve conter pelo menos uma letra minúscula.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (!senha.matches(&quot;.*\\d.*&quot;)) {</span>
+<span class="fc" id="L219">            throw new IllegalArgumentException(&quot;A senha deve conter pelo menos um número.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        if (!senha.matches(&quot;.*[^a-zA-Z0-9].*&quot;)) {</span>
+<span class="fc" id="L223">            throw new IllegalArgumentException(&quot;A senha deve conter pelo menos um caractere especial.&quot;);</span>
+        }
+<span class="fc" id="L225">    }</span>
+
+    private String normalizarMatricula(String matricula) {
+<span class="fc" id="L228">        return matricula.trim().toLowerCase();</span>
+    }
+
+    private String gerarTokenSeguro() {
+<span class="fc" id="L232">        byte[] bytes = new byte[32];</span>
+<span class="fc" id="L233">        new SecureRandom().nextBytes(bytes);</span>
+<span class="fc" id="L234">        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);</span>
+    }
+
+    private String gerarHashToken(String token) {
+<span class="fc" id="L238">        return gerarSha256(token);</span>
+    }
+
+    private String gerarHashSenhaLegado(String senha) {
+<span class="nc" id="L242">        return gerarSha256(LEGACY_SALT + senha);</span>
+    }
+
+    private String gerarSha256(String valor) {
+        try {
+<span class="fc" id="L247">            MessageDigest digest = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
+<span class="fc" id="L248">            byte[] hash = digest.digest(valor.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L249">            return HexFormat.of().formatHex(hash);</span>
+<span class="nc" id="L250">        } catch (Exception e) {</span>
+<span class="nc" id="L251">            throw new IllegalStateException(&quot;Erro ao gerar hash SHA-256.&quot;, e);</span>
+        }
+    }
+
+    private void normalizarCamposGamificacao(Usuario usuario) {
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        if (usuario.pontuacaoTotal == null) {</span>
+<span class="nc" id="L257">            usuario.pontuacaoTotal = 0;</span>
+        }
+
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        if (usuario.nivel == null) {</span>
+<span class="nc" id="L261">            usuario.nivel = 1;</span>
+        }
+
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">        if (usuario.progressoPercentual == null) {</span>
+<span class="nc" id="L265">            usuario.progressoPercentual = 0;</span>
+        }
+
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">        if (usuario.trilhasConcluidas == null) {</span>
+<span class="nc" id="L269">            usuario.trilhasConcluidas = 0;</span>
+        }
+
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (usuario.desafiosRespondidos == null) {</span>
+<span class="nc" id="L273">            usuario.desafiosRespondidos = 0;</span>
+        }
+<span class="fc" id="L275">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RequestLoggingFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.logging</a> &gt; <span class="el_source">RequestLoggingFilter.java</span></div><h1>RequestLoggingFilter.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.logging;
+
+import br.gov.caixa.treinamento.util.LoggerFactory;
+import jakarta.annotation.Priority;
+import jakarta.ws.rs.Priorities;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ContainerResponseContext;
+import jakarta.ws.rs.container.ContainerResponseFilter;
+import jakarta.ws.rs.ext.Provider;
+import org.jboss.logging.Logger;
+import org.jboss.logging.MDC;
+
+import java.io.IOException;
+import java.util.Set;
+import java.util.UUID;
+
+/**
+ * Loga início/fim das requisições HTML/API do protótipo.
+ * Ajuda a rastrear erros sem expor cookies, tokens ou payloads sensíveis.
+ */
+@Provider
+@Priority(Priorities.USER)
+<span class="nc" id="L24">public class RequestLoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {</span>
+
+<span class="nc" id="L26">    private static final Logger ACCESS = LoggerFactory.getAccessLogger();</span>
+    private static final String REQUEST_ID = &quot;requestId&quot;;
+    private static final String START_TIME = &quot;requestStartTime&quot;;
+
+<span class="nc" id="L30">    private static final Set&lt;String&gt; PREFIXOS_IGNORADOS = Set.of(</span>
+            &quot;/css/&quot;,
+            &quot;/js/&quot;,
+            &quot;/img/&quot;,
+            &quot;/assets/&quot;,
+            &quot;/favicon.ico&quot;
+    );
+
+    @Override
+    public void filter(ContainerRequestContext requestContext) throws IOException {
+<span class="nc" id="L40">        String path = normalizarPath(requestContext.getUriInfo().getPath());</span>
+
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (ignorar(path)) {</span>
+<span class="nc" id="L43">            return;</span>
+        }
+
+<span class="nc" id="L46">        String requestId = UUID.randomUUID().toString();</span>
+<span class="nc" id="L47">        requestContext.setProperty(REQUEST_ID, requestId);</span>
+<span class="nc" id="L48">        requestContext.setProperty(START_TIME, System.currentTimeMillis());</span>
+<span class="nc" id="L49">        MDC.put(REQUEST_ID, requestId);</span>
+
+<span class="nc" id="L51">        ACCESS.infof(&quot;evento=HTTP_REQUEST_START requestId=%s metodo=%s path=%s&quot;,</span>
+                requestId,
+<span class="nc" id="L53">                LogSanitizer.textoSeguro(requestContext.getMethod()),</span>
+<span class="nc" id="L54">                LogSanitizer.textoSeguro(path));</span>
+<span class="nc" id="L55">    }</span>
+
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+<span class="nc" id="L59">        String path = normalizarPath(requestContext.getUriInfo().getPath());</span>
+
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (ignorar(path)) {</span>
+<span class="nc" id="L62">            return;</span>
+        }
+
+<span class="nc" id="L65">        String requestId = String.valueOf(requestContext.getProperty(REQUEST_ID));</span>
+<span class="nc" id="L66">        Object start = requestContext.getProperty(START_TIME);</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        long duracaoMs = start instanceof Long inicio ? System.currentTimeMillis() - inicio : -1L;</span>
+
+<span class="nc" id="L69">        ACCESS.infof(&quot;evento=HTTP_REQUEST_END requestId=%s metodo=%s path=%s status=%s duracaoMs=%s&quot;,</span>
+<span class="nc" id="L70">                LogSanitizer.textoSeguro(requestId),</span>
+<span class="nc" id="L71">                LogSanitizer.textoSeguro(requestContext.getMethod()),</span>
+<span class="nc" id="L72">                LogSanitizer.textoSeguro(path),</span>
+<span class="nc" id="L73">                responseContext.getStatus(),</span>
+<span class="nc" id="L74">                duracaoMs);</span>
+
+<span class="nc" id="L76">        MDC.remove(REQUEST_ID);</span>
+<span class="nc" id="L77">    }</span>
+
+    private boolean ignorar(String path) {
+<span class="nc" id="L80">        return PREFIXOS_IGNORADOS.stream().anyMatch(path::startsWith);</span>
+    }
+
+    private String normalizarPath(String path) {
+<span class="nc bnc" id="L84" title="All 4 branches missed.">        if (path == null || path.isBlank()) {</span>
+<span class="nc" id="L85">            return &quot;/&quot;;</span>
+        }
+<span class="nc" id="L87">        String normalizado = path.trim();</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        return normalizado.startsWith(&quot;/&quot;) ? normalizado : &quot;/&quot; + normalizado;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LogSanitizer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.logging</a> &gt; <span class="el_source">LogSanitizer.java</span></div><h1>LogSanitizer.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.logging;
+
+import java.text.Normalizer;
+
+/**
+ * Utilitário simples para evitar vazamento de dados sensíveis nos logs.
+ * Mantém os logs úteis para auditoria sem gravar senha, token, cookie ou CPF completo.
+ */
+public final class LogSanitizer {
+
+<span class="nc" id="L11">    private LogSanitizer() {</span>
+<span class="nc" id="L12">        throw new UnsupportedOperationException(&quot;Classe utilitária não pode ser instanciada&quot;);</span>
+    }
+
+    public static String textoSeguro(String valor) {
+<span class="nc bnc" id="L16" title="All 4 branches missed.">        if (valor == null || valor.isBlank()) {</span>
+<span class="nc" id="L17">            return &quot;-&quot;;</span>
+        }
+
+<span class="nc" id="L20">        String normalizado = Normalizer.normalize(valor.trim(), Normalizer.Form.NFKC)</span>
+<span class="nc" id="L21">                .replaceAll(&quot;[\\r\\n\\t]&quot;, &quot; &quot;)</span>
+<span class="nc" id="L22">                .replaceAll(&quot;\\s+&quot;, &quot; &quot;);</span>
+
+<span class="nc" id="L24">        normalizado = normalizado.replaceAll(&quot;(?i)(senha|password|csrf|token|cookie|authorization)=([^\\s&amp;;]+)&quot;, &quot;$1=***&quot;);</span>
+<span class="nc" id="L25">        normalizado = normalizado.replaceAll(&quot;\\b\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}\\b&quot;, &quot;***CPF***&quot;);</span>
+
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (normalizado.length() &gt; 180) {</span>
+<span class="nc" id="L28">            return normalizado.substring(0, 180) + &quot;...&quot;;</span>
+        }
+
+<span class="nc" id="L31">        return normalizado;</span>
+    }
+
+    public static String matriculaSegura(String matricula) {
+<span class="nc bnc" id="L35" title="All 4 branches missed.">        if (matricula == null || matricula.isBlank()) {</span>
+<span class="nc" id="L36">            return &quot;anonimo&quot;;</span>
+        }
+
+<span class="nc" id="L39">        String limpa = textoSeguro(matricula).replaceAll(&quot;[^A-Za-z0-9]&quot;, &quot;&quot;);</span>
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (limpa.length() &lt;= 3) {</span>
+<span class="nc" id="L42">            return &quot;***&quot;;</span>
+        }
+
+<span class="nc" id="L45">        return limpa.substring(0, Math.min(2, limpa.length()))</span>
+                + &quot;***&quot;
+<span class="nc" id="L47">                + limpa.substring(Math.max(0, limpa.length() - 2));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

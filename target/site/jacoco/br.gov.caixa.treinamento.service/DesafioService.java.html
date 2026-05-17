@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DesafioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.service</a> &gt; <span class="el_source">DesafioService.java</span></div><h1>DesafioService.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.service;
+
+import br.gov.caixa.treinamento.model.Desafio;
+import br.gov.caixa.treinamento.model.DesafioAssistivo;
+import br.gov.caixa.treinamento.model.ResultadoDesafio;
+import br.gov.caixa.treinamento.model.ResultadoDesafioUsuario;
+import br.gov.caixa.treinamento.model.Usuario;
+import br.gov.caixa.treinamento.repository.DesafioAssistivoRepository;
+import br.gov.caixa.treinamento.repository.ResultadoDesafioUsuarioRepository;
+import br.gov.caixa.treinamento.repository.UsuarioRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
+
+@ApplicationScoped
+<span class="fc" id="L20">public class DesafioService {</span>
+
+    public static final String CODIGO_DESAFIO_CONTA_FACIL = &quot;conta-facil-validacao-assistiva&quot;;
+
+    @Inject
+    UsuarioRepository usuarioRepository;
+
+    @Inject
+    DesafioAssistivoRepository desafioAssistivoRepository;
+
+    @Inject
+    ResultadoDesafioUsuarioRepository resultadoDesafioUsuarioRepository;
+
+    public Desafio buscarDesafioAberturaConta() {
+<span class="fc" id="L34">        return new Desafio(</span>
+                &quot;quiz-abertura-conta&quot;,
+                &quot;Validação: Conta Fácil - Jornada Assistiva PcD&quot;,
+                &quot;Após concluir a jornada assistiva, responda: qual etapa deve ocorrer antes da confirmação final do fluxo piloto de abertura de conta? A validação demonstra autonomia assistida que pode ser aplicada a intranet, SISRH, atender.caixa e outros sistemas internos.&quot;,
+<span class="fc" id="L38">                Arrays.asList(</span>
+                        &quot;Revisar os dados da proposta&quot;,
+                        &quot;Ignorar alertas de documentação&quot;,
+                        &quot;Confirmar a conta sem validação&quot;,
+                        &quot;Pular a identificação do tipo de conta&quot;
+                ),
+                &quot;Revisar os dados da proposta&quot;
+        );
+    }
+
+    public ResultadoDesafio validarRespostaAberturaConta(String resposta) {
+<span class="fc bfc" id="L49" title="All 4 branches covered.">        if (resposta == null || resposta.trim().isEmpty()) {</span>
+<span class="fc" id="L50">            return new ResultadoDesafio(</span>
+                    false,
+                    0,
+                    &quot;Nenhuma resposta foi selecionada.&quot;
+            );
+        }
+
+<span class="fc" id="L57">        Desafio desafio = buscarDesafioAberturaConta();</span>
+<span class="fc" id="L58">        boolean acertou = desafio.respostaCorreta.equalsIgnoreCase(resposta.trim());</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (acertou) {</span>
+<span class="fc" id="L61">            return new ResultadoDesafio(</span>
+                    true,
+                    100,
+                    &quot;Correto. Resultado salvo. O empregado demonstrou autonomia assistida, atenção a alertas e revisão segura antes da confirmação final.&quot;
+            );
+        }
+
+<span class="fc" id="L68">        return new ResultadoDesafio(</span>
+                false,
+                40,
+                &quot;Resposta incorreta. Revise a jornada Conta Fácil antes de repetir a prática. Resultado salvo com revisão recomendada.&quot;
+        );
+    }
+
+    public boolean desafioContaFacilJaRespondido(String matricula) {
+<span class="nc" id="L76">        Optional&lt;Usuario&gt; usuarioOpt = usuarioRepository.buscarPorMatricula(matricula);</span>
+<span class="nc" id="L77">        Optional&lt;DesafioAssistivo&gt; desafioOpt = desafioAssistivoRepository.buscarPorCodigo(CODIGO_DESAFIO_CONTA_FACIL);</span>
+
+<span class="nc bnc" id="L79" title="All 4 branches missed.">        if (usuarioOpt.isEmpty() || desafioOpt.isEmpty()) {</span>
+<span class="nc" id="L80">            return false;</span>
+        }
+
+<span class="nc" id="L83">        return resultadoDesafioUsuarioRepository.usuarioJaConcluiu(usuarioOpt.get(), desafioOpt.get());</span>
+    }
+
+    public Optional&lt;ResultadoDesafioUsuario&gt; buscarResultadoContaFacil(String matricula) {
+<span class="nc" id="L87">        Optional&lt;Usuario&gt; usuarioOpt = usuarioRepository.buscarPorMatricula(matricula);</span>
+<span class="nc" id="L88">        Optional&lt;DesafioAssistivo&gt; desafioOpt = desafioAssistivoRepository.buscarPorCodigo(CODIGO_DESAFIO_CONTA_FACIL);</span>
+
+<span class="nc bnc" id="L90" title="All 4 branches missed.">        if (usuarioOpt.isEmpty() || desafioOpt.isEmpty()) {</span>
+<span class="nc" id="L91">            return Optional.empty();</span>
+        }
+
+<span class="nc" id="L94">        return resultadoDesafioUsuarioRepository.buscarPorUsuarioEDesafio(usuarioOpt.get(), desafioOpt.get());</span>
+    }
+
+    @Transactional
+    public ResultadoDesafio registrarResultadoContaFacil(String matricula,
+                                                         String resposta,
+                                                         Integer acertos,
+                                                         Integer percentual,
+                                                         Integer totalSituacoes) {
+<span class="nc" id="L103">        Usuario usuario = usuarioRepository.buscarPorMatricula(matricula)</span>
+<span class="nc" id="L104">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Usuário não encontrado.&quot;));</span>
+
+<span class="nc" id="L106">        DesafioAssistivo desafio = desafioAssistivoRepository.buscarPorCodigo(CODIGO_DESAFIO_CONTA_FACIL)</span>
+<span class="nc" id="L107">                .orElseThrow(() -&gt; new IllegalStateException(&quot;Desafio Conta Fácil não foi cadastrado na base.&quot;));</span>
+
+<span class="nc" id="L109">        Optional&lt;ResultadoDesafioUsuario&gt; resultadoExistente =</span>
+<span class="nc" id="L110">                resultadoDesafioUsuarioRepository.buscarPorUsuarioEDesafio(usuario, desafio);</span>
+
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (resultadoExistente.isPresent()) {</span>
+<span class="nc" id="L113">            ResultadoDesafioUsuario salvo = resultadoExistente.get();</span>
+<span class="nc" id="L114">            return new ResultadoDesafio(</span>
+<span class="nc" id="L115">                    Boolean.TRUE.equals(salvo.aprovado),</span>
+                    0,
+                    &quot;Este desafio já foi concluído por este usuário. O resultado anterior foi mantido para preservar o ranking e evitar pontuação repetida.&quot;
+            );
+        }
+
+<span class="nc" id="L121">        ResultadoDesafio resultado = validarRespostaAberturaConta(resposta);</span>
+
+<span class="nc" id="L123">        int totalNormalizado = normalizarInteiro(totalSituacoes, desafio.quantidadeSituacoes, 1, 100);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        int acertosNormalizados = normalizarInteiro(acertos, resultado.acertou ? totalNormalizado : 0, 0, totalNormalizado);</span>
+<span class="nc" id="L125">        int percentualNormalizado = normalizarInteiro(percentual, calcularPercentual(acertosNormalizados, totalNormalizado), 0, 100);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        boolean aprovado = percentualNormalizado &gt;= 70;</span>
+
+<span class="nc" id="L128">        ResultadoDesafioUsuario registro = new ResultadoDesafioUsuario();</span>
+<span class="nc" id="L129">        registro.usuario = usuario;</span>
+<span class="nc" id="L130">        registro.desafio = desafio;</span>
+<span class="nc" id="L131">        registro.totalSituacoes = totalNormalizado;</span>
+<span class="nc" id="L132">        registro.acertos = acertosNormalizados;</span>
+<span class="nc" id="L133">        registro.percentual = percentualNormalizado;</span>
+<span class="nc" id="L134">        registro.pontuacao = resultado.pontuacao;</span>
+<span class="nc" id="L135">        registro.aprovado = aprovado;</span>
+<span class="nc" id="L136">        registro.status = &quot;CONCLUIDO&quot;;</span>
+<span class="nc" id="L137">        registro.respostaResumo = resposta;</span>
+<span class="nc" id="L138">        registro.dataInicio = LocalDateTime.now();</span>
+<span class="nc" id="L139">        registro.dataConclusao = LocalDateTime.now();</span>
+
+<span class="nc" id="L141">        resultadoDesafioUsuarioRepository.persist(registro);</span>
+
+<span class="nc" id="L143">        return resultado;</span>
+    }
+
+    private int calcularPercentual(int acertos, int total) {
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        if (total &lt;= 0) {</span>
+<span class="nc" id="L148">            return 0;</span>
+        }
+<span class="nc" id="L150">        return Math.round((acertos * 100f) / total);</span>
+    }
+
+    private int normalizarInteiro(Integer valor, int padrao, int minimo, int maximo) {
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        int normalizado = valor == null ? padrao : valor;</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (normalizado &lt; minimo) {</span>
+<span class="nc" id="L156">            return minimo;</span>
+        }
+<span class="nc" id="L158">        return Math.min(normalizado, maximo);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

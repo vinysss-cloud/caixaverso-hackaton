@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CsrfService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.security</a> &gt; <span class="el_source">CsrfService.java</span></div><h1>CsrfService.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.security;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.NewCookie;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import java.security.SecureRandom;
+import java.util.Base64;
+
+@ApplicationScoped
+<span class="fc" id="L11">public class CsrfService {</span>
+
+    public static final String COOKIE_CSRF = &quot;CAIXAVERSO_CSRF&quot;;
+    private static final int BYTES_TOKEN = 32;
+    private static final int TEMPO_TOKEN_SEGUNDOS = 7200;
+
+<span class="fc" id="L17">    private final SecureRandom secureRandom = new SecureRandom();</span>
+
+    @ConfigProperty(name = &quot;caixaverso.cookie.secure&quot;, defaultValue = &quot;true&quot;)
+    boolean cookieSecure;
+
+    public String gerarToken() {
+<span class="fc" id="L23">        byte[] bytes = new byte[BYTES_TOKEN];</span>
+<span class="fc" id="L24">        secureRandom.nextBytes(bytes);</span>
+<span class="fc" id="L25">        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);</span>
+    }
+
+    public String obterOuGerarToken(String tokenAtual) {
+<span class="fc bfc" id="L29" title="All 6 branches covered.">        if (tokenAtual == null || tokenAtual.isBlank() || tokenAtual.length() &lt; 32) {</span>
+<span class="fc" id="L30">            return gerarToken();</span>
+        }
+<span class="fc" id="L32">        return tokenAtual;</span>
+    }
+
+    public boolean tokenValido(String tokenFormulario, String tokenCookie) {
+<span class="fc bfc" id="L36" title="All 4 branches covered.">        return tokenFormulario != null</span>
+                &amp;&amp; tokenCookie != null
+<span class="fc bfc" id="L38" title="All 2 branches covered.">                &amp;&amp; !tokenFormulario.isBlank()</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">                &amp;&amp; tokenFormulario.equals(tokenCookie);</span>
+    }
+
+    public NewCookie criarCookie(String token) {
+<span class="fc" id="L43">        return new NewCookie.Builder(COOKIE_CSRF)</span>
+<span class="fc" id="L44">                .value(token)</span>
+<span class="fc" id="L45">                .path(&quot;/&quot;)</span>
+<span class="fc" id="L46">                .httpOnly(true)</span>
+<span class="fc" id="L47">                .secure(cookieSecure)</span>
+<span class="fc" id="L48">                .sameSite(NewCookie.SameSite.STRICT)</span>
+<span class="fc" id="L49">                .maxAge(TEMPO_TOKEN_SEGUNDOS)</span>
+<span class="fc" id="L50">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuditLogService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.logging</a> &gt; <span class="el_source">AuditLogService.java</span></div><h1>AuditLogService.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.logging;
+
+import br.gov.caixa.treinamento.util.LoggerFactory;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.jboss.logging.Logger;
+
+/**
+ * Serviço centralizado para logs de auditoria do protótipo.
+ *
+ * Regras:
+ * - não registrar senha, token de sessão, CSRF, cookie ou dados sensíveis;
+ * - mascarar matrícula quando possível;
+ * - usar eventos padronizados para facilitar leitura no arquivo de log.
+ */
+@ApplicationScoped
+<span class="nc" id="L16">public class AuditLogService {</span>
+
+<span class="nc" id="L18">    private static final Logger AUDIT = LoggerFactory.getAuditLogger();</span>
+<span class="nc" id="L19">    private static final Logger SECURITY = LoggerFactory.getSecurityLogger();</span>
+<span class="nc" id="L20">    private static final Logger BUSINESS = LoggerFactory.getServiceLogger();</span>
+
+    public void usuarioAutenticado(String matricula) {
+<span class="nc" id="L23">        AUDIT.infof(&quot;evento=USUARIO_AUTENTICADO matricula=%s&quot;, LogSanitizer.matriculaSegura(matricula));</span>
+<span class="nc" id="L24">    }</span>
+
+    public void usuarioCadastrado(String matricula) {
+<span class="nc" id="L27">        AUDIT.infof(&quot;evento=USUARIO_CADASTRADO matricula=%s&quot;, LogSanitizer.matriculaSegura(matricula));</span>
+<span class="nc" id="L28">    }</span>
+
+    public void falhaAutenticacao(String matricula, String motivo) {
+<span class="nc" id="L31">        SECURITY.warnf(&quot;evento=FALHA_AUTENTICACAO matricula=%s motivo=%s&quot;,</span>
+<span class="nc" id="L32">                LogSanitizer.matriculaSegura(matricula),</span>
+<span class="nc" id="L33">                LogSanitizer.textoSeguro(motivo));</span>
+<span class="nc" id="L34">    }</span>
+
+    public void csrfInvalido(String rota, String matricula) {
+<span class="nc" id="L37">        SECURITY.warnf(&quot;evento=CSRF_INVALIDO rota=%s matricula=%s&quot;,</span>
+<span class="nc" id="L38">                LogSanitizer.textoSeguro(rota),</span>
+<span class="nc" id="L39">                LogSanitizer.matriculaSegura(matricula));</span>
+<span class="nc" id="L40">    }</span>
+
+    public void desafioBloqueado(String matricula, String codigoDesafio) {
+<span class="nc" id="L43">        BUSINESS.infof(&quot;evento=DESAFIO_BLOQUEADO matricula=%s desafio=%s&quot;,</span>
+<span class="nc" id="L44">                LogSanitizer.matriculaSegura(matricula),</span>
+<span class="nc" id="L45">                LogSanitizer.textoSeguro(codigoDesafio));</span>
+<span class="nc" id="L46">    }</span>
+
+    public void desafioJaConcluido(String matricula, String codigoDesafio) {
+<span class="nc" id="L49">        AUDIT.infof(&quot;evento=DESAFIO_JA_CONCLUIDO matricula=%s desafio=%s&quot;,</span>
+<span class="nc" id="L50">                LogSanitizer.matriculaSegura(matricula),</span>
+<span class="nc" id="L51">                LogSanitizer.textoSeguro(codigoDesafio));</span>
+<span class="nc" id="L52">    }</span>
+
+    public void desafioConcluido(String matricula, String codigoDesafio, Integer acertos, Integer percentual) {
+<span class="nc" id="L55">        AUDIT.infof(&quot;evento=DESAFIO_CONCLUIDO matricula=%s desafio=%s acertos=%s percentual=%s&quot;,</span>
+<span class="nc" id="L56">                LogSanitizer.matriculaSegura(matricula),</span>
+<span class="nc" id="L57">                LogSanitizer.textoSeguro(codigoDesafio),</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                acertos == null ? &quot;-&quot; : acertos,</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                percentual == null ? &quot;-&quot; : percentual);</span>
+<span class="nc" id="L60">    }</span>
+
+    public void erroAplicacao(String evento, Throwable erro) {
+<span class="nc" id="L63">        BUSINESS.errorf(erro, &quot;evento=%s erro=%s&quot;, LogSanitizer.textoSeguro(evento), LogSanitizer.textoSeguro(erro.getMessage()));</span>
+<span class="nc" id="L64">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

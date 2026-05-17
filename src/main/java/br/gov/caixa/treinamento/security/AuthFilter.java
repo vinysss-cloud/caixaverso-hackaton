@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Set;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthFilter implements ContainerRequestFilter {
@@ -41,6 +43,9 @@ public class AuthFilter implements ContainerRequestFilter {
     @Inject
     AuthService authService;
 
+    @ConfigProperty(name = "caixaverso.cookie.secure", defaultValue = "true")
+    boolean cookieSecure;
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String path = normalizarPath(requestContext.getUriInfo().getPath());
@@ -60,6 +65,7 @@ public class AuthFilter implements ContainerRequestFilter {
                     .value("")
                     .path("/")
                     .httpOnly(true)
+                    .secure(cookieSecure)
                     .sameSite(NewCookie.SameSite.STRICT)
                     .maxAge(0)
                     .build();

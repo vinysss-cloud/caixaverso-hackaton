@@ -1,0 +1,288 @@
+/* ==========================================================
+   COMPLEMENTO VISUAL E ACESSIBILIDADE - CAIXAVERSO ASSISTIVO
+   Cole este conteúdo no final de:
+   src/main/resources/META-INF/resources/css/style.css
+   ========================================================== */
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 100000;
+    transform: translateY(-180%);
+    background: #ffbf00;
+    color: #002f6c;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 900;
+    text-decoration: none;
+    border: 3px solid #002f6c;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+}
+
+:focus-visible {
+    outline: 4px solid #ffbf00 !important;
+    outline-offset: 4px !important;
+    box-shadow: 0 0 0 6px rgba(0, 47, 108, .35) !important;
+}
+
+[id] {
+    scroll-margin-top: 110px;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex]:not([tabindex="-1"]) {
+    min-height: 40px;
+}
+
+.accessibility-toolbar,
+div.accessibility-toolbar {
+    position: fixed !important;
+    right: 18px !important;
+    bottom: 18px !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    max-width: min(640px, calc(100vw - 32px)) !important;
+    padding: 10px !important;
+    border-radius: 22px !important;
+    background: #ffffff !important;
+    border: 2px solid #005ca9 !important;
+    box-shadow: 0 12px 30px rgba(7, 38, 76, 0.22) !important;
+}
+
+.accessibility-toolbar button {
+    min-height: 42px !important;
+    padding: 9px 14px !important;
+    border-radius: 999px !important;
+    background: #005ca9 !important;
+    color: #ffffff !important;
+    border: 2px solid #005ca9 !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+.accessibility-toolbar button:hover {
+    background: #002f6c !important;
+    border-color: #002f6c !important;
+}
+
+.accessibility-toolbar button[aria-pressed="true"] {
+    background: #ffbf00 !important;
+    color: #002f6c !important;
+    border-color: #002f6c !important;
+}
+
+body.low-vision {
+    font-size: 120%;
+    line-height: 1.75;
+    letter-spacing: .02em;
+}
+
+body.low-vision p,
+body.low-vision li,
+body.low-vision label,
+body.low-vision input,
+body.low-vision select,
+body.low-vision textarea,
+body.low-vision button {
+    line-height: 1.75;
+}
+
+body.low-vision button,
+body.low-vision a,
+body.low-vision input,
+body.low-vision select,
+body.low-vision textarea {
+    min-height: 48px;
+}
+
+body.high-contrast {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast main,
+body.high-contrast section,
+body.high-contrast article,
+body.high-contrast .card,
+body.high-contrast .dashboard-card,
+body.high-contrast .training-choice-card,
+body.high-contrast .guided-step-card,
+body.high-contrast .cadastro-simulado-card,
+body.high-contrast .feedback-card,
+body.high-contrast .auth-card,
+body.high-contrast .auth-panel {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast strong {
+    color: #ffff00 !important;
+}
+
+body.high-contrast p,
+body.high-contrast span,
+body.high-contrast li,
+body.high-contrast label,
+body.high-contrast small {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+body.high-contrast a:not(.btn):not(.nav-action) {
+    color: #00e5ff !important;
+    text-decoration: underline !important;
+}
+
+body.high-contrast button,
+body.high-contrast .btn,
+body.high-contrast .btn-primary,
+body.high-contrast .btn-secondary,
+body.high-contrast .nav-action {
+    background: #ffff00 !important;
+    color: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast input,
+body.high-contrast select,
+body.high-contrast textarea {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 3px solid #ffff00 !important;
+}
+
+body.high-contrast .accessibility-toolbar {
+    background: #000000 !important;
+    border: 3px solid #ffffff !important;
+    box-shadow: 0 0 0 3px #ffffff !important;
+}
+
+body.high-contrast .accessibility-toolbar button {
+    background: #ffff00 !important;
+    color: #000000 !important;
+    border-color: #ffff00 !important;
+}
+
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+.audio-transcription {
+    margin-top: 14px;
+    background: #ffffff;
+    color: #1f2937;
+    border: 2px solid #dde7f0;
+    border-radius: 16px;
+    padding: 12px 14px;
+}
+
+.audio-transcription summary {
+    cursor: pointer;
+    font-weight: 900;
+    color: #005ca9;
+}
+
+.audio-transcription p {
+    margin: 10px 0 0;
+}
+
+.assistive-hero .hero-kicker span,
+.assistive-dashboard-page .section-kicker,
+.assistive-training-page .section-kicker,
+.assistive-validation-page .section-kicker {
+    letter-spacing: .03em;
+}
+
+.assistive-summary-card,
+.assistive-auth-card,
+.assistive-auth-panel {
+    border: 1px solid rgba(0, 92, 169, .18);
+}
+
+.assistive-auth-panel .auth-benefits div,
+.assistive-home-page .feature-card,
+.assistive-dashboard-page .dashboard-card {
+    position: relative;
+}
+
+.assistive-auth-panel .auth-benefits div::before,
+.assistive-home-page .feature-card::before,
+.assistive-dashboard-page .dashboard-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #005ca9, #ffbf00);
+    opacity: .85;
+}
+
+@media (max-width: 720px) {
+    .accessibility-toolbar {
+        left: 12px !important;
+        right: 12px !important;
+        bottom: 12px !important;
+        justify-content: center !important;
+        border-radius: 18px !important;
+    }
+
+    .accessibility-toolbar button {
+        flex: 1 1 auto !important;
+        font-size: .86rem !important;
+        padding: 8px 10px !important;
+    }
+
+    body {
+        padding-bottom: 140px;
+    }
+}

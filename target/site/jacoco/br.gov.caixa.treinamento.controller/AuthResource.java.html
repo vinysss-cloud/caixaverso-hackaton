@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.controller</a> &gt; <span class="el_source">AuthResource.java</span></div><h1>AuthResource.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.controller;
+
+import br.gov.caixa.treinamento.dto.CadastroUsuarioDTO;
+import br.gov.caixa.treinamento.model.Usuario;
+import br.gov.caixa.treinamento.security.AuthFilter;
+import br.gov.caixa.treinamento.security.CsrfService;
+import br.gov.caixa.treinamento.security.LoginRateLimitService;
+import br.gov.caixa.treinamento.service.AuthService;
+import br.gov.caixa.treinamento.service.GamificacaoService;
+import io.quarkus.qute.Template;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.Response;
+
+import java.net.URI;
+import java.util.Optional;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+@Path(&quot;/&quot;)
+<span class="fc" id="L30">public class AuthResource {</span>
+
+    @Inject
+    Template login;
+
+    @Inject
+    Template cadastro;
+
+    @Inject
+    AuthService authService;
+
+    @Inject
+    GamificacaoService gamificacaoService;
+
+    @Inject
+    CsrfService csrfService;
+
+    @Inject
+    LoginRateLimitService loginRateLimitService;
+
+    @ConfigProperty(name = &quot;caixaverso.cookie.secure&quot;, defaultValue = &quot;true&quot;)
+    boolean cookieSecure;
+
+    @GET
+    @Path(&quot;/login&quot;)
+    @Produces(MediaType.TEXT_HTML)
+    public Response login() {
+<span class="fc" id="L57">        return renderLogin(null, null);</span>
+    }
+
+    @POST
+    @Path(&quot;/login&quot;)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response autenticar(@FormParam(&quot;matricula&quot;) String matricula,
+                               @FormParam(&quot;senha&quot;) String senha,
+                               @FormParam(&quot;csrfToken&quot;) String csrfToken,
+                               @CookieParam(CsrfService.COOKIE_CSRF) String csrfCookie,
+                               @HeaderParam(&quot;X-Forwarded-For&quot;) String forwardedFor,
+                               @HeaderParam(&quot;X-Real-IP&quot;) String realIp) {
+
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (!csrfService.tokenValido(csrfToken, csrfCookie)) {</span>
+<span class="nc" id="L71">            return renderLogin(&quot;Formulário expirado por segurança. Recarregue a página e tente novamente.&quot;, null);</span>
+        }
+
+<span class="fc" id="L74">        String origem = origemRequisicao(forwardedFor, realIp);</span>
+
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (loginRateLimitService.estaBloqueado(matricula, origem)) {</span>
+<span class="nc" id="L77">            return renderLogin(&quot;Muitas tentativas de acesso. Aguarde alguns minutos antes de tentar novamente.&quot;, null);</span>
+        }
+
+<span class="pc bpc" id="L80" title="3 of 8 branches missed.">        if (matricula == null || matricula.isBlank() || senha == null || senha.isBlank()) {</span>
+<span class="fc" id="L81">            loginRateLimitService.registrarFalha(matricula, origem);</span>
+<span class="fc" id="L82">            return renderLogin(&quot;Informe sua matrícula e senha para acessar a plataforma.&quot;, null);</span>
+        }
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (!authService.existeMatricula(matricula)) {</span>
+<span class="fc" id="L86">            loginRateLimitService.registrarFalha(matricula, origem);</span>
+<span class="fc" id="L87">            return renderLogin(&quot;Não encontramos cadastro para esta matrícula. Confira se digitou corretamente ou clique em Criar cadastro.&quot;, null);</span>
+        }
+
+<span class="fc" id="L90">        Optional&lt;Usuario&gt; usuario = authService.autenticar(matricula, senha);</span>
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (usuario.isEmpty()) {</span>
+<span class="fc" id="L93">            loginRateLimitService.registrarFalha(matricula, origem);</span>
+<span class="fc" id="L94">            return renderLogin(&quot;Senha incorreta. Verifique a senha cadastrada e tente novamente.&quot;, null);</span>
+        }
+
+<span class="fc" id="L97">        loginRateLimitService.registrarSucesso(matricula, origem);</span>
+
+<span class="fc" id="L99">        String tokenSessao = authService.criarSessao(usuario.get());</span>
+<span class="fc" id="L100">        NewCookie cookie = criarCookieSessao(tokenSessao, 7200);</span>
+
+        try {
+<span class="fc" id="L103">            gamificacaoService.registrarLogin(usuario.get().matricula);</span>
+<span class="fc" id="L104">        } catch (Exception e) {</span>
+            // Não impedir login em caso de erro na gamificação.
+<span class="fc" id="L106">        }</span>
+
+<span class="fc" id="L108">        return Response.seeOther(URI.create(&quot;/home&quot;))</span>
+<span class="fc" id="L109">                .cookie(cookie)</span>
+<span class="fc" id="L110">                .build();</span>
+    }
+
+    @GET
+    @Path(&quot;/cadastro&quot;)
+    @Produces(MediaType.TEXT_HTML)
+    public Response cadastro() {
+<span class="fc" id="L117">        return renderCadastro(null);</span>
+    }
+
+    @POST
+    @Path(&quot;/cadastro&quot;)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response cadastrar(@FormParam(&quot;nome&quot;) String nome,
+                              @FormParam(&quot;matricula&quot;) String matricula,
+                              @FormParam(&quot;idade&quot;) Integer idade,
+                              @FormParam(&quot;preferenciasAcessibilidade&quot;) java.util.List&lt;String&gt; preferenciasAcessibilidade,
+                              @FormParam(&quot;senha&quot;) String senha,
+                              @FormParam(&quot;repetirSenha&quot;) String repetirSenha,
+                              @FormParam(&quot;csrfToken&quot;) String csrfToken,
+                              @CookieParam(CsrfService.COOKIE_CSRF) String csrfCookie) {
+
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (!csrfService.tokenValido(csrfToken, csrfCookie)) {</span>
+<span class="nc" id="L133">            return renderCadastro(&quot;Formulário expirado por segurança. Recarregue a página e tente novamente.&quot;);</span>
+        }
+
+<span class="fc" id="L136">        CadastroUsuarioDTO dto = new CadastroUsuarioDTO();</span>
+<span class="fc" id="L137">        dto.nome = nome;</span>
+<span class="fc" id="L138">        dto.matricula = matricula;</span>
+<span class="fc" id="L139">        dto.idade = idade;</span>
+<span class="fc" id="L140">        dto.preferenciasAcessibilidade = preferenciasAcessibilidade;</span>
+<span class="fc" id="L141">        dto.senha = senha;</span>
+<span class="fc" id="L142">        dto.repetirSenha = repetirSenha;</span>
+
+        try {
+<span class="fc" id="L145">            authService.cadastrarUsuario(dto);</span>
+<span class="fc" id="L146">            return renderLogin(null, &quot;Cadastro realizado com sucesso. Agora faça login com sua matrícula e senha.&quot;);</span>
+<span class="fc" id="L147">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L148">            return renderCadastro(e.getMessage());</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;/logout&quot;)
+    public Response logout(@CookieParam(AuthFilter.COOKIE_SESSAO) String tokenSessao) {
+<span class="fc" id="L155">        authService.encerrarSessao(tokenSessao);</span>
+
+<span class="fc" id="L157">        return Response.seeOther(URI.create(&quot;/login&quot;))</span>
+<span class="fc" id="L158">                .cookie(criarCookieSessao(&quot;&quot;, 0))</span>
+<span class="fc" id="L159">                .build();</span>
+    }
+
+    private Response renderLogin(String erro, String sucesso) {
+<span class="fc" id="L163">        String csrfToken = csrfService.gerarToken();</span>
+<span class="fc" id="L164">        return Response.ok(login.data(&quot;erro&quot;, erro).data(&quot;sucesso&quot;, sucesso).data(&quot;csrfToken&quot;, csrfToken))</span>
+<span class="fc" id="L165">                .type(MediaType.TEXT_HTML)</span>
+<span class="fc" id="L166">                .cookie(csrfService.criarCookie(csrfToken))</span>
+<span class="fc" id="L167">                .header(&quot;Cache-Control&quot;, &quot;no-store&quot;)</span>
+<span class="fc" id="L168">                .build();</span>
+    }
+
+    private Response renderCadastro(String erro) {
+<span class="fc" id="L172">        String csrfToken = csrfService.gerarToken();</span>
+<span class="fc" id="L173">        return Response.ok(cadastro.data(&quot;erro&quot;, erro).data(&quot;csrfToken&quot;, csrfToken))</span>
+<span class="fc" id="L174">                .type(MediaType.TEXT_HTML)</span>
+<span class="fc" id="L175">                .cookie(csrfService.criarCookie(csrfToken))</span>
+<span class="fc" id="L176">                .header(&quot;Cache-Control&quot;, &quot;no-store&quot;)</span>
+<span class="fc" id="L177">                .build();</span>
+    }
+
+    private String origemRequisicao(String forwardedFor, String realIp) {
+<span class="pc bpc" id="L181" title="2 of 4 branches missed.">        if (forwardedFor != null &amp;&amp; !forwardedFor.isBlank()) {</span>
+<span class="fc" id="L182">            return forwardedFor.split(&quot;,&quot;)[0].trim();</span>
+        }
+<span class="nc bnc" id="L184" title="All 4 branches missed.">        if (realIp != null &amp;&amp; !realIp.isBlank()) {</span>
+<span class="nc" id="L185">            return realIp.trim();</span>
+        }
+<span class="nc" id="L187">        return &quot;local&quot;;</span>
+    }
+
+    private NewCookie criarCookieSessao(String valor, int maxAge) {
+<span class="fc" id="L191">        return new NewCookie.Builder(AuthFilter.COOKIE_SESSAO)</span>
+<span class="fc" id="L192">                .value(valor)</span>
+<span class="fc" id="L193">                .path(&quot;/&quot;)</span>
+<span class="fc" id="L194">                .httpOnly(true)</span>
+<span class="fc" id="L195">                .secure(cookieSecure)</span>
+<span class="fc" id="L196">                .sameSite(NewCookie.SameSite.STRICT)</span>
+<span class="fc" id="L197">                .maxAge(maxAge)</span>
+<span class="fc" id="L198">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

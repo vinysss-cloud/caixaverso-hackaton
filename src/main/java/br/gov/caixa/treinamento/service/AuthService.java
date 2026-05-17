@@ -1,12 +1,15 @@
 package br.gov.caixa.treinamento.service;
 
 import br.gov.caixa.treinamento.dto.CadastroUsuarioDTO;
+import br.gov.caixa.treinamento.logging.AuditLogService;
 import br.gov.caixa.treinamento.model.Usuario;
 import br.gov.caixa.treinamento.repository.UsuarioRepository;
+import br.gov.caixa.treinamento.util.LoggerFactory;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.jboss.logging.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -20,11 +23,17 @@ import java.util.Optional;
 @ApplicationScoped
 public class AuthService {
 
+    private static final Logger logger = LoggerFactory.getSecurityLogger();
+    private static final Logger auditLogger = LoggerFactory.getAuditLogger();
+
     private static final int TEMPO_SESSAO_HORAS = 2;
     private static final String LEGACY_SALT = "caixaverso-salt-";
 
     @Inject
     UsuarioRepository usuarioRepository;
+
+    @Inject
+    AuditLogService auditLogService;
 
     @Transactional
     public void cadastrarUsuario(CadastroUsuarioDTO dto) {
@@ -34,22 +43,33 @@ public class AuthService {
         usuario.nome = dto.nome.trim();
         usuario.matricula = normalizarMatricula(dto.matricula);
         usuario.idade = dto.idade;
-        usuario.deficiencias = dto.deficiencias != null ? dto.deficiencias : new ArrayList<>();
+        usuario.preferenciasAcessibilidade = dto.preferenciasAcessibilidade != null ? dto.preferenciasAcessibilidade : new ArrayList<>();
         usuario.senhaHash = BcryptUtil.bcryptHash(dto.senha);
 
         normalizarCamposGamificacao(usuario);
         usuarioRepository.persist(usuario);
+        
+        auditLogger.infof("evento=USUARIO_CADASTRADO matricula=%s", usuario.matricula);
+        if (auditLogService != null) {
+            auditLogService.usuarioCadastrado(usuario.matricula);
+        }
     }
 
     @Transactional
     public Optional<Usuario> autenticar(String matricula, String senha) {
         if (matricula == null || matricula.isBlank() || senha == null || senha.isBlank()) {
+            logger.warn("Tentativa de autenticação com credenciais vazias");
             return Optional.empty();
         }
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.buscarPorMatricula(normalizarMatricula(matricula));
+        String matriculaNormalizada = normalizarMatricula(matricula);
+        Optional<Usuario> usuarioOpt = usuarioRepository.buscarPorMatricula(matriculaNormalizada);
 
         if (usuarioOpt.isEmpty()) {
+            logger.warnf("evento=AUTENTICACAO_FALHA matricula=%s motivo=MATRICULA_INEXISTENTE", matriculaNormalizada);
+            if (auditLogService != null) {
+                auditLogService.falhaAutenticacao(matriculaNormalizada, "Matrícula inexistente");
+            }
             return Optional.empty();
         }
 
@@ -57,9 +77,17 @@ public class AuthService {
 
         if (senhaConfere(usuario, senha)) {
             normalizarCamposGamificacao(usuario);
+            auditLogger.infof("evento=AUTENTICACAO_SUCESSO matricula=%s", matriculaNormalizada);
+            if (auditLogService != null) {
+                auditLogService.usuarioAutenticado(matriculaNormalizada);
+            }
             return Optional.of(usuario);
         }
 
+        logger.warnf("evento=AUTENTICACAO_FALHA matricula=%s motivo=SENHA_INVALIDA", matriculaNormalizada);
+        if (auditLogService != null) {
+            auditLogService.falhaAutenticacao(matriculaNormalizada, "Senha inválida");
+        }
         return Optional.empty();
     }
 

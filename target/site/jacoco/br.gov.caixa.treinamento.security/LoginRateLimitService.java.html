@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginRateLimitService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.security</a> &gt; <span class="el_source">LoginRateLimitService.java</span></div><h1>LoginRateLimitService.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.security;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@ApplicationScoped
+<span class="fc" id="L11">public class LoginRateLimitService {</span>
+
+    private static final int MAX_TENTATIVAS = 5;
+<span class="fc" id="L14">    private static final Duration JANELA = Duration.ofMinutes(15);</span>
+<span class="fc" id="L15">    private static final Duration BLOQUEIO = Duration.ofMinutes(15);</span>
+
+<span class="fc" id="L17">    private final Map&lt;String, TentativaLogin&gt; tentativas = new ConcurrentHashMap&lt;&gt;();</span>
+
+    public boolean estaBloqueado(String matricula, String origem) {
+<span class="fc" id="L20">        String chave = montarChave(matricula, origem);</span>
+<span class="fc" id="L21">        TentativaLogin tentativa = tentativas.get(chave);</span>
+
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (tentativa == null) {</span>
+<span class="fc" id="L24">            return false;</span>
+        }
+
+<span class="fc" id="L27">        Instant agora = Instant.now();</span>
+
+<span class="pc bpc" id="L29" title="1 of 4 branches missed.">        if (tentativa.bloqueadoAte != null &amp;&amp; tentativa.bloqueadoAte.isAfter(agora)) {</span>
+<span class="fc" id="L30">            return true;</span>
+        }
+
+<span class="pc bpc" id="L33" title="3 of 4 branches missed.">        if (tentativa.bloqueadoAte != null &amp;&amp; !tentativa.bloqueadoAte.isAfter(agora)) {</span>
+<span class="nc" id="L34">            tentativas.remove(chave);</span>
+        }
+
+<span class="fc" id="L37">        return false;</span>
+    }
+
+    public void registrarFalha(String matricula, String origem) {
+<span class="fc" id="L41">        String chave = montarChave(matricula, origem);</span>
+<span class="fc" id="L42">        Instant agora = Instant.now();</span>
+
+<span class="fc" id="L44">        tentativas.compute(chave, (k, tentativa) -&gt; {</span>
+<span class="pc bpc" id="L45" title="1 of 4 branches missed.">            if (tentativa == null || tentativa.inicioJanela.plus(JANELA).isBefore(agora)) {</span>
+<span class="fc" id="L46">                tentativa = new TentativaLogin();</span>
+<span class="fc" id="L47">                tentativa.inicioJanela = agora;</span>
+<span class="fc" id="L48">                tentativa.quantidade = 0;</span>
+            }
+
+<span class="fc" id="L51">            tentativa.quantidade++;</span>
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (tentativa.quantidade &gt;= MAX_TENTATIVAS) {</span>
+<span class="fc" id="L54">                tentativa.bloqueadoAte = agora.plus(BLOQUEIO);</span>
+            }
+
+<span class="fc" id="L57">            return tentativa;</span>
+        });
+<span class="fc" id="L59">    }</span>
+
+    public void registrarSucesso(String matricula, String origem) {
+<span class="fc" id="L62">        tentativas.remove(montarChave(matricula, origem));</span>
+<span class="fc" id="L63">    }</span>
+
+    private String montarChave(String matricula, String origem) {
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        String matriculaNormalizada = matricula == null ? &quot;matricula-ausente&quot; : matricula.trim().toLowerCase();</span>
+<span class="pc bpc" id="L67" title="2 of 4 branches missed.">        String origemNormalizada = origem == null || origem.isBlank() ? &quot;origem-desconhecida&quot; : origem.trim();</span>
+<span class="fc" id="L68">        return matriculaNormalizada + &quot;|&quot; + origemNormalizada;</span>
+    }
+
+    private static class TentativaLogin {
+        private Instant inicioJanela;
+        private int quantidade;
+        private Instant bloqueadoAte;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

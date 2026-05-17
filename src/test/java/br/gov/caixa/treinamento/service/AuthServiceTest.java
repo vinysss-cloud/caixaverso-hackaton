@@ -40,7 +40,7 @@ class AuthServiceTest {
         dto.nome = "João Silva";
         dto.matricula = "c123456";
         dto.idade = 30;
-        dto.deficiencias = new ArrayList<>();
+        dto.preferenciasAcessibilidade = new ArrayList<>();
         dto.senha = "Senha@123";
         dto.repetirSenha = "Senha@123";
 
@@ -49,7 +49,7 @@ class AuthServiceTest {
         usuarioExistente.nome = "João Silva";
         usuarioExistente.matricula = "c123456";
         usuarioExistente.idade = 30;
-        usuarioExistente.deficiencias = new ArrayList<>();
+        usuarioExistente.preferenciasAcessibilidade = new ArrayList<>();
         usuarioExistente.senhaHash = BcryptUtil.bcryptHash("Senha@123");
         usuarioExistente.pontuacaoTotal = 0;
         usuarioExistente.nivel = 1;

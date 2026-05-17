@@ -43,12 +43,12 @@ class CadastroUsuarioDTOTest {
     }
 
     @Test
-    @DisplayName("DTO deve ter campo deficiencias")
+    @DisplayName("DTO deve ter campo preferenciasAcessibilidade")
     void testDTOTemDeficiencias() {
-        dto.deficiencias = new ArrayList<>();
-        dto.deficiencias.add("visual");
+        dto.preferenciasAcessibilidade = new ArrayList<>();
+        dto.preferenciasAcessibilidade.add("visual");
         
-        assertThat(dto.deficiencias).contains("visual");
+        assertThat(dto.preferenciasAcessibilidade).contains("visual");
     }
 
     @Test
@@ -71,7 +71,7 @@ class CadastroUsuarioDTOTest {
         dto.nome = "João Silva";
         dto.matricula = "c123456";
         dto.idade = 30;
-        dto.deficiencias = List.of("visual");
+        dto.preferenciasAcessibilidade = List.of("visual");
         dto.senha = "Senha@123";
         dto.repetirSenha = "Senha@123";
 
@@ -83,15 +83,15 @@ class CadastroUsuarioDTOTest {
     @Test
     @DisplayName("Deve permitir null em deficiências")
     void testDeficienciasPodemSerNull() {
-        dto.deficiencias = null;
-        assertThat(dto.deficiencias).isNull();
+        dto.preferenciasAcessibilidade = null;
+        assertThat(dto.preferenciasAcessibilidade).isNull();
     }
 
     @Test
     @DisplayName("Deve permitir lista vazia em deficiências")
     void testDeficienciasVazia() {
-        dto.deficiencias = new ArrayList<>();
-        assertThat(dto.deficiencias).isEmpty();
+        dto.preferenciasAcessibilidade = new ArrayList<>();
+        assertThat(dto.preferenciasAcessibilidade).isEmpty();
     }
 }
 

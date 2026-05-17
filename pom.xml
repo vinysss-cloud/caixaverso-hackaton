@@ -1,27 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>br.gov.caixa.treinamento</groupId>
     <artifactId>caixa-pcd-game-training</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <properties>
         <compiler-plugin.version>3.14.0</compiler-plugin.version>
         <maven.compiler.release>17</maven.compiler.release>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.version>3.15.3</quarkus.platform.version>
-
-        <!-- SonarQube Properties -->
+        <!--  SonarQube Properties  -->
         <sonar.projectKey>caixa-pcd-game-training</sonar.projectKey>
         <sonar.projectName>Caixa PCD Game Training</sonar.projectName>
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
@@ -31,7 +22,6 @@
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.exclusions>**/dto/**/*.java,**/bootstrap/**/*.java</sonar.exclusions>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -43,81 +33,69 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
-        <!-- REST atual do Quarkus -->
+        <!--  REST atual do Quarkus  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest</artifactId>
         </dependency>
-
-        <!-- Integração REST + Qute para renderizar HTML -->
+        <!--  Integração REST + Qute para renderizar HTML  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-qute</artifactId>
         </dependency>
-
-        <!-- Suporte JSON, útil para endpoints futuros -->
+        <!--  Suporte JSON, útil para endpoints futuros  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
-
-        <!-- CDI / Injeção de dependência -->
+        <!--  CDI / Injeção de dependência  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
-
-        <!-- Testes -->
+        <!--  Testes  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Mockito para testes unitários -->
+        <!--  Mockito para testes unitários  -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- AssertJ para asserções mais legíveis -->
+        <!--  AssertJ para asserções mais legíveis  -->
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>3.24.1</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Hibernate ORM + Panache -->
+        <!--  Hibernate ORM + Panache  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
         </dependency>
-
-        <!-- H2 Database -->
+        <!--  H2 Database  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-h2</artifactId>
         </dependency>
-
-        <!-- Bean Validation -->
+        <!--  Bean Validation  -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-validator</artifactId>
@@ -126,11 +104,15 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-elytron-security-common</artifactId>
         </dependency>
-
+        <!--  Logging  -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-logging-json</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
-            <!-- Plugin principal do Quarkus -->
+            <!--  Plugin principal do Quarkus  -->
             <plugin>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -146,8 +128,7 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Compilador Java -->
+            <!--  Compilador Java  -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
@@ -156,8 +137,7 @@
                     <parameters>true</parameters>
                 </configuration>
             </plugin>
-
-            <!-- Plugin de testes -->
+            <!--  Plugin de testes  -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
@@ -168,8 +148,7 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
-
-            <!-- JaCoCo para relatório de cobertura (gera XML para integração com Sonar) -->
+            <!--  JaCoCo para relatório de cobertura (gera XML para integração com Sonar)  -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -196,10 +175,8 @@
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>PACKAGE</element>
-                                    <excludes>
-                                        <exclude>*Test</exclude>
-                                    </excludes>
+                                    <!--  Cobertura mínima aplicada ao projeto inteiro, não por pacote/classe  -->
+                                    <element>BUNDLE</element>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
@@ -215,5 +192,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

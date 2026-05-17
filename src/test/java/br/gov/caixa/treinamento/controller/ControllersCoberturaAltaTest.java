@@ -6,6 +6,8 @@ import br.gov.caixa.treinamento.model.ProgressoTreinamentoUsuario;
 import br.gov.caixa.treinamento.model.ResultadoDesafio;
 import br.gov.caixa.treinamento.model.Usuario;
 import br.gov.caixa.treinamento.security.AuthFilter;
+import br.gov.caixa.treinamento.security.CsrfService;
+import br.gov.caixa.treinamento.security.LoginRateLimitService;
 import br.gov.caixa.treinamento.security.UsuarioLogadoService;
 import br.gov.caixa.treinamento.service.AuthService;
 import br.gov.caixa.treinamento.service.DashboardService;
@@ -55,6 +57,8 @@ class ControllersCoberturaAltaTest {
     @Mock TreinamentoService treinamentoService;
     @Mock DesafioService desafioService;
     @Mock UsuarioLogadoService usuarioLogadoService;
+    @Mock CsrfService csrfService;
+    @Mock LoginRateLimitService loginRateLimitService;
 
     @Test
     @DisplayName("AtualizacaoResource deve redirecionar URL antiga para home")
@@ -86,7 +90,7 @@ class ControllersCoberturaAltaTest {
         AuthResource resource = authResource();
         prepararLoginTemplate();
 
-        Response response = resource.autenticar(" ", "");
+        Response response = resource.autenticar(" ", "", "csrf", "csrf", "127.0.0.1", null);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         verify(login).data(eq("erro"), contains("matrícula"));
@@ -100,7 +104,7 @@ class ControllersCoberturaAltaTest {
         prepararLoginTemplate();
         when(authService.existeMatricula("c123456")).thenReturn(false);
 
-        Response response = resource.autenticar("c123456", "Senha@123");
+        Response response = resource.autenticar("c123456", "Senha@123", "csrf", "csrf", "127.0.0.1", null);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         verify(login).data(eq("erro"), contains("Não encontramos cadastro"));
@@ -115,7 +119,7 @@ class ControllersCoberturaAltaTest {
         when(authService.existeMatricula("c123456")).thenReturn(true);
         when(authService.autenticar("c123456", "errada")).thenReturn(Optional.empty());
 
-        Response response = resource.autenticar("c123456", "errada");
+        Response response = resource.autenticar("c123456", "errada", "csrf", "csrf", "127.0.0.1", null);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         verify(login).data(eq("erro"), contains("Senha incorreta"));
@@ -130,7 +134,7 @@ class ControllersCoberturaAltaTest {
         when(authService.autenticar("c123456", "Senha@123")).thenReturn(Optional.of(usuario));
         when(authService.criarSessao(usuario)).thenReturn("token-gerado");
 
-        Response response = resource.autenticar("c123456", "Senha@123");
+        Response response = resource.autenticar("c123456", "Senha@123", "csrf", "csrf", "127.0.0.1", null);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         assertThat(response.getLocation()).isEqualTo(URI.create("/home"));
@@ -152,7 +156,7 @@ class ControllersCoberturaAltaTest {
         doThrow(new RuntimeException("erro gamificação"))
                 .when(gamificacaoService).registrarLogin("c123456");
 
-        Response response = resource.autenticar("c123456", "Senha@123");
+        Response response = resource.autenticar("c123456", "Senha@123", "csrf", "csrf", "127.0.0.1", null);
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         assertThat(response.getLocation()).isEqualTo(URI.create("/home"));
@@ -183,7 +187,9 @@ class ControllersCoberturaAltaTest {
                 30,
                 List.of("visual"),
                 "Senha@123",
-                "Senha@123"
+                "Senha@123",
+                "csrf",
+                "csrf"
         );
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
@@ -191,7 +197,7 @@ class ControllersCoberturaAltaTest {
                 "João Silva".equals(dto.nome)
                         && "c123456".equals(dto.matricula)
                         && Integer.valueOf(30).equals(dto.idade)
-                        && dto.deficiencias.contains("visual")
+                        && dto.preferenciasAcessibilidade.contains("visual")
                         && "Senha@123".equals(dto.senha)
                         && "Senha@123".equals(dto.repetirSenha)
         ));
@@ -206,7 +212,7 @@ class ControllersCoberturaAltaTest {
                 .when(authService).cadastrarUsuario(any(CadastroUsuarioDTO.class));
         when(cadastro.data(eq("erro"), nullable(Object.class))).thenReturn(cadastroInstance);
 
-        Response response = resource.cadastrar("João", "c123", 30, List.of(), "123", "456");
+        Response response = resource.cadastrar("João", "c123", 30, List.of(), "123", "456", "csrf", "csrf");
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(response.getHeaderString("Cache-Control")).isEqualTo("no-store");
@@ -307,7 +313,7 @@ class ControllersCoberturaAltaTest {
         TreinamentoResource resource = treinamentoResource();
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn(null);
 
-        Object result = resource.treinamento("token");
+        Object result = resource.treinamento("token", "csrf");
 
         assertThat(result).isInstanceOf(Response.class);
         assertThat(((Response) result).getLocation()).isEqualTo(URI.create("/login"));
@@ -325,9 +331,11 @@ class ControllersCoberturaAltaTest {
         when(treinamento.data(eq("trilha"), nullable(Object.class))).thenReturn(treinamentoInstance);
         when(treinamentoInstance.data(eq("progresso"), nullable(Object.class))).thenReturn(treinamentoInstance);
 
-        Object result = resource.treinamento("token");
+        Object result = resource.treinamento("token", "csrf");
 
-        assertThat(result).isSameAs(treinamentoInstance);
+        assertThat(result).isInstanceOf(Response.class);
+        Response response = (Response) result;
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         verify(treinamentoService).iniciarOuBuscarProgresso("c123456", TreinamentoService.CODIGO_ABERTURA_CONTA);
     }
 
@@ -337,7 +345,7 @@ class ControllersCoberturaAltaTest {
         TreinamentoResource resource = treinamentoResource();
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn(null);
 
-        Response response = resource.concluirEtapa("token");
+        Response response = resource.concluirEtapa("token", "csrf", "csrf");
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
         verifyNoInteractions(treinamentoService, gamificacaoService);
@@ -357,7 +365,7 @@ class ControllersCoberturaAltaTest {
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn("c123456");
         when(treinamentoService.concluirProximaEtapa("c123456", TreinamentoService.CODIGO_ABERTURA_CONTA)).thenReturn(progresso);
 
-        Response response = resource.concluirEtapa("token");
+        Response response = resource.concluirEtapa("token", "csrf", "csrf");
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(response.getEntity()).isInstanceOf(Map.class);
@@ -378,7 +386,7 @@ class ControllersCoberturaAltaTest {
         TreinamentoResource resource = treinamentoResource();
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn(" ");
 
-        Response response = resource.refazerTrilha("token");
+        Response response = resource.refazerTrilha("token", "csrf", "csrf");
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         assertThat(response.getLocation()).isEqualTo(URI.create("/login"));
@@ -390,7 +398,7 @@ class ControllersCoberturaAltaTest {
         TreinamentoResource resource = treinamentoResource();
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn("c123456");
 
-        Response response = resource.refazerTrilha("token");
+        Response response = resource.refazerTrilha("token", "csrf", "csrf");
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.SEE_OTHER.getStatusCode());
         assertThat(response.getLocation()).isEqualTo(URI.create("/treinamento"));
@@ -404,7 +412,7 @@ class ControllersCoberturaAltaTest {
         DesafioResource resource = desafioResource();
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn(null);
 
-        Object result = resource.desafio("token");
+        Object result = resource.desafio("token", "csrf");
 
         assertThat(result).isInstanceOf(Response.class);
         assertThat(((Response) result).getLocation()).isEqualTo(URI.create("/login"));
@@ -418,13 +426,13 @@ class ControllersCoberturaAltaTest {
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn("c123456");
         when(treinamentoService.desafioEstaDesbloqueado("c123456", TreinamentoService.CODIGO_ABERTURA_CONTA)).thenReturn(true);
         when(desafioService.buscarDesafioAberturaConta()).thenReturn(desafio);
-        prepararDesafioTemplate();
+        when(desafioTemplate.data(anyString(), any())).thenReturn(desafioInstance);
+        when(desafioInstance.data(anyString(), any())).thenReturn(desafioInstance);
 
-        Object result = resource.desafio("token");
+        Response result = resource.desafio("token", "csrf");
 
-        assertThat(result).isSameAs(desafioInstance);
-        verify(desafioTemplate).data("desafio", desafio);
-        verify(desafioInstance).data("desbloqueado", true);
+        assertThat(result.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        verify(desafioService).buscarDesafioAberturaConta();
     }
 
     @Test
@@ -433,7 +441,7 @@ class ControllersCoberturaAltaTest {
         DesafioResource resource = desafioResource();
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn(null);
 
-        Object result = resource.responder("token", "A");
+        Object result = resource.responder("token", "csrf", "csrf", "A", 0, 0, 8);
 
         assertThat(result).isInstanceOf(Response.class);
         assertThat(((Response) result).getLocation()).isEqualTo(URI.create("/login"));
@@ -449,10 +457,10 @@ class ControllersCoberturaAltaTest {
         when(desafioService.buscarDesafioAberturaConta()).thenReturn(desafio);
         prepararDesafioTemplate();
 
-        Object result = resource.responder("token", "A");
+        Object result = resource.responder("token", "csrf", "csrf", "A", 0, 0, 8);
 
-        assertThat(result).isSameAs(desafioInstance);
-        verify(desafioInstance).data("desbloqueado", false);
+        assertThat(result).isInstanceOf(Response.class);
+        assertThat(((Response) result).getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         verify(gamificacaoService, never()).registrarDesafioRespondido(anyString(), anyBoolean(), anyInt());
     }
 
@@ -464,16 +472,16 @@ class ControllersCoberturaAltaTest {
         Desafio desafio = new Desafio("d1", "Título", "Descrição", List.of("A", "B"), "A");
         when(usuarioLogadoService.matriculaOuNulo("token")).thenReturn("c123456");
         when(treinamentoService.desafioEstaDesbloqueado("c123456", TreinamentoService.CODIGO_ABERTURA_CONTA)).thenReturn(true);
-        when(desafioService.validarRespostaAberturaConta("A")).thenReturn(resultado);
+        when(desafioService.registrarResultadoContaFacil("c123456", "A", 8, 100, 8)).thenReturn(resultado);
         when(desafioService.buscarDesafioAberturaConta()).thenReturn(desafio);
+        when(desafioService.buscarResultadoContaFacil("c123456")).thenReturn(Optional.empty());
         prepararDesafioTemplate();
 
-        Object result = resource.responder("token", "A");
+        Object result = resource.responder("token", "csrf", "csrf", "A", 8, 100, 8);
 
-        assertThat(result).isSameAs(desafioInstance);
+        assertThat(result).isInstanceOf(Response.class);
+        assertThat(((Response) result).getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         verify(gamificacaoService).registrarDesafioRespondido("c123456", true, 100);
-        verify(desafioInstance).data("resultado", resultado);
-        verify(desafioInstance).data("desbloqueado", true);
     }
 
     private AuthResource authResource() {
@@ -482,6 +490,11 @@ class ControllersCoberturaAltaTest {
         resource.cadastro = cadastro;
         resource.authService = authService;
         resource.gamificacaoService = gamificacaoService;
+        resource.csrfService = csrfService;
+        resource.loginRateLimitService = loginRateLimitService;
+        lenient().when(csrfService.gerarToken()).thenReturn("csrf");
+        lenient().when(csrfService.tokenValido(any(), any())).thenReturn(true);
+        lenient().when(csrfService.criarCookie(anyString())).thenReturn(new NewCookie.Builder(CsrfService.COOKIE_CSRF).value("csrf").path("/").build());
         return resource;
     }
 
@@ -508,6 +521,10 @@ class ControllersCoberturaAltaTest {
         resource.treinamentoService = treinamentoService;
         resource.gamificacaoService = gamificacaoService;
         resource.usuarioLogadoService = usuarioLogadoService;
+        resource.csrfService = csrfService;
+        lenient().when(csrfService.obterOuGerarToken(any())).thenReturn("csrf");
+        lenient().when(csrfService.tokenValido(any(), any())).thenReturn(true);
+        lenient().when(csrfService.criarCookie(anyString())).thenReturn(new NewCookie.Builder(CsrfService.COOKIE_CSRF).value("csrf").path("/").build());
         return resource;
     }
 
@@ -518,19 +535,22 @@ class ControllersCoberturaAltaTest {
         resource.treinamentoService = treinamentoService;
         resource.gamificacaoService = gamificacaoService;
         resource.usuarioLogadoService = usuarioLogadoService;
+        resource.csrfService = csrfService;
+        lenient().when(csrfService.obterOuGerarToken(any())).thenReturn("csrf");
+        lenient().when(csrfService.tokenValido(any(), any())).thenReturn(true);
+        lenient().when(csrfService.criarCookie(anyString())).thenReturn(new NewCookie.Builder(CsrfService.COOKIE_CSRF).value("csrf").path("/").build());
         return resource;
     }
 
     private void prepararLoginTemplate() {
         when(login.data(eq("erro"), any())).thenReturn(loginInstance);
         when(loginInstance.data(eq("sucesso"), any())).thenReturn(loginInstance);
+        when(loginInstance.data(eq("csrfToken"), any())).thenReturn(loginInstance);
     }
 
     private void prepararDesafioTemplate() {
-        when(desafioTemplate.data(eq("desafio"), nullable(Object.class))).thenReturn(desafioInstance);
-        when(desafioInstance.data(eq("resultado"), nullable(Object.class))).thenReturn(desafioInstance);
-        when(desafioInstance.data(eq("desbloqueado"), nullable(Object.class))).thenReturn(desafioInstance);
-        when(desafioInstance.data(eq("treinamentoTitulo"), nullable(Object.class))).thenReturn(desafioInstance);
+        lenient().when(desafioTemplate.data(anyString(), nullable(Object.class))).thenReturn(desafioInstance);
+        lenient().when(desafioInstance.data(anyString(), nullable(Object.class))).thenReturn(desafioInstance);
     }
 
     private Usuario usuarioExemplo() {

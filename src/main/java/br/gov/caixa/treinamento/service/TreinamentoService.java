@@ -30,14 +30,14 @@ public class TreinamentoService {
         return new TrilhaTreinamentoDTO(
                 CODIGO_ABERTURA_CONTA,
                 TITULO_TRILHA_CONTA_FACIL,
-                "Fluxo piloto: abertura de conta bancária em ambiente simulado, com orientação assistiva, acessibilidade e atendimento seguro.",
-                "Novos colaboradores e público PCD em treinamento",
+                "Fluxo piloto: abertura de conta bancária em ambiente simulado. Demonstra uma camada assistiva reutilizável para intranet, SISRH, atender.caixa e múltiplos sistemas internos CAIXA, com orientação contextual, acessibilidade e autonomia digital.",
+                "Empregados CAIXA PCD, usuários com baixa visão e colaboradores com menor familiaridade digital em sistemas internos",
                 150,
                 List.of(
                         new EtapaTreinamentoDTO(
                                 1,
                                 "Identificar o tipo de conta",
-                                "Escolha o tipo de conta mais adequado para o perfil do cliente fictício.",
+                                "Escolha o tipo de conta mais adequado para o perfil do cliente fictício. Esta etapa simula como o assistente guiaria uma decisão em sistemas internos complexos.",
                                 "Use TAB para navegar entre as opções e Enter para selecionar.",
                                 "Tipo de conta",
                                 "Selecionar Conta Corrente ou Conta Poupança"
@@ -77,7 +77,7 @@ public class TreinamentoService {
                         new EtapaTreinamentoDTO(
                                 6,
                                 "Informar necessidades de acessibilidade",
-                                "Registre se o cliente fictício possui alguma necessidade de acessibilidade para adaptar o atendimento.",
+                                "Registre se o cliente fictício possui alguma necessidade de acessibilidade para adaptar o atendimento e demonstrar como a plataforma personaliza jornadas internas.",
                                 "As informações são usadas apenas para simulação e adaptação do fluxo.",
                                 "Acessibilidade",
                                 "Selecionar necessidade, se houver"
@@ -93,7 +93,7 @@ public class TreinamentoService {
                         new EtapaTreinamentoDTO(
                                 8,
                                 "Confirmar o fluxo Conta Fácil",
-                                "Finalize a simulação do fluxo piloto de abertura de conta e libere a validação assistiva associada.",
+                                "Finalize a simulação do fluxo piloto de abertura de conta e libere a validação assistiva associada. A mesma lógica pode ser aplicada a intranet, SISRH e atender.caixa.",
                                 "Após concluir esta etapa, o desafio será desbloqueado.",
                                 "Confirmação",
                                 "Concluir jornada assistiva"
@@ -199,6 +199,19 @@ public class TreinamentoService {
         return progressoRepository.buscarPorUsuarioECodigo(usuarioOpt.get(), codigoTreinamento)
                 .map(p -> Boolean.TRUE.equals(p.desafioDesbloqueado))
                 .orElse(false);
+    }
+
+
+    @Transactional
+    public void marcarDesafioRespondido(String matricula, String codigoTreinamento) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.buscarPorMatricula(matricula);
+
+        if (usuarioOpt.isEmpty()) {
+            return;
+        }
+
+        progressoRepository.buscarPorUsuarioECodigo(usuarioOpt.get(), codigoTreinamento)
+                .ifPresent(progresso -> progresso.desafioRespondido = true);
     }
 
     @Transactional

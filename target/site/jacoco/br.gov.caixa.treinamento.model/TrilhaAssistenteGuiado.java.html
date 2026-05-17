@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrilhaAssistenteGuiado.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.model</a> &gt; <span class="el_source">TrilhaAssistenteGuiado.java</span></div><h1>TrilhaAssistenteGuiado.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.model;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;trilhas_assistente_guiado&quot;, uniqueConstraints = {
+        @UniqueConstraint(name = &quot;uk_trilha_codigo&quot;, columnNames = &quot;codigo&quot;)
+})
+<span class="nc" id="L15">public class TrilhaAssistenteGuiado extends PanacheEntity {</span>
+
+    @Column(nullable = false, unique = true, length = 80)
+    public String codigo;
+
+    @Column(nullable = false, length = 160)
+    public String titulo;
+
+    @Column(length = 1000)
+    public String descricao;
+
+    @Column(length = 500)
+    public String publicoAlvo;
+
+<span class="nc" id="L29">    @Column(nullable = false, length = 30)</span>
+    public String status = &quot;DISPONIVEL&quot;;
+
+<span class="nc" id="L32">    @Column(nullable = false)</span>
+<span class="nc" id="L33">    public Integer ordem = 0;</span>
+
+<span class="nc" id="L35">    @Column(nullable = false)</span>
+<span class="nc" id="L36">    public Boolean ativa = true;</span>
+
+<span class="nc" id="L38">    public LocalDateTime dataCriacao = LocalDateTime.now();</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

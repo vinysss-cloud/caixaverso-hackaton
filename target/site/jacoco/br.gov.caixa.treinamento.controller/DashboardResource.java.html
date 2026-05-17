@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DashboardResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.controller</a> &gt; <span class="el_source">DashboardResource.java</span></div><h1>DashboardResource.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.controller;
+
+import br.gov.caixa.treinamento.security.UsuarioLogadoService;
+import br.gov.caixa.treinamento.service.DashboardService;
+import br.gov.caixa.treinamento.service.GamificacaoService;
+import io.quarkus.qute.Template;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+import java.net.URI;
+import java.util.Map;
+
+@Path(&quot;/dashboard&quot;)
+<span class="fc" id="L19">public class DashboardResource {</span>
+
+    @Inject
+    Template dashboard;
+
+    @Inject
+    DashboardService dashboardService;
+
+    @Inject
+    GamificacaoService gamificacaoService;
+
+    @Inject
+    UsuarioLogadoService usuarioLogadoService;
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Object dashboard(@CookieParam(&quot;CAIXAVERSO_SESSION&quot;) String tokenSessao) {
+<span class="fc" id="L36">        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);</span>
+
+<span class="pc bpc" id="L38" title="1 of 4 branches missed.">        if (usuarioLogado == null || usuarioLogado.isBlank()) {</span>
+<span class="fc" id="L39">            return Response.seeOther(URI.create(&quot;/login&quot;)).build();</span>
+        }
+
+<span class="fc" id="L42">        Map&lt;String, Object&gt; resumo = gamificacaoService.buscarResumoUsuario(usuarioLogado);</span>
+<span class="fc" id="L43">        Map&lt;String, Object&gt; dados = dashboardService.buscarDados(usuarioLogado, resumo);</span>
+
+<span class="fc" id="L45">        return dashboard</span>
+<span class="fc" id="L46">                .data(&quot;usuarioLogado&quot;, usuarioLogado)</span>
+<span class="fc" id="L47">                .data(&quot;dados&quot;, dados)</span>
+<span class="fc" id="L48">                .data(&quot;resumo&quot;, resumo);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

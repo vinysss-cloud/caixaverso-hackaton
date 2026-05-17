@@ -6,6 +6,7 @@ import br.gov.caixa.treinamento.model.Usuario;
 import br.gov.caixa.treinamento.repository.AtividadeUsuarioRepository;
 import br.gov.caixa.treinamento.repository.BadgeUsuarioRepository;
 import br.gov.caixa.treinamento.repository.UsuarioRepository;
+import br.gov.caixa.treinamento.repository.ResultadoDesafioUsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ class GamificacaoServiceTest {
 
     @Mock
     private BadgeUsuarioRepository badgeUsuarioRepository;
+
+    @Mock
+    private ResultadoDesafioUsuarioRepository resultadoDesafioUsuarioRepository;
 
     @InjectMocks
     private GamificacaoService gamificacaoService;
@@ -470,6 +474,7 @@ class GamificacaoServiceTest {
 
         verify(atividadeUsuarioRepository, never()).apagarPorUsuario(any());
         verify(badgeUsuarioRepository, never()).apagarPorUsuario(any());
+        verify(resultadoDesafioUsuarioRepository, never()).apagarPorUsuario(any());
     }
 }
 

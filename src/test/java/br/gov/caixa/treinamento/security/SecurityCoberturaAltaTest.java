@@ -135,6 +135,113 @@ class SecurityCoberturaAltaTest {
         assertThat(service.matriculaOuNulo("token")).isNull();
     }
 
+    @Test
+    @DisplayName("LoginRateLimitService deve permitir login sem tentativas")
+    void loginRateLimit_devePermitirSemTentativas() {
+        LoginRateLimitService service = new LoginRateLimitService();
+        assertThat(service.estaBloqueado("c123456", "127.0.0.1")).isFalse();
+    }
+
+    @Test
+    @DisplayName("LoginRateLimitService deve registrar falha")
+    void loginRateLimit_deveRegistrarFalha() {
+        LoginRateLimitService service = new LoginRateLimitService();
+        service.registrarFalha("c123456", "127.0.0.1");
+        assertThat(service.estaBloqueado("c123456", "127.0.0.1")).isFalse();
+    }
+
+    @Test
+    @DisplayName("LoginRateLimitService deve bloquear apos 5 tentativas")
+    void loginRateLimit_deveBloquearApos5Tentativas() {
+        LoginRateLimitService service = new LoginRateLimitService();
+        for (int i = 0; i < 5; i++) {
+            service.registrarFalha("c123456", "127.0.0.1");
+        }
+        assertThat(service.estaBloqueado("c123456", "127.0.0.1")).isTrue();
+    }
+
+    @Test
+    @DisplayName("LoginRateLimitService deve limpar apos sucesso")
+    void loginRateLimit_deveLimparAposSucesso() {
+        LoginRateLimitService service = new LoginRateLimitService();
+        service.registrarFalha("c123456", "127.0.0.1");
+        service.registrarSucesso("c123456", "127.0.0.1");
+        assertThat(service.estaBloqueado("c123456", "127.0.0.1")).isFalse();
+    }
+
+    @Test
+    @DisplayName("CsrfService deve gerar token aleatorio")
+    void csrfService_deveGerarTokenAleatorio() {
+        CsrfService service = new CsrfService();
+        String token1 = service.gerarToken();
+        String token2 = service.gerarToken();
+        assertThat(token1).isNotEmpty();
+        assertThat(token2).isNotEmpty();
+        assertThat(token1).isNotEqualTo(token2);
+    }
+
+    @Test
+    @DisplayName("CsrfService deve validar tokens iguais")
+    void csrfService_deveValidarTokensIguais() {
+        CsrfService service = new CsrfService();
+        String token = service.gerarToken();
+        assertThat(service.tokenValido(token, token)).isTrue();
+    }
+
+    @Test
+    @DisplayName("CsrfService deve rejeitar tokens diferentes")
+    void csrfService_deveRejeitarTokensDiferentes() {
+        CsrfService service = new CsrfService();
+        String token1 = service.gerarToken();
+        String token2 = service.gerarToken();
+        assertThat(service.tokenValido(token1, token2)).isFalse();
+    }
+
+    @Test
+    @DisplayName("CsrfService deve retornar token novo quando nulo")
+    void csrfService_deveGerarTokenQuandoNulo() {
+        CsrfService service = new CsrfService();
+        String token = service.obterOuGerarToken(null);
+        assertThat(token).isNotEmpty().hasSizeGreaterThan(20);
+    }
+
+    @Test
+    @DisplayName("CsrfService deve retornar token novo quando em branco")
+    void csrfService_deveGerarTokenQuandoEmBranco() {
+        CsrfService service = new CsrfService();
+        String token = service.obterOuGerarToken("   ");
+        assertThat(token).isNotEmpty().hasSizeGreaterThan(20);
+    }
+
+    @Test
+    @DisplayName("CsrfService deve retornar token novo quando muito curto")
+    void csrfService_deveGerarTokenQuandoMuitoCurto() {
+        CsrfService service = new CsrfService();
+        String token = service.obterOuGerarToken("abc");
+        assertThat(token).isNotEmpty().hasSizeGreaterThan(20);
+    }
+
+    @Test
+    @DisplayName("CsrfService deve retornar token valido")
+    void csrfService_deveRetornarTokenValido() {
+        CsrfService service = new CsrfService();
+        String tokenValido = service.gerarToken();
+        String token = service.obterOuGerarToken(tokenValido);
+        assertThat(token).isEqualTo(tokenValido);
+    }
+
+    @Test
+    @DisplayName("CsrfService deve criar cookie httpOnly")
+    void csrfService_deveCriarCookieHttpOnly() {
+        CsrfService service = new CsrfService();
+        String token = service.gerarToken();
+        var cookie = service.criarCookie(token);
+        assertThat(cookie.getName()).isEqualTo(CsrfService.COOKIE_CSRF);
+        assertThat(cookie.getValue()).isEqualTo(token);
+        assertThat(cookie.getPath()).isEqualTo("/");
+        assertThat(cookie.isHttpOnly()).isTrue();
+    }
+
     private AuthFilter authFilter() {
         AuthFilter filter = new AuthFilter();
         filter.authService = authService;

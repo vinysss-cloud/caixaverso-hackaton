@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.security</a> &gt; <span class="el_source">AuthFilter.java</span></div><h1>AuthFilter.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.security;
+
+import br.gov.caixa.treinamento.service.AuthService;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Priorities;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.core.Cookie;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.Set;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+@Provider
+@Priority(Priorities.AUTHENTICATION)
+<span class="fc" id="L23">public class AuthFilter implements ContainerRequestFilter {</span>
+
+    public static final String COOKIE_SESSAO = &quot;CAIXAVERSO_SESSION&quot;;
+
+<span class="fc" id="L27">    private static final Set&lt;String&gt; ROTAS_PUBLICAS_EXATAS = Set.of(</span>
+            &quot;&quot;,
+            &quot;/&quot;,
+            &quot;/login&quot;,
+            &quot;/cadastro&quot;,
+            &quot;/favicon.ico&quot;
+    );
+
+<span class="fc" id="L35">    private static final Set&lt;String&gt; ROTAS_PUBLICAS_PREFIXO = Set.of(</span>
+            &quot;/css/&quot;,
+            &quot;/js/&quot;,
+            &quot;/img/&quot;,
+            &quot;/assets/&quot;,
+            &quot;/q/&quot;
+    );
+
+    @Inject
+    AuthService authService;
+
+    @ConfigProperty(name = &quot;caixaverso.cookie.secure&quot;, defaultValue = &quot;true&quot;)
+    boolean cookieSecure;
+
+    @Override
+    public void filter(ContainerRequestContext requestContext) throws IOException {
+<span class="fc" id="L51">        String path = normalizarPath(requestContext.getUriInfo().getPath());</span>
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (&quot;OPTIONS&quot;.equalsIgnoreCase(requestContext.getMethod())) {</span>
+<span class="fc" id="L54">            return;</span>
+        }
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (rotaPublica(path)) {</span>
+<span class="fc" id="L58">            return;</span>
+        }
+
+<span class="fc" id="L61">        Cookie cookie = requestContext.getCookies().get(COOKIE_SESSAO);</span>
+
+<span class="fc bfc" id="L63" title="All 4 branches covered.">        if (cookie == null || authService.buscarUsuarioPorTokenSessao(cookie.getValue()).isEmpty()) {</span>
+<span class="fc" id="L64">            NewCookie limparCookie = new NewCookie.Builder(COOKIE_SESSAO)</span>
+<span class="fc" id="L65">                    .value(&quot;&quot;)</span>
+<span class="fc" id="L66">                    .path(&quot;/&quot;)</span>
+<span class="fc" id="L67">                    .httpOnly(true)</span>
+<span class="fc" id="L68">                    .secure(cookieSecure)</span>
+<span class="fc" id="L69">                    .sameSite(NewCookie.SameSite.STRICT)</span>
+<span class="fc" id="L70">                    .maxAge(0)</span>
+<span class="fc" id="L71">                    .build();</span>
+
+<span class="fc" id="L73">            requestContext.abortWith(</span>
+<span class="fc" id="L74">                    Response.seeOther(URI.create(&quot;/login&quot;))</span>
+<span class="fc" id="L75">                            .cookie(limparCookie)</span>
+<span class="fc" id="L76">                            .header(HttpHeaders.CACHE_CONTROL, &quot;no-store&quot;)</span>
+<span class="fc" id="L77">                            .build()</span>
+            );
+        }
+<span class="fc" id="L80">    }</span>
+
+    private String normalizarPath(String path) {
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">        if (path == null || path.isBlank()) {</span>
+<span class="nc" id="L84">            return &quot;/&quot;;</span>
+        }
+
+<span class="fc" id="L87">        String normalizado = path.trim();</span>
+
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (!normalizado.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L90">            normalizado = &quot;/&quot; + normalizado;</span>
+        }
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        while (normalizado.contains(&quot;//&quot;)) {</span>
+<span class="fc" id="L94">            normalizado = normalizado.replace(&quot;//&quot;, &quot;/&quot;);</span>
+        }
+
+<span class="fc" id="L97">        return normalizado;</span>
+    }
+
+    private boolean rotaPublica(String path) {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (ROTAS_PUBLICAS_EXATAS.contains(path)) {</span>
+<span class="fc" id="L102">            return true;</span>
+        }
+
+<span class="fc" id="L105">        return ROTAS_PUBLICAS_PREFIXO.stream().anyMatch(path::startsWith);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -81,4 +81,94 @@ class DTOsComplementaresTest {
         assertThat(trilha.xpConclusao).isEqualTo(100);
         assertThat(trilha.etapas).containsExactly(etapa);
     }
+
+    @Test
+    @DisplayName("TrilhaTreinamentoDTO deve calcular duração padrão a partir das etapas")
+    void trilhaTreinamentoDTO_deveCalcularDuracaoPadrao() {
+        EtapaTreinamentoDTO etapa1 = new EtapaTreinamentoDTO(1, "E1", "i1", "d1", "c1", "a1");
+        EtapaTreinamentoDTO etapa2 = new EtapaTreinamentoDTO(2, "E2", "i2", "d2", "c2", "a2");
+
+        TrilhaTreinamentoDTO trilha = new TrilhaTreinamentoDTO(
+                "teste",
+                "Teste",
+                "Descrição",
+                "Público",
+                100,
+                List.of(etapa1, etapa2)
+        );
+
+        // 2 etapas * 5 minutos = 10
+        assertThat(trilha.duracao).isEqualTo(10);
+        assertThat(trilha.getDuracao()).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("TrilhaTreinamentoDTO deve retornar 0 para duração com lista vazia")
+    void trilhaTreinamentoDTO_duracaoZeroComListaVazia() {
+        TrilhaTreinamentoDTO trilha = new TrilhaTreinamentoDTO(
+                "teste",
+                "Teste",
+                "Descrição",
+                "Público",
+                100,
+                List.of()
+        );
+
+        assertThat(trilha.duracao).isZero();
+    }
+
+    @Test
+    @DisplayName("TrilhaTreinamentoDTO deve retornar 0 para duração com lista nula")
+    void trilhaTreinamentoDTO_duracaoZeroComListaNula() {
+        TrilhaTreinamentoDTO trilha = new TrilhaTreinamentoDTO(
+                "teste",
+                "Teste",
+                "Descrição",
+                "Público",
+                100,
+                null
+        );
+
+        assertThat(trilha.duracao).isZero();
+    }
+
+    @Test
+    @DisplayName("TrilhaTreinamentoDTO com duração explícita não deve calcular duração padrão")
+    void trilhaTreinamentoDTO_duracaoExplicita() {
+        EtapaTreinamentoDTO etapa = new EtapaTreinamentoDTO(1, "E1", "i1", "d1", "c1", "a1");
+
+        TrilhaTreinamentoDTO trilha = new TrilhaTreinamentoDTO(
+                "teste",
+                "Teste",
+                "Descrição",
+                "Público",
+                100,
+                15,
+                List.of(etapa)
+        );
+
+        assertThat(trilha.duracao).isEqualTo(15);
+        assertThat(trilha.getDuracao()).isEqualTo(15);
+    }
+
+    @Test
+    @DisplayName("TrilhaTreinamentoDTO getters devem retornar valores corretos")
+    void trilhaTreinamentoDTO_gettersDevemRetornarCorretamente() {
+        EtapaTreinamentoDTO etapa = new EtapaTreinamentoDTO(1, "E1", "i1", "d1", "c1", "a1");
+        TrilhaTreinamentoDTO trilha = new TrilhaTreinamentoDTO(
+                "codigo-teste",
+                "Título Teste",
+                "Descrição Teste",
+                "Público Alvo",
+                250,
+                List.of(etapa)
+        );
+
+        assertThat(trilha.getCodigo()).isEqualTo("codigo-teste");
+        assertThat(trilha.getTitulo()).isEqualTo("Título Teste");
+        assertThat(trilha.getDescricao()).isEqualTo("Descrição Teste");
+        assertThat(trilha.getPublicoAlvo()).isEqualTo("Público Alvo");
+        assertThat(trilha.getXpConclusao()).isEqualTo(250);
+        assertThat(trilha.getEtapas()).containsExactly(etapa);
+    }
 }

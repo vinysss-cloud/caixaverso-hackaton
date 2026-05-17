@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AtualizacaoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.service</a> &gt; <span class="el_source">AtualizacaoService.java</span></div><h1>AtualizacaoService.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.service;
+
+import br.gov.caixa.treinamento.model.ModuloAtualizacao;
+import jakarta.enterprise.context.ApplicationScoped;
+
+import java.util.Arrays;
+
+@ApplicationScoped
+<span class="nc" id="L9">public class AtualizacaoService {</span>
+
+    public ModuloAtualizacao buscarModuloAtualizacao() {
+<span class="nc" id="L12">        return new ModuloAtualizacao(</span>
+                &quot;mod-1&quot;,
+                &quot;Novo fluxo de validação assistida&quot;,
+                &quot;Introduz um passo extra de verificação com sugestões automáticas.&quot;,
+<span class="nc" id="L16">                Arrays.asList(</span>
+                        &quot;Abra o formulário de atendimento&quot;,
+                        &quot;Preencha os campos como de costume&quot;,
+                        &quot;Use a nova seção de verificação para receber sugestões&quot;,
+                        &quot;Confirme e conclua&quot;
+                )
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

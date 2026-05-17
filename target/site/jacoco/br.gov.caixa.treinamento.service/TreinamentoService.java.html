@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TreinamentoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.service</a> &gt; <span class="el_source">TreinamentoService.java</span></div><h1>TreinamentoService.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.service;
+
+import br.gov.caixa.treinamento.dto.EtapaTreinamentoDTO;
+import br.gov.caixa.treinamento.dto.TrilhaTreinamentoDTO;
+import br.gov.caixa.treinamento.model.ProgressoTreinamentoUsuario;
+import br.gov.caixa.treinamento.model.Usuario;
+import br.gov.caixa.treinamento.repository.ProgressoTreinamentoUsuarioRepository;
+import br.gov.caixa.treinamento.repository.UsuarioRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@ApplicationScoped
+<span class="fc" id="L18">public class TreinamentoService {</span>
+
+    public static final String CODIGO_ABERTURA_CONTA = &quot;abertura-conta&quot;;
+    public static final String TITULO_TRILHA_CONTA_FACIL = &quot;Conta Fácil: Jornada Assistiva PcD&quot;;
+
+    @Inject
+    UsuarioRepository usuarioRepository;
+
+    @Inject
+    ProgressoTreinamentoUsuarioRepository progressoRepository;
+
+    public TrilhaTreinamentoDTO buscarTrilhaAberturaConta() {
+<span class="fc" id="L30">        return new TrilhaTreinamentoDTO(</span>
+                CODIGO_ABERTURA_CONTA,
+                TITULO_TRILHA_CONTA_FACIL,
+                &quot;Fluxo piloto: abertura de conta bancária em ambiente simulado. Demonstra uma camada assistiva reutilizável para intranet, SISRH, atender.caixa e múltiplos sistemas internos CAIXA, com orientação contextual, acessibilidade e autonomia digital.&quot;,
+                &quot;Empregados CAIXA PCD, usuários com baixa visão e colaboradores com menor familiaridade digital em sistemas internos&quot;,
+<span class="fc" id="L35">                150,</span>
+<span class="fc" id="L36">                List.of(</span>
+                        new EtapaTreinamentoDTO(
+                                1,
+                                &quot;Identificar o tipo de conta&quot;,
+                                &quot;Escolha o tipo de conta mais adequado para o perfil do cliente fictício. Esta etapa simula como o assistente guiaria uma decisão em sistemas internos complexos.&quot;,
+                                &quot;Use TAB para navegar entre as opções e Enter para selecionar.&quot;,
+                                &quot;Tipo de conta&quot;,
+                                &quot;Selecionar Conta Corrente ou Conta Poupança&quot;
+                        ),
+                        new EtapaTreinamentoDTO(
+                                2,
+                                &quot;Preencher nome do cliente&quot;,
+                                &quot;Preencha o nome completo do cliente fictício.&quot;,
+                                &quot;Não use dados reais. Este é um ambiente de treinamento.&quot;,
+                                &quot;Nome completo&quot;,
+                                &quot;Preencher nome e sobrenome&quot;
+                        ),
+                        new EtapaTreinamentoDTO(
+                                3,
+                                &quot;Validar CPF e data de nascimento&quot;,
+                                &quot;Preencha CPF e data de nascimento do cliente fictício.&quot;,
+                                &quot;Use CPF com 11 números e data no formato dd/mm/aaaa.&quot;,
+                                &quot;CPF e data de nascimento&quot;,
+                                &quot;Preencher dados cadastrais&quot;
+                        ),
+                        new EtapaTreinamentoDTO(
+                                4,
+                                &quot;Informar telefone para contato&quot;,
+                                &quot;Preencha um telefone de contato fictício para o cliente.&quot;,
+                                &quot;Use DDD e número. Exemplo: (21) 99999-9999.&quot;,
+                                &quot;Telefone para contato&quot;,
+                                &quot;Preencher telefone&quot;
+                        ),
+                        new EtapaTreinamentoDTO(
+                                5,
+                                &quot;Preencher endereço residencial&quot;,
+                                &quot;Informe os dados de endereço do cliente fictício.&quot;,
+                                &quot;Preencha CEP, endereço, número, bairro, cidade e UF.&quot;,
+                                &quot;Endereço residencial&quot;,
+                                &quot;Preencher endereço completo&quot;
+                        ),
+                        new EtapaTreinamentoDTO(
+                                6,
+                                &quot;Informar necessidades de acessibilidade&quot;,
+                                &quot;Registre se o cliente fictício possui alguma necessidade de acessibilidade para adaptar o atendimento e demonstrar como a plataforma personaliza jornadas internas.&quot;,
+                                &quot;As informações são usadas apenas para simulação e adaptação do fluxo.&quot;,
+                                &quot;Acessibilidade&quot;,
+                                &quot;Selecionar necessidade, se houver&quot;
+                        ),
+                        new EtapaTreinamentoDTO(
+                                7,
+                                &quot;Validar documentação&quot;,
+                                &quot;Confira se todos os documentos fictícios obrigatórios foram informados antes de avançar.&quot;,
+                                &quot;Observe os alertas visuais e mensagens de erro da tela.&quot;,
+                                &quot;Documentação&quot;,
+                                &quot;Validar documentos simulados&quot;
+                        ),
+                        new EtapaTreinamentoDTO(
+                                8,
+                                &quot;Confirmar o fluxo Conta Fácil&quot;,
+                                &quot;Finalize a simulação do fluxo piloto de abertura de conta e libere a validação assistiva associada. A mesma lógica pode ser aplicada a intranet, SISRH e atender.caixa.&quot;,
+                                &quot;Após concluir esta etapa, o desafio será desbloqueado.&quot;,
+                                &quot;Confirmação&quot;,
+                                &quot;Concluir jornada assistiva&quot;
+                        )
+                )
+        );
+    }
+
+    @Transactional
+    public ProgressoTreinamentoUsuario iniciarOuBuscarProgresso(String matricula, String codigoTreinamento) {
+<span class="fc" id="L107">        Usuario usuario = usuarioRepository.buscarPorMatricula(matricula)</span>
+<span class="fc" id="L108">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Usuário não encontrado.&quot;));</span>
+
+<span class="fc" id="L110">        TrilhaTreinamentoDTO trilha = buscarTrilhaAberturaConta();</span>
+
+<span class="fc" id="L112">        Optional&lt;ProgressoTreinamentoUsuario&gt; progressoExistente =</span>
+<span class="fc" id="L113">                progressoRepository.buscarPorUsuarioECodigo(usuario, codigoTreinamento);</span>
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (progressoExistente.isPresent()) {</span>
+<span class="fc" id="L116">            ProgressoTreinamentoUsuario progresso = progressoExistente.get();</span>
+<span class="fc" id="L117">            sincronizarTotalEtapas(progresso, trilha.etapas.size());</span>
+<span class="fc" id="L118">            return progresso;</span>
+        }
+
+<span class="fc" id="L121">        ProgressoTreinamentoUsuario progresso = new ProgressoTreinamentoUsuario();</span>
+<span class="fc" id="L122">        progresso.usuario = usuario;</span>
+<span class="fc" id="L123">        progresso.codigoTreinamento = codigoTreinamento;</span>
+<span class="fc" id="L124">        progresso.tituloTreinamento = trilha.titulo;</span>
+<span class="fc" id="L125">        progresso.etapaAtual = 0;</span>
+<span class="fc" id="L126">        progresso.totalEtapas = trilha.etapas.size();</span>
+<span class="fc" id="L127">        progresso.progressoPercentual = 0;</span>
+<span class="fc" id="L128">        progresso.concluido = false;</span>
+<span class="fc" id="L129">        progresso.desafioDesbloqueado = false;</span>
+<span class="fc" id="L130">        progresso.desafioRespondido = false;</span>
+<span class="fc" id="L131">        progresso.dataInicio = LocalDateTime.now();</span>
+
+<span class="fc" id="L133">        progressoRepository.persist(progresso);</span>
+
+<span class="fc" id="L135">        return progresso;</span>
+    }
+
+
+    private void sincronizarTotalEtapas(ProgressoTreinamentoUsuario progresso, int totalEtapasAtualizado) {
+<span class="pc bpc" id="L140" title="2 of 4 branches missed.">        if (progresso.totalEtapas == null || progresso.totalEtapas != totalEtapasAtualizado) {</span>
+<span class="nc" id="L141">            progresso.totalEtapas = totalEtapasAtualizado;</span>
+
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (progresso.etapaAtual == null) {</span>
+<span class="nc" id="L144">                progresso.etapaAtual = 0;</span>
+            }
+
+<span class="nc bnc" id="L147" title="All 2 branches missed.">            if (progresso.etapaAtual &gt; totalEtapasAtualizado) {</span>
+<span class="nc" id="L148">                progresso.etapaAtual = totalEtapasAtualizado;</span>
+            }
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            if (Boolean.TRUE.equals(progresso.concluido)) {</span>
+<span class="nc" id="L152">                progresso.etapaAtual = totalEtapasAtualizado;</span>
+<span class="nc" id="L153">                progresso.progressoPercentual = 100;</span>
+<span class="nc" id="L154">                progresso.desafioDesbloqueado = true;</span>
+<span class="nc" id="L155">                return;</span>
+            }
+
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            progresso.progressoPercentual = totalEtapasAtualizado == 0</span>
+<span class="nc" id="L159">                    ? 0</span>
+<span class="nc" id="L160">                    : (progresso.etapaAtual * 100) / totalEtapasAtualizado;</span>
+        }
+<span class="fc" id="L162">    }</span>
+
+    @Transactional
+    public ProgressoTreinamentoUsuario concluirProximaEtapa(String matricula, String codigoTreinamento) {
+<span class="fc" id="L166">        Usuario usuario = usuarioRepository.buscarPorMatricula(matricula)</span>
+<span class="pc" id="L167">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Usuário não encontrado.&quot;));</span>
+
+<span class="fc" id="L169">        ProgressoTreinamentoUsuario progresso = progressoRepository</span>
+<span class="fc" id="L170">                .buscarPorUsuarioECodigo(usuario, codigoTreinamento)</span>
+<span class="pc" id="L171">                .orElseGet(() -&gt; iniciarOuBuscarProgresso(matricula, codigoTreinamento));</span>
+
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (Boolean.TRUE.equals(progresso.concluido)) {</span>
+<span class="fc" id="L174">            return progresso;</span>
+        }
+
+<span class="fc" id="L177">        progresso.etapaAtual = progresso.etapaAtual + 1;</span>
+
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (progresso.etapaAtual &gt;= progresso.totalEtapas) {</span>
+<span class="fc" id="L180">            progresso.etapaAtual = progresso.totalEtapas;</span>
+<span class="fc" id="L181">            progresso.progressoPercentual = 100;</span>
+<span class="fc" id="L182">            progresso.concluido = true;</span>
+<span class="fc" id="L183">            progresso.desafioDesbloqueado = true;</span>
+<span class="fc" id="L184">            progresso.dataConclusao = LocalDateTime.now();</span>
+        } else {
+<span class="fc" id="L186">            progresso.progressoPercentual = (progresso.etapaAtual * 100) / progresso.totalEtapas;</span>
+        }
+
+<span class="fc" id="L189">        return progresso;</span>
+    }
+
+    public boolean desafioEstaDesbloqueado(String matricula, String codigoTreinamento) {
+<span class="fc" id="L193">        Optional&lt;Usuario&gt; usuarioOpt = usuarioRepository.buscarPorMatricula(matricula);</span>
+
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (usuarioOpt.isEmpty()) {</span>
+<span class="fc" id="L196">            return false;</span>
+        }
+
+<span class="fc" id="L199">        return progressoRepository.buscarPorUsuarioECodigo(usuarioOpt.get(), codigoTreinamento)</span>
+<span class="fc" id="L200">                .map(p -&gt; Boolean.TRUE.equals(p.desafioDesbloqueado))</span>
+<span class="fc" id="L201">                .orElse(false);</span>
+    }
+
+
+    @Transactional
+    public void marcarDesafioRespondido(String matricula, String codigoTreinamento) {
+<span class="nc" id="L207">        Optional&lt;Usuario&gt; usuarioOpt = usuarioRepository.buscarPorMatricula(matricula);</span>
+
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (usuarioOpt.isEmpty()) {</span>
+<span class="nc" id="L210">            return;</span>
+        }
+
+<span class="nc" id="L213">        progressoRepository.buscarPorUsuarioECodigo(usuarioOpt.get(), codigoTreinamento)</span>
+<span class="nc" id="L214">                .ifPresent(progresso -&gt; progresso.desafioRespondido = true);</span>
+<span class="nc" id="L215">    }</span>
+
+    @Transactional
+    public ProgressoTreinamentoUsuario reiniciarTrilha(String matricula, String codigoTreinamento) {
+<span class="fc" id="L219">        Usuario usuario = usuarioRepository.buscarPorMatricula(matricula)</span>
+<span class="fc" id="L220">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Usuário não encontrado.&quot;));</span>
+
+<span class="fc" id="L222">        progressoRepository.apagarPorUsuarioECodigo(usuario, codigoTreinamento);</span>
+
+<span class="fc" id="L224">        TrilhaTreinamentoDTO trilha = buscarTrilhaAberturaConta();</span>
+
+<span class="fc" id="L226">        ProgressoTreinamentoUsuario progresso = new ProgressoTreinamentoUsuario();</span>
+<span class="fc" id="L227">        progresso.usuario = usuario;</span>
+<span class="fc" id="L228">        progresso.codigoTreinamento = codigoTreinamento;</span>
+<span class="fc" id="L229">        progresso.tituloTreinamento = trilha.titulo;</span>
+<span class="fc" id="L230">        progresso.etapaAtual = 0;</span>
+<span class="fc" id="L231">        progresso.totalEtapas = trilha.etapas.size();</span>
+<span class="fc" id="L232">        progresso.progressoPercentual = 0;</span>
+<span class="fc" id="L233">        progresso.concluido = false;</span>
+<span class="fc" id="L234">        progresso.desafioDesbloqueado = false;</span>
+<span class="fc" id="L235">        progresso.desafioRespondido = false;</span>
+<span class="fc" id="L236">        progresso.dataInicio = LocalDateTime.now();</span>
+<span class="fc" id="L237">        progresso.dataConclusao = null;</span>
+
+<span class="fc" id="L239">        progressoRepository.persist(progresso);</span>
+
+<span class="fc" id="L241">        return progresso;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -6,6 +6,7 @@ import br.gov.caixa.treinamento.model.Usuario;
 import br.gov.caixa.treinamento.repository.AtividadeUsuarioRepository;
 import br.gov.caixa.treinamento.repository.BadgeUsuarioRepository;
 import br.gov.caixa.treinamento.repository.UsuarioRepository;
+import br.gov.caixa.treinamento.repository.ResultadoDesafioUsuarioRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -26,6 +27,9 @@ public class GamificacaoService {
 
     @Inject
     BadgeUsuarioRepository badgeUsuarioRepository;
+
+    @Inject
+    ResultadoDesafioUsuarioRepository resultadoDesafioUsuarioRepository;
 
     @Transactional
     public void registrarLogin(String matricula) {
@@ -219,6 +223,7 @@ public class GamificacaoService {
 
         atividadeUsuarioRepository.apagarPorUsuario(usuario);
         badgeUsuarioRepository.apagarPorUsuario(usuario);
+        resultadoDesafioUsuarioRepository.apagarPorUsuario(usuario);
 
         usuario.pontuacaoTotal = 0;
         usuario.nivel = 1;

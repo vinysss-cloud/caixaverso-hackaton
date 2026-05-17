@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResultadoDesafioUsuario.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.model</a> &gt; <span class="el_source">ResultadoDesafioUsuario.java</span></div><h1>ResultadoDesafioUsuario.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.model;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;resultados_desafio_usuario&quot;, uniqueConstraints = {
+        @UniqueConstraint(name = &quot;uk_resultado_usuario_desafio&quot;, columnNames = {&quot;usuario_id&quot;, &quot;desafio_id&quot;})
+})
+<span class="nc" id="L17">public class ResultadoDesafioUsuario extends PanacheEntity {</span>
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    public Usuario usuario;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    public DesafioAssistivo desafio;
+
+<span class="nc" id="L25">    @Column(nullable = false)</span>
+<span class="nc" id="L26">    public Integer totalSituacoes = 0;</span>
+
+<span class="nc" id="L28">    @Column(nullable = false)</span>
+<span class="nc" id="L29">    public Integer acertos = 0;</span>
+
+<span class="nc" id="L31">    @Column(nullable = false)</span>
+<span class="nc" id="L32">    public Integer percentual = 0;</span>
+
+<span class="nc" id="L34">    @Column(nullable = false)</span>
+<span class="nc" id="L35">    public Integer pontuacao = 0;</span>
+
+<span class="nc" id="L37">    @Column(nullable = false)</span>
+<span class="nc" id="L38">    public Boolean aprovado = false;</span>
+
+<span class="nc" id="L40">    @Column(nullable = false, length = 30)</span>
+    public String status = &quot;CONCLUIDO&quot;;
+
+    @Column(length = 500)
+    public String respostaResumo;
+
+    public LocalDateTime dataInicio;
+
+<span class="nc" id="L48">    public LocalDateTime dataConclusao = LocalDateTime.now();</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TreinamentoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">caixa-pcd-game-training</a> &gt; <a href="index.source.html" class="el_package">br.gov.caixa.treinamento.controller</a> &gt; <span class="el_source">TreinamentoResource.java</span></div><h1>TreinamentoResource.java</h1><pre class="source lang-java linenums">package br.gov.caixa.treinamento.controller;
+
+import br.gov.caixa.treinamento.model.ProgressoTreinamentoUsuario;
+import br.gov.caixa.treinamento.security.CsrfService;
+import br.gov.caixa.treinamento.security.UsuarioLogadoService;
+import br.gov.caixa.treinamento.service.GamificacaoService;
+import br.gov.caixa.treinamento.service.TreinamentoService;
+import io.quarkus.qute.Template;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+import java.net.URI;
+import java.util.Map;
+
+@Path(&quot;/treinamento&quot;)
+<span class="fc" id="L24">public class TreinamentoResource {</span>
+
+    @Inject
+    Template treinamento;
+
+    @Inject
+    TreinamentoService treinamentoService;
+
+    @Inject
+    GamificacaoService gamificacaoService;
+
+    @Inject
+    UsuarioLogadoService usuarioLogadoService;
+
+    @Inject
+    CsrfService csrfService;
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response treinamento(@CookieParam(&quot;CAIXAVERSO_SESSION&quot;) String tokenSessao,
+                                @CookieParam(CsrfService.COOKIE_CSRF) String csrfCookie) {
+<span class="fc" id="L45">        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);</span>
+
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">        if (usuarioLogado == null || usuarioLogado.isBlank()) {</span>
+<span class="fc" id="L48">            return Response.seeOther(URI.create(&quot;/login&quot;)).build();</span>
+        }
+
+<span class="fc" id="L51">        var trilha = treinamentoService.buscarTrilhaAberturaConta();</span>
+
+<span class="fc" id="L53">        ProgressoTreinamentoUsuario progresso =</span>
+<span class="fc" id="L54">                treinamentoService.iniciarOuBuscarProgresso(</span>
+                        usuarioLogado,
+                        TreinamentoService.CODIGO_ABERTURA_CONTA
+                );
+
+<span class="fc" id="L59">        String csrfToken = csrfService.obterOuGerarToken(csrfCookie);</span>
+
+<span class="fc" id="L61">        return Response.ok(treinamento</span>
+<span class="fc" id="L62">                .data(&quot;trilha&quot;, trilha)</span>
+<span class="fc" id="L63">                .data(&quot;progresso&quot;, progresso)</span>
+<span class="fc" id="L64">                .data(&quot;csrfToken&quot;, csrfToken))</span>
+<span class="fc" id="L65">                .type(MediaType.TEXT_HTML)</span>
+<span class="fc" id="L66">                .cookie(csrfService.criarCookie(csrfToken))</span>
+<span class="fc" id="L67">                .header(&quot;Cache-Control&quot;, &quot;no-store&quot;)</span>
+<span class="fc" id="L68">                .build();</span>
+    }
+
+    @POST
+    @Path(&quot;/etapa-concluida&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response concluirEtapa(@CookieParam(&quot;CAIXAVERSO_SESSION&quot;) String tokenSessao,
+                                  @CookieParam(CsrfService.COOKIE_CSRF) String csrfCookie,
+                                  @HeaderParam(&quot;X-CSRF-Token&quot;) String csrfToken) {
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (!csrfService.tokenValido(csrfToken, csrfCookie)) {</span>
+<span class="nc" id="L78">            return Response.status(Response.Status.FORBIDDEN)</span>
+<span class="nc" id="L79">                    .entity(Map.of(&quot;sucesso&quot;, false, &quot;mensagem&quot;, &quot;Token CSRF inválido ou ausente.&quot;))</span>
+<span class="nc" id="L80">                    .build();</span>
+        }
+
+<span class="fc" id="L83">        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);</span>
+
+<span class="pc bpc" id="L85" title="1 of 4 branches missed.">        if (usuarioLogado == null || usuarioLogado.isBlank()) {</span>
+<span class="fc" id="L86">            return Response.status(Response.Status.UNAUTHORIZED).build();</span>
+        }
+
+<span class="fc" id="L89">        ProgressoTreinamentoUsuario progresso =</span>
+<span class="fc" id="L90">                treinamentoService.concluirProximaEtapa(</span>
+                        usuarioLogado,
+                        TreinamentoService.CODIGO_ABERTURA_CONTA
+                );
+
+<span class="fc" id="L95">        gamificacaoService.registrarEtapaConcluida(usuarioLogado);</span>
+
+<span class="fc" id="L97">        return Response.ok(Map.of(</span>
+<span class="fc" id="L98">                &quot;sucesso&quot;, true,</span>
+                &quot;etapaAtual&quot;, progresso.etapaAtual,
+                &quot;totalEtapas&quot;, progresso.totalEtapas,
+                &quot;progressoPercentual&quot;, progresso.progressoPercentual,
+                &quot;concluido&quot;, progresso.concluido,
+                &quot;desafioDesbloqueado&quot;, progresso.desafioDesbloqueado
+<span class="fc" id="L104">        )).build();</span>
+    }
+
+    @POST
+    @Path(&quot;/refazer&quot;)
+    public Response refazerTrilha(@CookieParam(&quot;CAIXAVERSO_SESSION&quot;) String tokenSessao,
+                                  @CookieParam(CsrfService.COOKIE_CSRF) String csrfCookie,
+                                  @FormParam(&quot;csrfToken&quot;) String csrfToken) {
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (!csrfService.tokenValido(csrfToken, csrfCookie)) {</span>
+<span class="nc" id="L113">            return Response.seeOther(URI.create(&quot;/treinamento&quot;)).build();</span>
+        }
+
+<span class="fc" id="L116">        String usuarioLogado = usuarioLogadoService.matriculaOuNulo(tokenSessao);</span>
+
+<span class="pc bpc" id="L118" title="1 of 4 branches missed.">        if (usuarioLogado == null || usuarioLogado.isBlank()) {</span>
+<span class="fc" id="L119">            return Response.seeOther(URI.create(&quot;/login&quot;)).build();</span>
+        }
+
+<span class="fc" id="L122">        gamificacaoService.zerarGamificacaoDoUsuario(usuarioLogado);</span>
+
+<span class="fc" id="L124">        treinamentoService.reiniciarTrilha(</span>
+                usuarioLogado,
+                TreinamentoService.CODIGO_ABERTURA_CONTA
+        );
+
+<span class="fc" id="L129">        return Response.seeOther(URI.create(&quot;/treinamento&quot;)).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

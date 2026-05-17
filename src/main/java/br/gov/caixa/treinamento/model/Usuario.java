@@ -25,7 +25,7 @@ public class Usuario extends PanacheEntity {
     public Integer idade;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    public List<String> deficiencias = new ArrayList<>();
+    public List<String> preferenciasAcessibilidade = new ArrayList<>();
 
     @Column(nullable = false)
     public String senhaHash;

@@ -1,191 +1,277 @@
 # CaixaVerso Assistivo
 
-**Plataforma assistiva, gamificada e adaptativa para apoiar empregados CAIXA na aprendizagem e navegação de jornadas digitais internas.**
+**Plataforma assistiva, acessível e gamificada para ampliar a autonomia digital de empregados CAIXA em jornadas internas.**
 
-O **CaixaVerso Assistivo** é um protótipo desenvolvido para o **Hackathon CAIXAVERSO - 1ª Onda**, com foco em **inclusão e acessibilidade digital do empregado CAIXA**.
+O **CaixaVerso Assistivo** é um protótipo desenvolvido para o **Hackathon CAIXAVERSO - 1ª Onda**, com foco no **Desafio 1 — Inclusão e Acessibilidade Digital do Empregado CAIXA**.
 
-A proposta não é apenas criar um treinamento digital. A solução funciona como uma **camada de autonomia digital**, capaz de transformar fluxos internos complexos em **trilhas guiadas, acessíveis, simples, auditáveis e gamificadas**, respeitando diferentes perfis de empregados, incluindo pessoas com deficiência, empregados com baixo letramento digital e profissionais que lidam com múltiplos sistemas corporativos.
+A proposta vai além de um treinamento digital tradicional. O projeto funciona como uma **camada assistiva de autonomia**, capaz de transformar fluxos internos complexos em **jornadas guiadas, simples, acessíveis, auditáveis e progressivas**, apoiando empregados PcD, empregados com baixa familiaridade digital e profissionais que precisam lidar diariamente com múltiplos sistemas corporativos.
 
----
-
-## 1. Problema
-
-A CAIXA possui um ambiente digital amplo, com múltiplos sistemas, fluxos operacionais, ferramentas internas e jornadas corporativas. Parte dos empregados pode enfrentar barreiras para acessar, compreender ou navegar de forma autônoma nesses ambientes, especialmente quando há:
-
-- deficiência visual, auditiva, motora, cognitiva ou neurodivergência;
-- baixa familiaridade com ferramentas digitais;
-- dificuldade de adaptação a múltiplos sistemas internos;
-- dependência de suporte presencial para execução de tarefas;
-- excesso de informações em telas complexas;
-- baixa padronização no processo de aprendizagem operacional.
-
-Essas barreiras podem gerar perda de produtividade, retrabalho, aumento do esforço operacional, dependência de apoio externo e impacto indireto na qualidade do atendimento ao cliente.
+> **Frase central do projeto:**  
+> O CaixaVerso Assistivo transforma sistemas internos complexos em jornadas simples, acessíveis e humanas.
 
 ---
 
-## 2. Solução
+## 1. Contexto do desafio
 
-O **CaixaVerso Assistivo** propõe uma experiência de aprendizagem prática, acessível e orientada por etapas.
+A CAIXA possui um ambiente digital amplo, composto por sistemas, canais internos, normativos, ferramentas de gestão, atendimento e processos operacionais. Parte dos empregados pode enfrentar barreiras para compreender, navegar e executar tarefas de forma autônoma nesses ambientes.
 
-A solução guia o empregado dentro de uma jornada simulada, apresentando instruções simples, textos explicativos, apoio por áudio, recursos de acessibilidade, validações, progresso, pontuação, medalhas e ranking gamificado.
+Essas barreiras podem afetar especialmente:
 
-A trilha **Conta Fácil: Jornada Assistiva PcD** foi utilizada como **caso piloto** para demonstrar a solução. O fluxo piloto simula a abertura de conta bancária em ambiente seguro e acessível. A arquitetura, porém, foi pensada para evoluir e permitir novas trilhas relacionadas a sistemas internos, como:
+- empregados PcD;
+- empregados com baixa familiaridade digital;
+- empregados em unidades com menor apoio presencial;
+- profissionais que utilizam muitos sistemas ao mesmo tempo;
+- empregados em fase de aprendizagem de novos fluxos;
+- equipes que dependem de orientação rápida, clara e padronizada.
 
-- intranet;
+O resultado pode ser aumento de dúvidas recorrentes, dependência de suporte, retrabalho, perda de produtividade e maior esforço operacional.
+
+---
+
+## 2. Problema que o projeto resolve
+
+O problema atacado pelo **CaixaVerso Assistivo** é a dificuldade de navegação autônoma em jornadas digitais internas.
+
+Em vez de entregar apenas manuais, PDFs ou treinamentos passivos, a solução cria uma experiência prática, guiada e acessível, na qual o empregado aprende executando uma jornada simulada, com apoio contextual em cada etapa.
+
+O projeto busca responder à seguinte pergunta:
+
+> **Como permitir que empregados com diferentes necessidades, ritmos e níveis de familiaridade digital consigam aprender e navegar por fluxos internos com mais autonomia, clareza e segurança?**
+
+---
+
+## 3. Solução proposta
+
+O **CaixaVerso Assistivo** oferece uma plataforma de trilhas assistivas, com recursos de acessibilidade, orientação por etapas, feedback visual, apoio por voz, validação de aprendizagem e elementos de gamificação.
+
+A trilha piloto implementada é:
+
+> **Conta Fácil: Jornada Assistiva PcD**  
+> **Fluxo piloto:** abertura de conta bancária em ambiente simulado.
+
+A abertura de conta foi usada apenas como **caso demonstrativo**. A arquitetura foi pensada para permitir expansão para novas jornadas internas, como:
+
 - SISRH;
+- intranet;
 - atender.caixa;
 - ferramentas de atendimento;
+- consulta a normativos;
 - fluxos de suporte interno;
 - processos operacionais;
-- consulta a normativos;
-- integração com canais corporativos.
+- trilhas de capacitação assistida;
+- integração futura com canais corporativos.
 
 ---
 
-## 3. Objetivo do projeto
+## 4. Objetivo do projeto
 
-Ampliar a autonomia digital de empregados CAIXA por meio de uma plataforma que combina:
+Ampliar a autonomia digital de empregados CAIXA por meio de uma solução que combina:
 
 - acessibilidade;
-- orientação contextual;
-- gamificação;
-- trilhas de aprendizagem;
-- feedback visual;
-- apoio por voz;
 - linguagem simples;
-- progressão por níveis;
-- dashboard gerencial;
-- boas práticas de segurança;
+- orientação contextual;
+- trilhas práticas;
+- apoio por voz;
+- progressão por etapas;
+- validação de aprendizagem;
+- gamificação leve;
+- dashboard de evolução;
+- segurança mínima aplicada ao MVP;
 - respeito à privacidade e à LGPD.
 
 ---
 
-## 4. Público-alvo
+## 5. Público-alvo
 
-O projeto foi pensado principalmente para:
+O projeto foi pensado para apoiar principalmente:
 
 - empregados PcD;
 - empregados com baixa familiaridade digital;
-- empregados em fase de aprendizagem de novos sistemas;
-- equipes de atendimento que precisam operar múltiplos sistemas;
-- gestores que desejam acompanhar evolução, engajamento e conclusão de trilhas;
+- empregados em aprendizagem de novos sistemas;
+- equipes de atendimento que operam múltiplos sistemas;
+- gestores que precisam acompanhar evolução e conclusão de trilhas;
 - áreas de capacitação, inovação, tecnologia e experiência do empregado.
 
 ---
 
-## 5. Como o projeto atende ao Desafio 1
+## 6. Enquadramento no Desafio 1
 
-O projeto se enquadra no desafio de **Inclusão e Acessibilidade Digital do Empregado CAIXA**, pois busca ampliar o acesso e a autonomia de empregados com necessidades especiais ou limitações tecnológicas no uso de ferramentas digitais internas.
+O projeto se enquadra no **Desafio 1 — Inclusão e Acessibilidade Digital do Empregado CAIXA**, pois busca ampliar o acesso, a clareza, a usabilidade e a autonomia de empregados em jornadas digitais internas.
 
-A solução atua diretamente sobre os seguintes pontos:
-
-| Necessidade do desafio | Como o projeto responde |
+| Necessidade do desafio | Como o CaixaVerso Assistivo responde |
 |---|---|
 | Autonomia do empregado | Trilhas guiadas com instruções passo a passo |
-| Acessibilidade | Alto contraste, ajuste de fonte, textos claros e áudio explicativo |
-| Clareza | Linguagem objetiva e orientação por etapas |
-| Usabilidade | Interface simples, botões destacados e fluxo progressivo |
-| Inclusão digital | Treinamento prático para empregados com diferentes níveis de familiaridade |
-| Apoio a PcD | Recursos visuais, sonoros e estrutura simplificada |
-| Redução de dependência de suporte | Aprendizagem autônoma dentro da jornada |
-| Melhoria da experiência do empregado | Ambiente mais acolhedor, simples e assistivo |
+| Acessibilidade digital | Alto contraste, ajuste de fonte, modo baixa visão, redução de animações e apoio por voz |
+| Clareza no uso dos sistemas | Linguagem simples, etapas curtas e orientação contextual |
+| Baixa familiaridade digital | Experiência progressiva, com menos informações por tela |
+| Apoio a empregados PcD | Recursos visuais, sonoros e estrutura simplificada |
+| Redução de dependência de suporte | Aprendizagem prática e autônoma |
+| Melhoria da experiência do empregado | Interface mais acolhedora, assistiva e padronizada |
+| Escalabilidade para sistemas internos | Arquitetura preparada para novas trilhas e fluxos corporativos |
 
 ---
 
-## 6. Principais funcionalidades
+## 7. Funcionalidades implementadas
 
-### Cadastro e autenticação
+### 7.1 Cadastro e autenticação
 
 - Cadastro de usuário.
 - Login com matrícula e senha.
 - Validação de senha forte.
-- Armazenamento de senha com BCrypt.
+- Armazenamento de senha com **BCrypt**.
 - Sessão por token aleatório.
-- Cookie de sessão com `HttpOnly` e `SameSite=Strict`.
-- Filtro de autenticação para proteger rotas internas.
+- Armazenamento de hash do token de sessão.
+- Cookie de sessão com `HttpOnly`.
+- Cookie de sessão com `SameSite=Strict`.
+- Filtro de autenticação para proteção de rotas internas.
+- Mensagens amigáveis em caso de usuário não cadastrado ou senha inválida.
 
-### Perfil de acessibilidade
+### 7.2 Preferências de acessibilidade
 
-- Registro opcional de necessidades de acessibilidade.
-- Uso da informação apenas para adaptação da experiência.
-- Estrutura preparada para evoluir para personalização automática por perfil.
+O cadastro foi pensado para registrar preferências de uso e adaptação da experiência, evitando exposição indevida de informações sensíveis.
 
-### Trilhas de aprendizagem
+Exemplos de preferências que podem orientar a experiência:
 
-- Cards de treinamento.
-- Trilha disponível: **Conta Fácil: Jornada Assistiva PcD**.
+- necessidade de fonte ampliada;
+- preferência por leitura em voz;
+- preferência por alto contraste;
+- redução de animações;
+- navegação simplificada;
+- apoio visual mais evidente.
+
+> Em evolução para ambiente corporativo, essas preferências devem seguir princípios de minimização de dados, consentimento, finalidade específica e governança LGPD.
+
+### 7.3 Trilhas assistivas
+
+- Listagem de trilhas disponíveis.
+- Trilha piloto: **Conta Fácil: Jornada Assistiva PcD**.
 - Fluxo piloto: abertura de conta bancária.
-- Cards futuros com status “Em breve”.
-- Controle de início, andamento, conclusão e refazer trilha.
-- Botão para reiniciar treinamento do zero.
+- Cards futuros com status **“Em breve”**.
+- Controle de início, andamento e conclusão.
+- Botão para refazer trilha.
+- Reinício do progresso ao refazer a jornada.
 
-### Jornada guiada
+### 7.4 Jornada guiada
 
-- Popup orientador contextual.
-- Destaque visual do campo atual.
-- Instruções simples.
-- Avanço por etapas.
+- Assistente contextual durante a execução da trilha.
+- Orientações simples por etapa.
+- Destaque visual do campo ou ação principal.
+- Avanço progressivo.
 - Feedback de conclusão.
-- Controle para exibir o assistente apenas durante a execução da trilha.
+- Exibição do assistente apenas no contexto correto da trilha.
+- Redução de sobrecarga visual.
 
-### Acessibilidade
+### 7.5 Assistente de voz
 
-- Botão para aumentar fonte.
-- Botão para reduzir fonte.
-- Modo alto contraste.
-- Botão de áudio para leitura de textos explicativos.
-- Uso de `speechSynthesis` no navegador.
-- Interface com foco em simplicidade.
+- Leitura de textos explicativos com `speechSynthesis`.
+- Botões de áudio para apoio sob demanda.
+- Resumo de telas e instruções principais.
+- Apoio para usuários com baixa visão ou dificuldade de leitura.
+- Estrutura preparada para futura integração com serviços corporativos de voz ou IA responsável.
+
+> No MVP, o assistente de voz é baseado em recursos nativos do navegador e textos orientados por contexto. Não utiliza dados reais, deepfake, biometria vocal ou processamento sensível.
+
+### 7.6 Acessibilidade visual e interação
+
+- Aumento de fonte.
+- Redução de fonte.
+- Alto contraste.
+- Modo baixa visão.
+- Redução de animações.
+- Foco visual mais evidente.
+- Linguagem simples.
 - Menos informação por etapa.
-- Elementos visuais destacados.
+- Botões destacados.
+- Organização visual voltada à clareza.
 
-### Gamificação
+### 7.7 Gamificação leve
+
+A gamificação é usada como mecanismo de engajamento, não como objetivo principal.
 
 - Pontuação por avanço.
 - XP acumulado.
 - Nível do usuário.
 - Medalhas/badges.
 - Progresso da trilha.
-- Ranking fictício para demonstração.
-- Regras de evolução por conclusão de etapas e desafios.
+- Ranking demonstrativo.
+- Regras de pontuação por conclusão de etapas.
 
-### Validação de aprendizado
+### 7.8 Validação de aprendizagem
 
 - Validação liberada após conclusão da trilha.
-- Perguntas de fixação contextualizadas no fluxo Conta Fácil.
-- Validação de respostas.
+- Perguntas de fixação contextualizadas.
+- Respostas avaliadas.
 - Pontuação conforme desempenho.
 - Reforço do aprendizado prático.
 
-### Dashboard
+### 7.9 Dashboard
 
 - Visão de progresso.
 - Pontuação do usuário.
-- Ranking.
-- Medalhas.
+- Medalhas conquistadas.
+- Ranking demonstrativo.
 - Indicadores de evolução.
-- Estrutura preparada para métricas gerenciais.
+- Estrutura preparada para métricas gerenciais e acompanhamento por trilha.
 
 ---
 
-## 7. Diferenciais da solução
+## 8. Evidências de acessibilidade
+
+O projeto foi estruturado para demonstrar acessibilidade prática no MVP. Abaixo está o checklist de recursos previstos e/ou implementados.
+
+| Recurso | Situação | Evidência esperada |
+|---|---|---|
+| Navegação por teclado | Previsto/implementável | Campos, botões e links acessíveis via `Tab` |
+| Foco visível | Implementado/melhorado | Destaque visual ao navegar por teclado |
+| Skip link | Implementado/melhorado | Link para pular ao conteúdo principal |
+| Alto contraste | Implementado | Alternância visual para melhorar leitura |
+| Modo baixa visão | Implementado | Interface com maior legibilidade |
+| Ajuste de fonte | Implementado | Botões para aumentar e reduzir texto |
+| Redução de animações | Implementado | Opção para reduzir movimento na interface |
+| Apoio por voz | Implementado no MVP | Leitura de textos por `speechSynthesis` |
+| Transcrição textual | Implementado/conceito aplicado | Textos disponíveis em tela para conteúdos narrados |
+| Linguagem simples | Implementado | Instruções curtas e objetivas |
+| ARIA e semântica | Em evolução | Melhorias em `aria-label`, `aria-live` e estrutura semântica |
+| Compatibilidade com leitor de tela | Em evolução | Testes recomendados com NVDA, Narrador do Windows ou similares |
+| Contraste WCAG | Em evolução | Validação recomendada por ferramenta de contraste |
+
+### Próximos testes recomendados de acessibilidade
+
+Antes da banca ou evolução corporativa, recomenda-se validar:
+
+- fluxo completo usando apenas teclado;
+- leitura das telas com leitor de tela;
+- contraste de textos e botões;
+- comportamento com zoom de 125%, 150% e 175%;
+- uso do modo baixa visão;
+- uso com redução de movimento ativada;
+- clareza das mensagens de erro;
+- acessibilidade dos formulários;
+- foco inicial e foco após ações;
+- consistência dos `aria-labels`.
+
+---
+
+## 9. Diferenciais da solução
 
 O diferencial do **CaixaVerso Assistivo** está na combinação de recursos que normalmente aparecem separados:
 
-1. **Treinamento prático**, não apenas conteúdo teórico.
-2. **Orientação contextual**, mostrando onde o empregado deve atuar.
-3. **Acessibilidade integrada**, não tratada como recurso secundário.
-4. **Gamificação**, aumentando engajamento e continuidade.
-5. **Dashboard**, permitindo visão gerencial da evolução.
-6. **Arquitetura extensível**, preparada para novas trilhas.
-7. **Segurança mínima aplicada ao MVP**, com BCrypt e sessão por token.
-8. **Foco na experiência do empregado**, impactando indiretamente a experiência do cliente.
+1. **Camada assistiva reutilizável**, não apenas uma tela de treinamento.
+2. **Aprendizagem prática**, na qual o empregado aprende executando.
+3. **Orientação contextual**, mostrando o que fazer em cada etapa.
+4. **Acessibilidade integrada**, tratada como requisito central.
+5. **Apoio por voz**, auxiliando usuários com baixa visão ou dificuldade de leitura.
+6. **Gamificação leve**, para engajamento e continuidade.
+7. **Dashboard**, permitindo acompanhar evolução e conclusão.
+8. **Arquitetura extensível**, preparada para novas trilhas.
+9. **Segurança mínima aplicada ao MVP**, com BCrypt e sessão por token.
+10. **Foco na experiência do empregado**, com impacto indireto na experiência do cliente.
 
 ---
 
-## 8. Arquitetura técnica
+## 10. Arquitetura técnica
 
-O projeto foi desenvolvido como uma aplicação web utilizando Java e Quarkus.
+O projeto foi desenvolvido como aplicação web Java utilizando Quarkus.
 
 ### Tecnologias utilizadas
 
@@ -225,156 +311,182 @@ src
 
 ---
 
-## 9. Fluxo principal da aplicação
+## 11. Fluxo principal da aplicação
 
-1. Usuário acessa a aplicação.
-2. Realiza cadastro informando dados básicos e, opcionalmente, necessidades de acessibilidade.
-3. Efetua login.
-4. Visualiza as trilhas disponíveis.
-5. Inicia a trilha **Conta Fácil: Jornada Assistiva PcD**.
-6. Pratica o fluxo piloto de abertura de conta bancária.
-7. Recebe orientação passo a passo.
-8. Pode ativar áudio, aumentar fonte ou usar alto contraste.
-9. Preenche campos simulados da jornada.
+1. O usuário acessa a plataforma.
+2. Realiza cadastro com dados básicos e preferências opcionais de acessibilidade.
+3. Efetua login com matrícula e senha.
+4. Acessa o painel de trilhas.
+5. Visualiza a trilha **Conta Fácil: Jornada Assistiva PcD**.
+6. Inicia a jornada assistida.
+7. Recebe orientação contextual passo a passo.
+8. Pode ativar áudio, ajustar fonte, alto contraste, baixa visão ou reduzir animações.
+9. Executa o fluxo piloto em ambiente simulado.
 10. Conclui etapas e acumula pontos.
 11. Desbloqueia a validação final.
-12. Responde à validação de aprendizagem.
+12. Responde às perguntas de fixação.
 13. Recebe pontuação, nível e medalhas.
-14. Visualiza sua evolução no dashboard.
-15. Pode refazer a trilha, zerando o progresso anterior.
+14. Acompanha sua evolução no dashboard.
+15. Pode refazer a trilha, reiniciando o progresso.
 
 ---
 
-## 10. Segurança e privacidade
+## 12. Segurança e privacidade
 
-O projeto é um MVP para hackathon, mas já contempla algumas preocupações importantes:
+O projeto é um MVP de hackathon, mas já contempla preocupações básicas de segurança e privacidade.
+
+### Implementado no MVP
 
 - Senhas armazenadas com BCrypt.
-- Regras de senha forte no cadastro.
+- Regras de senha forte.
 - Sessão baseada em token aleatório.
-- Armazenamento de hash do token de sessão.
+- Hash do token de sessão.
 - Cookie com `HttpOnly`.
 - Cookie com `SameSite=Strict`.
-- Rotas internas protegidas por filtro de autenticação.
-- Dados de acessibilidade tratados como opcionais.
-- Ambiente de demonstração sem uso de dados reais de clientes.
-- Trilha com dados fictícios e finalidade educacional.
+- Filtro de autenticação.
+- Dados fictícios na jornada demonstrativa.
+- Ausência de dados reais de clientes ou empregados.
+- Preferências de acessibilidade tratadas como opcionais.
 
-### Evolução prevista para ambiente corporativo
+### Cuidados para evolução corporativa
 
-Em um cenário real de produção, a solução deveria evoluir para:
+Em ambiente de produção, a solução deve evoluir para:
 
 - integração com SSO corporativo;
-- autenticação federada;
 - autorização por perfil;
-- trilhas vinculadas a papéis organizacionais;
-- criptografia de dados sensíveis;
-- auditoria de acessos;
-- logs estruturados;
+- autenticação federada;
+- logs estruturados e auditáveis;
 - controle CSRF;
 - cookies com `Secure` em HTTPS;
+- rate limit em login;
+- proteção contra força bruta;
 - segregação de ambientes;
-- governança LGPD;
+- criptografia de dados sensíveis;
 - mascaramento de dados;
-- integração com sistemas corporativos autorizados.
+- trilhas homologadas por área responsável;
+- governança LGPD;
+- revisão de segurança antes de integração com sistemas reais.
 
 ---
 
-## 11. LGPD e ética
+## 13. LGPD, ética e uso responsável
 
-A solução foi pensada para respeitar princípios de privacidade, minimização de dados e não discriminação.
+A solução foi pensada para respeitar os princípios de privacidade, minimização de dados, finalidade específica, segurança e não discriminação.
 
-As informações de acessibilidade devem ser:
+As preferências de acessibilidade devem ser:
 
 - opcionais;
-- utilizadas apenas para adaptar a experiência;
-- não expostas individualmente em dashboards públicos;
-- não utilizadas para restringir acesso;
-- não utilizadas para tomada de decisão discriminatória;
-- protegidas em ambiente corporativo adequado.
+- usadas apenas para adaptar a experiência;
+- não exibidas em ranking público;
+- não usadas para restringir acesso;
+- não usadas para avaliação discriminatória;
+- protegidas em ambiente corporativo;
+- visíveis apenas a perfis autorizados, quando necessário.
 
-O objetivo da coleta é exclusivamente assistivo: melhorar a experiência, reduzir barreiras e ampliar autonomia.
+O projeto não utiliza dados reais de clientes, dados sigilosos da CAIXA, deepfakes, biometria ou modelos de IA generativa no MVP.
 
 ---
 
-## 12. Valor de negócio para a CAIXA
+## 14. Valor de negócio para a CAIXA
 
-O projeto pode gerar valor institucional em diferentes frentes:
+O projeto pode gerar valor institucional em três dimensões principais.
 
 ### Para o empregado
 
-- Maior autonomia digital.
-- Menor dependência de suporte.
-- Aprendizagem mais simples e prática.
-- Experiência mais inclusiva.
-- Redução da ansiedade ao usar sistemas complexos.
-- Jornada adaptada ao seu ritmo.
+- Mais autonomia digital.
+- Menos dependência de suporte presencial.
+- Aprendizagem prática e acessível.
+- Redução de ansiedade diante de sistemas complexos.
+- Experiência adaptada ao ritmo do usuário.
+- Apoio a diferentes necessidades de acessibilidade.
 
-### Para gestores
+### Para gestores e áreas de capacitação
 
 - Acompanhamento de evolução por trilha.
 - Identificação de gargalos de aprendizagem.
-- Visão de engajamento.
+- Visualização de engajamento.
 - Indicadores de conclusão.
-- Apoio à gestão de capacitação.
+- Base para priorizar novos treinamentos.
+- Padronização da aprendizagem operacional.
 
 ### Para a organização
 
+- Redução de dúvidas recorrentes.
 - Redução de retrabalho.
-- Redução de esforço operacional.
-- Padronização de treinamento.
-- Melhoria da experiência do empregado.
+- Ganho de produtividade.
 - Fortalecimento da cultura de inclusão.
 - Apoio à transformação digital interna.
-- Impacto indireto na experiência do cliente.
+- Melhoria da experiência do empregado.
+- Impacto indireto na qualidade do atendimento ao cliente.
 
 ---
 
-## 13. Critérios de pontuação atendidos
+## 15. Indicadores de impacto sugeridos
+
+Para demonstrar valor de negócio em evolução futura, a solução pode acompanhar:
+
+| Indicador | Objetivo |
+|---|---|
+| Taxa de conclusão de trilhas | Medir adesão e finalização |
+| Tempo médio por jornada | Identificar pontos de dificuldade |
+| Quantidade de refações | Avaliar necessidade de reforço |
+| Pontuação média por trilha | Medir assimilação do conteúdo |
+| Etapas com maior abandono | Localizar gargalos de usabilidade |
+| Uso de recursos de acessibilidade | Entender preferências de apoio |
+| Redução de chamados recorrentes | Medir impacto operacional |
+| Satisfação do empregado | Avaliar experiência e clareza |
+
+---
+
+## 16. Critérios oficiais de avaliação
 
 | Critério | Como o projeto se posiciona |
 |---|---|
 | Aderência ao desafio | Foca inclusão digital, acessibilidade e autonomia do empregado CAIXA |
-| Inovação e criatividade | Combina trilhas, gamificação, popup guiado, voz, badges e dashboard |
-| Valor de negócio | Reduz suporte, acelera aprendizagem e melhora produtividade |
-| Ética e segurança | Usa sessão com token, BCrypt e dados fictícios no MVP |
-| Viabilidade técnica | Protótipo funcional em Java/Quarkus com banco, telas e fluxo completo |
+| Inovação e criatividade | Propõe camada assistiva reutilizável com voz, trilhas, dashboard e gamificação leve |
+| Valor de negócio | Reduz dependência de suporte, acelera aprendizagem e melhora produtividade |
+| Ética e segurança | Usa dados fictícios no MVP, BCrypt, sessão por token e visão de governança LGPD |
+| Viabilidade técnica | Protótipo funcional em Java/Quarkus, com banco, telas, fluxo completo e arquitetura extensível |
 
 ---
 
-## 14. Roadmap de evolução
+## 17. Roadmap de evolução
 
 ### Curto prazo
 
-- Tornar o dashboard totalmente baseado em dados reais do banco.
-- Implementar ranking real por pontuação.
-- Adicionar testes automatizados.
-- Melhorar cobertura de segurança nos formulários.
+- Refinar testes com teclado e leitor de tela.
+- Validar contraste por critérios WCAG.
+- Fortalecer semântica HTML e ARIA.
+- Melhorar responsividade em diferentes níveis de zoom.
+- Implementar CSRF nos formulários.
+- Adicionar rate limit no login.
 - Remover dados fixos de demonstração.
-- Refinar CSS e responsividade.
+- Tornar o dashboard totalmente baseado em dados persistidos.
 
 ### Médio prazo
 
 - Criar motor parametrizável de trilhas.
 - Permitir cadastro administrativo de novas jornadas.
-- Adaptar automaticamente a experiência por perfil de acessibilidade.
+- Criar trilhas para SISRH, intranet, atender.caixa e normativos.
+- Adaptar automaticamente a experiência por preferência de acessibilidade.
 - Adicionar relatórios gerenciais.
-- Implementar trilhas para SISRH, intranet, atendimento e normativos.
 - Integrar com base de conhecimento autorizada.
+- Criar biblioteca de componentes acessíveis reutilizáveis.
 
 ### Longo prazo
 
 - Integração com SSO corporativo.
-- Integração com plataformas internas autorizadas.
-- Motor inteligente de recomendação de trilhas.
+- Integração com sistemas internos autorizados.
 - Assistente contextual para dúvidas frequentes.
+- Motor inteligente de recomendação de trilhas.
 - Analytics de aprendizagem.
 - Auditoria corporativa.
 - Deploy em ambiente institucional seguro.
+- Governança de conteúdo por áreas responsáveis.
 
 ---
 
-## 15. Como executar o projeto
+## 18. Como executar o projeto
 
 ### Pré-requisitos
 
@@ -408,26 +520,90 @@ java -jar target/quarkus-app/quarkus-run.jar
 
 ---
 
-## 16. Observações sobre ambiente de demonstração
+## 19. Observações sobre ambiente de demonstração
 
-Este projeto utiliza banco H2 para facilitar execução local durante o hackathon.
+Este projeto utiliza banco H2 para facilitar a execução local durante o hackathon.
 
-O ambiente atual é exclusivamente demonstrativo e não utiliza dados reais da CAIXA, clientes ou empregados. Qualquer integração com sistemas corporativos deverá seguir políticas internas de segurança, privacidade, arquitetura e governança.
+O ambiente atual é exclusivamente demonstrativo e não utiliza dados reais da CAIXA, clientes ou empregados. Qualquer integração com sistemas corporativos deverá seguir as políticas internas de segurança, privacidade, arquitetura, governança e conformidade.
 
----
+Recomenda-se que o pacote final do projeto não inclua:
 
-## 17. Pitch resumido
-
-O **CaixaVerso Assistivo** é uma plataforma de autonomia digital para empregados CAIXA.
-
-Ele transforma jornadas internas complexas em trilhas guiadas, acessíveis e gamificadas, com apoio por voz, linguagem simples, progresso, pontuação, medalhas e dashboard.
-
-A **Conta Fácil: Jornada Assistiva PcD** é a trilha piloto. Ela usa como fluxo piloto a abertura de conta bancária. A proposta é permitir que a CAIXA evolua para uma biblioteca de trilhas assistivas aplicáveis a diferentes sistemas internos, apoiando empregados PcD, profissionais com baixo letramento digital e equipes que precisam operar múltiplas ferramentas no atendimento.
-
-Mais do que treinar, a solução reduz barreiras, aumenta autonomia, fortalece a inclusão e melhora a experiência do empregado — base essencial para uma melhor experiência do cliente.
+- pasta `target`;
+- banco local gerado;
+- arquivos temporários;
+- credenciais;
+- dados reais;
+- histórico `.git`, caso a entrega seja feita por arquivo compactado.
 
 ---
 
-## 18. Frase de impacto
+## 20. Pitch de 5 minutos
+
+### Abertura
+
+O **CaixaVerso Assistivo** nasceu para resolver uma dor real: muitos empregados precisam navegar por sistemas internos complexos, com diferentes níveis de familiaridade digital e diferentes necessidades de acessibilidade.
+
+### Problema
+
+Quando a jornada digital é confusa, o empregado depende mais de suporte, perde autonomia, gasta mais tempo e pode ter dificuldade para executar tarefas com segurança e confiança.
+
+### Solução
+
+Nossa solução transforma jornadas internas em trilhas guiadas, acessíveis e práticas. O empregado aprende executando, com instruções simples, apoio por voz, recursos de acessibilidade, feedback visual e validação de aprendizagem.
+
+### Protótipo
+
+A trilha piloto é a **Conta Fácil: Jornada Assistiva PcD**, usando abertura de conta bancária como fluxo demonstrativo. Mas a arquitetura permite evoluir para SISRH, intranet, atender.caixa, normativos e outros sistemas internos.
+
+### Valor para a CAIXA
+
+A solução aumenta autonomia, reduz dependência de suporte, padroniza capacitação, fortalece inclusão e melhora a experiência do empregado, que é base para melhorar também a experiência do cliente.
+
+### Fechamento
+
+O CaixaVerso Assistivo não é apenas um treinamento. É uma camada assistiva reutilizável para transformar sistemas complexos em jornadas simples, acessíveis e humanas.
+
+---
+
+## 21. Resposta curta para perguntas da banca
+
+### O projeto usa IA?
+
+No MVP, o projeto usa um assistente contextual baseado em regras e leitura por voz via navegador. A arquitetura está preparada para futura integração com IA responsável, respeitando segurança, privacidade e políticas internas da CAIXA.
+
+### Por que abertura de conta?
+
+A abertura de conta foi usada apenas como fluxo piloto por ser uma jornada conhecida, com etapas claras e fácil demonstração. A proposta principal é a camada assistiva, que pode ser aplicada a outras jornadas internas.
+
+### Como o projeto ajuda empregados PcD?
+
+A solução oferece alto contraste, ajuste de fonte, modo baixa visão, redução de animações, apoio por voz, linguagem simples, foco visual e jornada guiada por etapas.
+
+### Como evita risco LGPD?
+
+O MVP não usa dados reais. As preferências de acessibilidade são opcionais e devem ser usadas apenas para adaptar a experiência, sem exposição pública ou uso discriminatório.
+
+### Como gera valor para a CAIXA?
+
+Aumenta autonomia, reduz suporte recorrente, acelera aprendizagem, melhora produtividade e fortalece a cultura de inclusão digital.
+
+---
+
+## 22. Frase de impacto
 
 **CaixaVerso Assistivo: inclusão digital na prática, transformando sistemas complexos em jornadas simples, acessíveis e humanas.**
+
+
+### Reforço de segurança e privacidade aplicado nesta versão
+
+Esta versão reforça explicitamente que o CaixaVerso Assistivo é um MVP demonstrativo e não deve receber dados reais de clientes, empregados, operações bancárias ou sistemas corporativos. O fluxo de abertura de conta é apenas uma simulação para demonstrar a camada assistiva reutilizável em jornadas como intranet, SISRH, atender.caixa e demais plataformas internas.
+
+Medidas adicionadas:
+
+- proteção CSRF nos formulários sensíveis (`login`, `cadastro`, `desafio` e `refazer trilha`);
+- envio de token CSRF também nas chamadas assíncronas de conclusão de etapa;
+- cookie de sessão e cookie CSRF com `HttpOnly`, `SameSite=Strict` e `Secure` ativo por padrão;
+- rate limit em memória para tentativas de login, reduzindo força bruta no MVP;
+- remoção do campo técnico antigo relacionado a condição pessoal, substituído por preferências opcionais de acessibilidade;
+- remoção de usuário/senha H2 fixos em produção, usando variáveis de ambiente;
+- manutenção de credenciais locais apenas nos perfis `dev` e `test`, marcadas como demonstrativas.
