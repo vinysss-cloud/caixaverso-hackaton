@@ -28,7 +28,7 @@ class DesafioServiceTest {
         assertThat(desafio)
                 .isNotNull()
                 .extracting("id", "titulo")
-                .containsExactly("quiz-abertura-conta", "Quiz: Abertura de Conta Bancária");
+                .containsExactly("quiz-abertura-conta", "Validação: Conta Fácil - Jornada Assistiva PcD");
     }
 
     @Test
@@ -63,7 +63,7 @@ class DesafioServiceTest {
 
         assertThat(desafio.descricao)
                 .isNotBlank()
-                .containsIgnoringCase("abertura da conta");
+                .containsIgnoringCase("fluxo piloto de abertura de conta");
     }
 
     // ==================== TESTES DE VALIDAÇÃO - RESPOSTA CORRETA ====================

@@ -29,7 +29,7 @@ O **CaixaVerso Assistivo** propõe uma experiência de aprendizagem prática, ac
 
 A solução guia o empregado dentro de uma jornada simulada, apresentando instruções simples, textos explicativos, apoio por áudio, recursos de acessibilidade, validações, progresso, pontuação, medalhas e ranking gamificado.
 
-A trilha de **Abertura de Conta Bancária** foi utilizada como **caso piloto** para demonstrar a solução. A arquitetura, porém, foi pensada para evoluir e permitir novas trilhas relacionadas a sistemas internos, como:
+A trilha **Conta Fácil: Jornada Assistiva PcD** foi utilizada como **caso piloto** para demonstrar a solução. O fluxo piloto simula a abertura de conta bancária em ambiente seguro e acessível. A arquitetura, porém, foi pensada para evoluir e permitir novas trilhas relacionadas a sistemas internos, como:
 
 - intranet;
 - SISRH;
@@ -113,7 +113,8 @@ A solução atua diretamente sobre os seguintes pontos:
 ### Trilhas de aprendizagem
 
 - Cards de treinamento.
-- Treinamento disponível para Abertura de Conta Bancária.
+- Trilha disponível: **Conta Fácil: Jornada Assistiva PcD**.
+- Fluxo piloto: abertura de conta bancária.
 - Cards futuros com status “Em breve”.
 - Controle de início, andamento, conclusão e refazer trilha.
 - Botão para reiniciar treinamento do zero.
@@ -148,10 +149,10 @@ A solução atua diretamente sobre os seguintes pontos:
 - Ranking fictício para demonstração.
 - Regras de evolução por conclusão de etapas e desafios.
 
-### Quiz e validação de aprendizado
+### Validação de aprendizado
 
-- Desafio liberado após conclusão da trilha.
-- Perguntas de fixação.
+- Validação liberada após conclusão da trilha.
+- Perguntas de fixação contextualizadas no fluxo Conta Fácil.
 - Validação de respostas.
 - Pontuação conforme desempenho.
 - Reforço do aprendizado prático.
@@ -230,16 +231,17 @@ src
 2. Realiza cadastro informando dados básicos e, opcionalmente, necessidades de acessibilidade.
 3. Efetua login.
 4. Visualiza as trilhas disponíveis.
-5. Inicia a trilha de Abertura de Conta Bancária.
-6. Recebe orientação passo a passo.
-7. Pode ativar áudio, aumentar fonte ou usar alto contraste.
-8. Preenche campos simulados da jornada.
-9. Conclui etapas e acumula pontos.
-10. Desbloqueia o desafio final.
-11. Responde ao quiz.
-12. Recebe pontuação, nível e medalhas.
-13. Visualiza sua evolução no dashboard.
-14. Pode refazer a trilha, zerando o progresso anterior.
+5. Inicia a trilha **Conta Fácil: Jornada Assistiva PcD**.
+6. Pratica o fluxo piloto de abertura de conta bancária.
+7. Recebe orientação passo a passo.
+8. Pode ativar áudio, aumentar fonte ou usar alto contraste.
+9. Preenche campos simulados da jornada.
+10. Conclui etapas e acumula pontos.
+11. Desbloqueia a validação final.
+12. Responde à validação de aprendizagem.
+13. Recebe pontuação, nível e medalhas.
+14. Visualiza sua evolução no dashboard.
+15. Pode refazer a trilha, zerando o progresso anterior.
 
 ---
 
@@ -420,7 +422,7 @@ O **CaixaVerso Assistivo** é uma plataforma de autonomia digital para empregado
 
 Ele transforma jornadas internas complexas em trilhas guiadas, acessíveis e gamificadas, com apoio por voz, linguagem simples, progresso, pontuação, medalhas e dashboard.
 
-A abertura de conta é a trilha piloto. A proposta é permitir que a CAIXA evolua para uma biblioteca de trilhas assistivas aplicáveis a diferentes sistemas internos, apoiando empregados PcD, profissionais com baixo letramento digital e equipes que precisam operar múltiplas ferramentas no atendimento.
+A **Conta Fácil: Jornada Assistiva PcD** é a trilha piloto. Ela usa como fluxo piloto a abertura de conta bancária. A proposta é permitir que a CAIXA evolua para uma biblioteca de trilhas assistivas aplicáveis a diferentes sistemas internos, apoiando empregados PcD, profissionais com baixo letramento digital e equipes que precisam operar múltiplas ferramentas no atendimento.
 
 Mais do que treinar, a solução reduz barreiras, aumenta autonomia, fortalece a inclusão e melhora a experiência do empregado — base essencial para uma melhor experiência do cliente.
 

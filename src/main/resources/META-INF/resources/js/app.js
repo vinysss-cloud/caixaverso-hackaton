@@ -9,17 +9,75 @@ document.addEventListener('DOMContentLoaded', function () {
     const fontPlus = document.getElementById('fontPlus');
     const fontMinus = document.getElementById('fontMinus');
     const contrastToggle = document.getElementById('contrastToggle');
+    const lowVisionToggle = document.getElementById('lowVisionToggle');
+    const motionToggle = document.getElementById('motionToggle');
+    const accessibilityStatus = document.getElementById('accessibilityStatus');
 
-    const savedFontSize = localStorage.getItem('cv_font_size');
-    const savedContrast = localStorage.getItem('cv_high_contrast');
+    const STORAGE_KEYS = {
+        fontSize: 'cv_font_size',
+        highContrast: 'cv_high_contrast',
+        lowVision: 'cv_low_vision',
+        reduceMotion: 'cv_reduce_motion'
+    };
+
+    const savedFontSize = localStorage.getItem(STORAGE_KEYS.fontSize);
+    const savedContrast = localStorage.getItem(STORAGE_KEYS.highContrast);
+    const savedLowVision = localStorage.getItem(STORAGE_KEYS.lowVision);
+    const savedReduceMotion = localStorage.getItem(STORAGE_KEYS.reduceMotion);
+
+    const prefersReducedMotion = window.matchMedia
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false;
+
+    function announceAccessibility(message) {
+        if (!accessibilityStatus || !message) {
+            return;
+        }
+
+        accessibilityStatus.textContent = '';
+
+        setTimeout(function () {
+            accessibilityStatus.textContent = message;
+        }, 50);
+    }
+
+    function setPressed(button, pressed) {
+        if (button) {
+            button.setAttribute('aria-pressed', String(Boolean(pressed)));
+        }
+    }
+
+    function aplicarClasseAcessibilidade(nomeClasse, ativo) {
+        document.body.classList.toggle(nomeClasse, Boolean(ativo));
+    }
+
+    function getPreferredScrollBehavior() {
+        return document.body.classList.contains('reduce-motion') ? 'auto' : 'smooth';
+    }
 
     if (savedFontSize) {
         document.documentElement.style.fontSize = savedFontSize + 'px';
     }
 
     if (savedContrast === 'true') {
-        document.body.classList.add('high-contrast');
+        aplicarClasseAcessibilidade('high-contrast', true);
     }
+
+    if (savedLowVision === 'true') {
+        aplicarClasseAcessibilidade('low-vision', true);
+    }
+
+    /*
+     * Se o usuário já configurou preferência no app, respeitamos o valor salvo.
+     * Se não configurou, respeitamos a preferência do sistema operacional/navegador.
+     */
+    if (savedReduceMotion === 'true' || (savedReduceMotion === null && prefersReducedMotion)) {
+        aplicarClasseAcessibilidade('reduce-motion', true);
+    }
+
+    setPressed(contrastToggle, document.body.classList.contains('high-contrast'));
+    setPressed(lowVisionToggle, document.body.classList.contains('low-vision'));
+    setPressed(motionToggle, document.body.classList.contains('reduce-motion'));
 
     function getCurrentFontSize() {
         const size = window.getComputedStyle(document.documentElement).fontSize;
@@ -30,7 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fontPlus.addEventListener('click', function () {
             const nextSize = Math.min(getCurrentFontSize() + 1, 24);
             document.documentElement.style.fontSize = nextSize + 'px';
-            localStorage.setItem('cv_font_size', nextSize);
+            localStorage.setItem(STORAGE_KEYS.fontSize, nextSize);
+            announceAccessibility('Tamanho da fonte aumentado.');
         });
     }
 
@@ -38,17 +97,55 @@ document.addEventListener('DOMContentLoaded', function () {
         fontMinus.addEventListener('click', function () {
             const nextSize = Math.max(getCurrentFontSize() - 1, 15);
             document.documentElement.style.fontSize = nextSize + 'px';
-            localStorage.setItem('cv_font_size', nextSize);
+            localStorage.setItem(STORAGE_KEYS.fontSize, nextSize);
+            announceAccessibility('Tamanho da fonte reduzido.');
         });
     }
 
     if (contrastToggle) {
         contrastToggle.addEventListener('click', function () {
-            document.body.classList.toggle('high-contrast');
+            const ativo = !document.body.classList.contains('high-contrast');
 
-            localStorage.setItem(
-                'cv_high_contrast',
-                document.body.classList.contains('high-contrast')
+            aplicarClasseAcessibilidade('high-contrast', ativo);
+            localStorage.setItem(STORAGE_KEYS.highContrast, String(ativo));
+            setPressed(contrastToggle, ativo);
+
+            announceAccessibility(
+                ativo
+                    ? 'Alto contraste ativado.'
+                    : 'Alto contraste desativado.'
+            );
+        });
+    }
+
+    if (lowVisionToggle) {
+        lowVisionToggle.addEventListener('click', function () {
+            const ativo = !document.body.classList.contains('low-vision');
+
+            aplicarClasseAcessibilidade('low-vision', ativo);
+            localStorage.setItem(STORAGE_KEYS.lowVision, String(ativo));
+            setPressed(lowVisionToggle, ativo);
+
+            announceAccessibility(
+                ativo
+                    ? 'Modo baixa visão ativado. Textos, campos e espaçamentos foram ampliados.'
+                    : 'Modo baixa visão desativado.'
+            );
+        });
+    }
+
+    if (motionToggle) {
+        motionToggle.addEventListener('click', function () {
+            const ativo = !document.body.classList.contains('reduce-motion');
+
+            aplicarClasseAcessibilidade('reduce-motion', ativo);
+            localStorage.setItem(STORAGE_KEYS.reduceMotion, String(ativo));
+            setPressed(motionToggle, ativo);
+
+            announceAccessibility(
+                ativo
+                    ? 'Redução de animações ativada.'
+                    : 'Redução de animações desativada.'
             );
         });
     }
@@ -68,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
         startChallenge.addEventListener('click', function () {
             challengeSelector.style.display = 'none';
             challengeExperience.style.display = 'block';
-            challengeExperience.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            challengeExperience.scrollIntoView({ behavior: getPreferredScrollBehavior(), block: 'start' });
         });
     }
 
@@ -76,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
         changeChallenge.addEventListener('click', function () {
             challengeExperience.style.display = 'none';
             challengeSelector.style.display = 'block';
-            challengeSelector.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            challengeSelector.scrollIntoView({ behavior: getPreferredScrollBehavior(), block: 'start' });
         });
     }
 
@@ -100,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             experience.style.display = 'block';
-            experience.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            experience.scrollIntoView({ behavior: getPreferredScrollBehavior(), block: 'start' });
 
             setTimeout(function () {
                 treinamentoEmExecucao = true;
@@ -128,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
             experience.style.display = 'none';
             treinamentoEmExecucao = false;
             esconderPainelInstrucao();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: getPreferredScrollBehavior() });
         });
     }
 
@@ -333,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         targetParaRolar.scrollIntoView({
-            behavior: 'smooth',
+            behavior: getPreferredScrollBehavior(),
             block: 'center'
         });
 
@@ -902,7 +999,7 @@ function validarEtapaAtual() {
              return;
          }
 
-         exibirToast('Treinamento concluído! O quiz foi desbloqueado.', 'success');
+         exibirToast('Jornada Conta Fácil concluída! A validação foi desbloqueada.', 'success');
 
          setTimeout(function () {
              window.location.href = '/treinamento';

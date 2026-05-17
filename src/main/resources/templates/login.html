@@ -3,23 +3,61 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Login - CaixaVerso</title>
+    <title>Login - CaixaVerso Assistivo</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body class="auth-page">
-<main class="auth-container">
-    <section class="auth-panel">
-        <h1>CaixaVerso Treinamento</h1>
-        <p>
-            Ambiente de treinamento acessível, gamificado e interativo para praticar
-            funcionalidades de forma segura.
-        </p>
-        <p><strong>Use apenas dados fictícios neste MVP.</strong></p>
+<main id="conteudo-principal" class="auth-container assistive-auth-container">
+
+    <section class="auth-panel assistive-auth-panel" aria-labelledby="login-hero-title">
+        <a class="brand auth-brand" href="/login" aria-label="CaixaVerso Assistivo">
+            <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
+            <span class="brand-name">CaixaVerso Assistivo</span>
+        </a>
+
+        <div class="auth-panel-content">
+            <span class="hero-badge-auth">CaixaVerso Assistivo</span>
+
+            <h1 id="login-hero-title">Treinamento digital acessível para empregados CAIXA</h1>
+
+            <p>
+                Plataforma assistida, acessível e gamificada para apoiar empregados CAIXA,
+                com foco em pessoas com deficiência, baixa visão e usuários com menor familiaridade digital.
+            </p>
+
+            <div class="auth-benefits" aria-label="Recursos assistivos disponíveis">
+                <div>
+                    <strong>🧭 Assistente passo a passo</strong>
+                    <span>Resume a tela, explica campos e orienta cada ação do fluxo bancário simulado.</span>
+                </div>
+
+                <div>
+                    <strong>♿ Foco em PcD</strong>
+                    <span>Recursos para baixa visão, teclado, contraste, foco visível e menor carga cognitiva.</span>
+                </div>
+
+                <div>
+                    <strong>🎧 Voz, texto e transcrição</strong>
+                    <span>O usuário pode ouvir resumos da tela, ler instruções e revisar orientações.</span>
+                </div>
+            </div>
+
+            <p class="privacy-note auth-privacy">
+                Use apenas dados fictícios neste MVP. O objetivo é demonstrar o CaixaVerso Assistivo
+                como solução de treinamento inclusivo para autonomia digital.
+            </p>
+        </div>
     </section>
 
-    <section class="auth-card">
-        <h2>Acessar plataforma</h2>
+    <section class="auth-card assistive-auth-card" aria-labelledby="login-title">
+        <div class="auth-card-header">
+            <span class="auth-icon" aria-hidden="true">🔐</span>
+            <div>
+                <h2 id="login-title">Acessar CaixaVerso Assistivo</h2>
+                <p>Entre para continuar seu treinamento acessível e gamificado.</p>
+            </div>
+        </div>
 
         {#if erro}
         <div class="alert erro" role="alert" aria-live="assertive">{erro}</div>
@@ -32,24 +70,91 @@
         <form id="loginForm" method="post" action="/login" novalidate>
             <div class="form-group">
                 <label for="matricula">Matrícula</label>
-                <input id="matricula" name="matricula" required autocomplete="username" aria-required="true">
+                <input id="matricula"
+                       name="matricula"
+                       required
+                       autocomplete="username"
+                       aria-required="true"
+                       aria-describedby="matricula-ajuda">
+                <small id="matricula-ajuda">Informe a matrícula cadastrada para acessar o ambiente assistivo.</small>
             </div>
 
             <div class="form-group">
                 <label for="senha">Senha</label>
-                <input id="senha" name="senha" type="password" required autocomplete="current-password" aria-required="true">
+                <input id="senha"
+                       name="senha"
+                       type="password"
+                       required
+                       autocomplete="current-password"
+                       aria-required="true"
+                       aria-describedby="senha-ajuda">
+                <small id="senha-ajuda">Digite sua senha de acesso cadastrada.</small>
             </div>
 
-            <button id="btnEntrar" class="btn btn-primary" type="submit">Entrar</button>
+            <button id="btnEntrar" class="btn btn-primary" type="submit">Entrar no CaixaVerso</button>
         </form>
 
         <p style="margin-top:18px;">
             Ainda não tem cadastro?
-            <a href="/cadastro"><strong>Criar cadastro</strong></a>
+            <a href="/cadastro"><strong>Criar cadastro assistivo</strong></a>
         </p>
     </section>
 </main>
 
+<button type="button"
+        class="screen-voice-assistant"
+        data-screen-summary="Você está na tela de entrada do CaixaVerso Assistivo. Esta plataforma de treinamento digital acessível e gamificada apoia empregados CAIXA, especialmente pessoas com deficiência e usuários com baixa familiaridade digital. Informe sua matrícula e senha cadastradas para acessar o ambiente assistido."
+        aria-label="Ouvir resumo desta tela com assistente de voz">
+    <span class="screen-voice-icon" aria-hidden="true">🎧</span>
+    <span class="screen-voice-text">Ouvir tela</span>
+</button>
+
+<div class="accessibility-toolbar"
+     role="region"
+     aria-label="Ferramentas de acessibilidade">
+
+    <button type="button"
+            id="fontPlus"
+            aria-label="Aumentar tamanho da fonte">
+        A+
+    </button>
+
+    <button type="button"
+            id="fontMinus"
+            aria-label="Diminuir tamanho da fonte">
+        A-
+    </button>
+
+    <button type="button"
+            id="contrastToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar alto contraste">
+        Alto contraste
+    </button>
+
+    <button type="button"
+            id="lowVisionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar modo baixa visão">
+        Baixa visão
+    </button>
+
+    <button type="button"
+            id="motionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar redução de animações">
+        Reduzir animações
+    </button>
+</div>
+
+<div id="accessibilityStatus"
+     class="sr-only"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
+</div>
+
+<script src="/js/app.js"></script>
 <script>
     const loginForm = document.getElementById('loginForm');
     const btnEntrar = document.getElementById('btnEntrar');
@@ -66,5 +171,47 @@
         });
     }
 </script>
+<script>
+    (function () {
+        function falarResumoTela(texto) {
+            const status = document.getElementById('accessibilityStatus');
+
+            if (!('speechSynthesis' in window)) {
+                if (status) {
+                    status.textContent = 'Seu navegador não oferece suporte nativo à leitura por voz.';
+                } else {
+                    alert('Seu navegador não oferece suporte nativo à leitura por voz.');
+                }
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            fala.onend = function () {};
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const screenVoiceButton = document.querySelector('.screen-voice-assistant');
+
+            if (!screenVoiceButton) {
+                return;
+            }
+
+            screenVoiceButton.addEventListener('click', function () {
+                const texto = screenVoiceButton.getAttribute('data-screen-summary') || 'Esta tela faz parte do CaixaVerso Assistivo.';
+                falarResumoTela(texto);
+            });
+        });
+    })();
+</script>
+
 </body>
 </html>

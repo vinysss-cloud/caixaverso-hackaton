@@ -169,7 +169,7 @@
                 </configuration>
             </plugin>
 
-            <!-- JaCoCo para relatório de cobertura -->
+            <!-- JaCoCo para relatório de cobertura (gera XML para integração com Sonar) -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -204,7 +204,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.75</minimum>
+                                            <minimum>0.80</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

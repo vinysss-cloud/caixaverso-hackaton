@@ -3,88 +3,96 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Cadastro - CaixaVerso</title>
+    <title>Cadastro - CaixaVerso Assistivo</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body class="auth-page">
+<body class="auth-page cadastro-page">
 
-<main class="auth-container cadastro-container">
+<main id="conteudo-principal" class="auth-container cadastro-container assistive-auth-container" tabindex="-1">
 
-    <section class="auth-panel cadastro-panel">
-        <a class="brand auth-brand" href="/login" aria-label="CaixaVerso">
+    <section class="auth-panel cadastro-panel assistive-auth-panel" aria-labelledby="cadastro-hero-title">
+        <a class="brand auth-brand" href="/login" aria-label="CaixaVerso Assistivo">
             <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
-            <span class="brand-name">CaixaVerso</span>
+            <span class="brand-name">CaixaVerso Assistivo</span>
         </a>
 
         <div class="auth-panel-content">
-            <span class="hero-badge-auth">Cadastro acessível</span>
+            <span class="hero-badge-auth">Perfil assistivo PcD</span>
 
-            <h1>Crie sua jornada de treinamento</h1>
+            <h1 id="cadastro-hero-title">Configure uma jornada acessível para o empregado CAIXA</h1>
 
             <p>
-                Cadastre-se para acessar simulações guiadas, desafios, pontuação,
-                níveis e acompanhamento da sua evolução.
+                O cadastro identifica preferências de acessibilidade para adaptar o treinamento digital:
+                leitura por voz, apoio visual, linguagem simples, foco por etapa e suporte para baixa familiaridade digital.
             </p>
 
             <div class="auth-benefits">
                 <div>
-                    <strong>🎯 Treinamento guiado</strong>
-                    <span>Aprenda funcionalidades passo a passo.</span>
+                    <strong>🧠 Assistência contextual</strong>
+                    <span>O sistema orienta o usuário de acordo com a etapa do fluxo.</span>
                 </div>
 
                 <div>
-                    <strong>⚡ Desafios práticos</strong>
-                    <span>Ganhe pontos ao responder missões.</span>
+                    <strong>🎧 Texto, voz e transcrição</strong>
+                    <span>As instruções não dependem de apenas um canal de comunicação.</span>
                 </div>
 
                 <div>
-                    <strong>♿ Experiência acessível</strong>
-                    <span>Adapte sua jornada conforme sua necessidade.</span>
+                    <strong>♿ Preferências de acessibilidade</strong>
+                    <span>Baixa visão, teclado, redução de movimento e contraste reforçado.</span>
                 </div>
             </div>
 
             <p class="privacy-note auth-privacy">
-                As informações de acessibilidade são usadas apenas para adaptar a experiência
-                de treinamento neste MVP.
+                As informações deste MVP são usadas apenas para simular adaptação assistiva.
+                Não informe dados reais de clientes.
             </p>
         </div>
     </section>
 
-    <section class="auth-card cadastro-card">
+    <section class="auth-card cadastro-card assistive-auth-card" aria-labelledby="cadastro-title">
         <div class="auth-card-header">
-            <span class="auth-icon">📝</span>
+            <span class="auth-icon" aria-hidden="true">📝</span>
             <div>
-                <h2>Cadastro de usuário</h2>
-                <p>Use dados fictícios para criar sua conta de treinamento.</p>
+                <h2 id="cadastro-title">Cadastro de usuário assistido</h2>
+                <p>Use dados fictícios para criar sua conta de demonstração.</p>
             </div>
         </div>
 
         {#if erro}
-        <div class="alert erro">{erro}</div>
+        <div class="alert erro" role="alert" aria-live="assertive">{erro}</div>
         {/if}
 
-        <form method="post" action="/cadastro" class="cadastro-form">
+        <form method="post" action="/cadastro" class="cadastro-form" aria-describedby="cadastro-ajuda">
+            <p id="cadastro-ajuda" class="sr-only">
+                Preencha os dados básicos e, se desejar, informe necessidades de acessibilidade para personalizar a experiência.
+            </p>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="nome">Nome completo</label>
-                    <input id="nome" name="nome" required autocomplete="name">
+                    <input id="nome" name="nome" required autocomplete="name" aria-required="true">
                 </div>
 
                 <div class="form-group">
                     <label for="matricula">Matrícula</label>
-                    <input id="matricula" name="matricula" required autocomplete="username">
+                    <input id="matricula" name="matricula" required autocomplete="username" aria-required="true">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="idade">Idade</label>
-                <input id="idade" name="idade" type="number" min="14" required>
+                <input id="idade" name="idade" type="number" min="14" required aria-required="true">
             </div>
 
             <fieldset class="accessibility-fieldset">
                 <legend>Necessidade de acessibilidade <span>(opcional)</span></legend>
+
+                <p class="privacy-note">
+                    Esta seleção ajuda a demonstrar como o assistente pode adaptar linguagem, contraste,
+                    leitura e navegação. Se não desejar informar, marque a última opção.
+                </p>
 
                 <div class="checkbox-grid cadastro-checkbox-grid">
                     <label>
@@ -132,17 +140,29 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="senha">Senha</label>
-                    <input id="senha" name="senha" type="password" required autocomplete="new-password">
+                    <input id="senha"
+                           name="senha"
+                           type="password"
+                           required
+                           autocomplete="new-password"
+                           aria-required="true"
+                           aria-describedby="senha-requisitos">
+                    <small id="senha-requisitos">Crie uma senha para proteger o acesso ao ambiente de treinamento.</small>
                 </div>
 
                 <div class="form-group">
                     <label for="repetirSenha">Repetir senha</label>
-                    <input id="repetirSenha" name="repetirSenha" type="password" required autocomplete="new-password">
+                    <input id="repetirSenha"
+                           name="repetirSenha"
+                           type="password"
+                           required
+                           autocomplete="new-password"
+                           aria-required="true">
                 </div>
             </div>
 
             <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Cadastrar</button>
+                <button class="btn btn-primary" type="submit">Criar perfil assistivo</button>
                 <a href="/login" class="btn-link">Já tenho cadastro</a>
             </div>
 
@@ -150,6 +170,102 @@
     </section>
 
 </main>
+
+<button type="button"
+        class="screen-voice-assistant"
+        data-screen-summary="Você está na tela de cadastro assistivo. Crie um perfil de demonstração para adaptar a experiência de treinamento. Informe dados fictícios, registre preferências de acessibilidade se desejar, e crie uma senha para acessar o CaixaVerso Assistivo."
+        aria-label="Ouvir resumo desta tela com assistente de voz">
+    <span class="screen-voice-icon" aria-hidden="true">🎧</span>
+    <span class="screen-voice-text">Ouvir tela</span>
+</button>
+
+<div class="accessibility-toolbar"
+     role="region"
+     aria-label="Ferramentas de acessibilidade">
+
+    <button type="button"
+            id="fontPlus"
+            aria-label="Aumentar tamanho da fonte">
+        A+
+    </button>
+
+    <button type="button"
+            id="fontMinus"
+            aria-label="Diminuir tamanho da fonte">
+        A-
+    </button>
+
+    <button type="button"
+            id="contrastToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar alto contraste">
+        Alto contraste
+    </button>
+
+    <button type="button"
+            id="lowVisionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar modo baixa visão">
+        Baixa visão
+    </button>
+
+    <button type="button"
+            id="motionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar redução de animações">
+        Reduzir animações
+    </button>
+</div>
+
+<div id="accessibilityStatus"
+     class="sr-only"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+    (function () {
+        function falarResumoTela(texto) {
+            const status = document.getElementById('accessibilityStatus');
+
+            if (!('speechSynthesis' in window)) {
+                if (status) {
+                    status.textContent = 'Seu navegador não oferece suporte nativo à leitura por voz.';
+                } else {
+                    alert('Seu navegador não oferece suporte nativo à leitura por voz.');
+                }
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            fala.onend = function () {};
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const screenVoiceButton = document.querySelector('.screen-voice-assistant');
+
+            if (!screenVoiceButton) {
+                return;
+            }
+
+            screenVoiceButton.addEventListener('click', function () {
+                const texto = screenVoiceButton.getAttribute('data-screen-summary') || 'Esta tela faz parte do CaixaVerso Assistivo.';
+                falarResumoTela(texto);
+            });
+        });
+    })();
+</script>
 
 </body>
 </html>

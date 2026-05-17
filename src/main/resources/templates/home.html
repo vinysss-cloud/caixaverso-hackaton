@@ -3,66 +3,71 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>CaixaVerso Treinamento</title>
+    <title>CaixaVerso Assistivo</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
+
+<a class="skip-link" href="#conteudo-principal">
+    Pular para o conteúdo principal
+</a>
+
 <header class="topnav" role="banner">
     <div class="topnav-inner">
-        <a class="brand" href="/home" aria-label="CaixaVerso - Início">
+        <a class="brand" href="/home" aria-label="CaixaVerso Assistivo - Início">
             <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
-            <span class="brand-name">CaixaVerso</span>
+            <span class="brand-name">CaixaVerso Assistivo</span>
         </a>
 
         <nav class="nav-links" role="navigation" aria-label="Menu principal">
-            <a href="/home">Início</a>
-            <a href="/treinamento">Treinamento Guiado</a>
-            <a href="/desafio">Modo Desafio</a>
-            <a href="/dashboard">Dashboard</a>
+            <a href="/home" aria-current="page" class="active">Início</a>
+            <a href="/treinamento">Assistente Guiado</a>
+            <a href="/desafio">Validação</a>
+            <a href="/dashboard">Painel Assistivo</a>
         </nav>
 
         <a class="nav-action" href="/logout">Sair</a>
     </div>
 </header>
 
-<main class="page-shell">
+<main id="conteudo-principal" class="page-shell assistive-home-page" tabindex="-1">
 
-    <section class="hero-caixa" aria-labelledby="hero-title">
+    <section class="hero-caixa assistive-hero" aria-labelledby="hero-title">
         <div class="hero-copy">
             <div class="hero-kicker">
-                <span>MVP Inclusivo</span>
-                <span>Acessível</span>
-                <span>Gamificado</span>
+                <span>Solução assistiva</span>
+                <span>Inteligente</span>
+                <span>Inclusiva</span>
             </div>
 
             <h1 id="hero-title">
-                Aprenda novas funcionalidades de forma acessível
+                Um assistente digital para orientar colaboradores PCD em sistemas bancários
             </h1>
 
             {#if usuarioLogado}
             <p class="hero-greeting">
-                Olá, matrícula <strong>{usuarioLogado}</strong>. Pronto para a próxima missão?
+                Olá, matrícula <strong>{usuarioLogado}</strong>. O assistente está pronto para apoiar sua próxima atividade.
             </p>
             {/if}
 
             <p class="hero-subtitle">
-                Uma plataforma de treinamento gamificado com missões e desafios
-                para apoiar PCDs e novos colaboradores na prática de funcionalidades.
+                O CaixaVerso Assistivo transforma fluxos complexos em orientações simples, passo a passo,
+                com texto, voz, transcrição, foco visual, baixa visão e navegação por teclado.
             </p>
 
             <div class="hero-actions">
-                <a href="/treinamento" class="btn btn-primary">Começar treinamento</a>
-                <a href="/desafio" class="btn btn-secondary">Ver desafio</a>
+                <a href="/treinamento" class="btn btn-primary">Abrir assistente guiado</a>
+                <a href="/dashboard" class="btn btn-secondary">Ver painel assistivo</a>
             </div>
         </div>
 
-        <aside class="user-progress-card" aria-label="Resumo da jornada do usuário">
+        <aside class="user-progress-card assistive-summary-card" aria-label="Resumo da assistência do usuário">
             <div class="progress-card-header">
-                <span class="progress-card-icon">🏆</span>
+                <span class="progress-card-icon" aria-hidden="true">♿</span>
                 <div>
-                    <h2>Sua jornada</h2>
-                    <p>Progresso salvo no treinamento</p>
+                    <h2>Central de apoio</h2>
+                    <p>Resumo da experiência adaptada</p>
                 </div>
             </div>
 
@@ -73,62 +78,62 @@
             </div>
 
             <div class="level-box">
-                <span>Nível atual</span>
-                <strong>Nível {resumo.nivel}</strong>
+                <span>Modo de acompanhamento</span>
+                <strong>Assistido</strong>
             </div>
 
             <div class="progress-label">
-                <span>Progresso da trilha</span>
+                <span>Progresso no fluxo orientado</span>
                 <strong>{resumo.progressoPercentual}%</strong>
             </div>
 
-            <div class="progress-mini" aria-label="Progresso do usuário">
+            <div class="progress-mini" aria-label="Progresso do usuário no fluxo orientado">
                 <i style="width:{resumo.progressoPercentual}%"></i>
             </div>
 
             <div class="stats-grid">
                 <div>
-                    <span>Pontos</span>
+                    <span>Pontos de prática</span>
                     <strong>{resumo.pontuacaoTotal} XP</strong>
                 </div>
                 <div>
-                    <span>Trilhas</span>
+                    <span>Fluxos assistidos</span>
                     <strong>{resumo.trilhasConcluidas}</strong>
                 </div>
                 <div>
-                    <span>Desafios</span>
+                    <span>Validações</span>
                     <strong>{resumo.desafiosRespondidos}</strong>
                 </div>
             </div>
 
             <div class="badge-area">
-                <span class="badge-title">Medalhas</span>
+                <span class="badge-title">Recursos utilizados</span>
 
                 {#if resumo.badges}
                 {#for badge in resumo.badges}
                 <span class="badge">{badge.icone} {badge.nome}</span>
                 {/for}
                 {#else}
-                <span class="badge badge-empty">Nenhuma medalha ainda</span>
+                <span class="badge badge-empty">Nenhum recurso registrado ainda</span>
                 {/if}
             </div>
             {#else}
             <div class="user-mini">
-                <strong>Jornada inicial</strong>
-                <span>Conclua missões para liberar pontos e medalhas.</span>
+                <strong>Primeiro acesso</strong>
+                <span>Inicie um fluxo para receber orientação contextual.</span>
             </div>
 
             <div class="level-box">
-                <span>Nível atual</span>
-                <strong>Nível 1</strong>
+                <span>Modo de acompanhamento</span>
+                <strong>Assistido</strong>
             </div>
 
             <div class="progress-label">
-                <span>Progresso da trilha</span>
+                <span>Progresso no fluxo orientado</span>
                 <strong>0%</strong>
             </div>
 
-            <div class="progress-mini">
+            <div class="progress-mini" aria-label="Progresso inicial do usuário">
                 <i style="width:0%"></i>
             </div>
             {/if}
@@ -137,73 +142,164 @@
 
     <section class="section-wrapper" aria-labelledby="acoes-title">
         <div class="section-heading">
-            <span class="section-kicker">Funcionalidades</span>
-            <h2 id="acoes-title">O que você pode fazer</h2>
-            <p>Escolha uma trilha para praticar, ganhar pontos e evoluir na jornada de aprendizado.</p>
+            <span class="section-kicker">Recursos principais</span>
+            <h2 id="acoes-title">O que a solução assistiva entrega</h2>
+            <p>
+                A gamificação fica como apoio de engajamento. O foco principal é orientar, adaptar e reduzir barreiras de uso.
+            </p>
         </div>
 
         <div class="feature-grid">
             <a class="feature-card" href="/treinamento">
-                <span class="feature-icon">🎯</span>
-                <span class="feature-tag">Iniciante</span>
-                <h3>Treinamento Guiado</h3>
-                <p>Aprenda passo a passo com instruções claras, dicas de acessibilidade e simulação prática.</p>
-                <strong>Começar agora →</strong>
+                <span class="feature-icon" aria-hidden="true">🧭</span>
+                <span class="feature-tag">Assistente contextual</span>
+                <h3>Orientação passo a passo</h3>
+                <p>O sistema destaca campos, explica a ação esperada e oferece apoio por voz e transcrição.</p>
+                <strong>Abrir assistente →</strong>
             </a>
 
             <a class="feature-card" href="/desafio">
-                <span class="feature-icon">⚡</span>
-                <span class="feature-tag">Intermediário</span>
-                <h3>Modo Desafio</h3>
-                <p>Resolva missões, valide seu aprendizado e ganhe pontuação de acordo com seu desempenho.</p>
-                <strong>Responder desafio →</strong>
+                <span class="feature-icon" aria-hidden="true">✅</span>
+                <span class="feature-tag">Validação segura</span>
+                <h3>Conferência de aprendizagem</h3>
+                <p>Valide se o fluxo foi compreendido com perguntas simples e feedback acessível.</p>
+                <strong>Validar aprendizado →</strong>
             </a>
 
             <a class="feature-card" href="/dashboard">
-                <span class="feature-icon">📊</span>
-                <span class="feature-tag">Gestão</span>
-                <h3>Dashboard do Gestor</h3>
-                <p>Acompanhe progresso, trilhas concluídas, engajamento e desempenho dos usuários.</p>
+                <span class="feature-icon" aria-hidden="true">📊</span>
+                <span class="feature-tag">Gestão inclusiva</span>
+                <h3>Painel de barreiras e evolução</h3>
+                <p>Acompanhe progresso, recursos usados, pontos de dificuldade e evolução assistiva.</p>
                 <strong>Abrir painel →</strong>
             </a>
         </div>
     </section>
 
-    <section class="how-it-works" aria-labelledby="como-title">
+    <section class="how-it-works assistive-flow" aria-labelledby="como-title">
         <div class="section-heading">
-            <span class="section-kicker">Jornada</span>
-            <h2 id="como-title">Como funciona</h2>
+            <span class="section-kicker">Como funciona</span>
+            <h2 id="como-title">Da tela complexa à orientação simples</h2>
         </div>
 
         <div class="steps-grid">
             <article class="step-card">
-                <span>1</span>
-                <h3>Aprenda com instruções</h3>
-                <p>Receba orientação objetiva, acessível e dividida em pequenas etapas.</p>
+                <span aria-hidden="true">1</span>
+                <h3>Entende a etapa</h3>
+                <p>O assistente identifica o ponto do fluxo e explica a ação em linguagem objetiva.</p>
             </article>
 
             <article class="step-card">
-                <span>2</span>
-                <h3>Pratique em desafios</h3>
-                <p>Resolva situações simuladas e receba feedback imediato.</p>
+                <span aria-hidden="true">2</span>
+                <h3>Adapta a experiência</h3>
+                <p>O usuário pode usar teclado, contraste, baixa visão, redução de animações e apoio por voz.</p>
             </article>
 
             <article class="step-card">
-                <span>3</span>
-                <h3>Evolua com pontuação</h3>
-                <p>Ganhe XP, suba de nível e acompanhe sua evolução no dashboard.</p>
+                <span aria-hidden="true">3</span>
+                <h3>Confirma a autonomia</h3>
+                <p>O painel mostra evolução e ajuda a identificar onde ainda existem barreiras.</p>
             </article>
         </div>
     </section>
 
 </main>
 
-<div class="accessibility-toolbar" aria-label="Ferramentas de acessibilidade">
-    <button type="button" id="fontPlus">A+</button>
-    <button type="button" id="fontMinus">A-</button>
-    <button type="button" id="contrastToggle">Alto contraste</button>
+<button type="button"
+        class="screen-voice-assistant"
+        data-screen-summary="Você está na página inicial do CaixaVerso Assistivo. Aqui você encontra os principais recursos da plataforma: assistente guiado, validação de aprendizagem e painel assistivo para acompanhar autonomia, acessibilidade e evolução."
+        aria-label="Ouvir resumo desta tela com assistente de voz">
+    <span class="screen-voice-icon" aria-hidden="true">🎧</span>
+    <span class="screen-voice-text">Ouvir tela</span>
+</button>
+
+<div class="accessibility-toolbar"
+     role="region"
+     aria-label="Ferramentas de acessibilidade">
+
+    <button type="button"
+            id="fontPlus"
+            aria-label="Aumentar tamanho da fonte">
+        A+
+    </button>
+
+    <button type="button"
+            id="fontMinus"
+            aria-label="Diminuir tamanho da fonte">
+        A-
+    </button>
+
+    <button type="button"
+            id="contrastToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar alto contraste">
+        Alto contraste
+    </button>
+
+    <button type="button"
+            id="lowVisionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar modo baixa visão">
+        Baixa visão
+    </button>
+
+    <button type="button"
+            id="motionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar redução de animações">
+        Reduzir animações
+    </button>
+</div>
+
+<div id="accessibilityStatus"
+     class="sr-only"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
 </div>
 
 <script src="/js/app.js"></script>
+<script>
+    (function () {
+        function falarResumoTela(texto) {
+            const status = document.getElementById('accessibilityStatus');
+
+            if (!('speechSynthesis' in window)) {
+                if (status) {
+                    status.textContent = 'Seu navegador não oferece suporte nativo à leitura por voz.';
+                } else {
+                    alert('Seu navegador não oferece suporte nativo à leitura por voz.');
+                }
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            fala.onend = function () {};
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const screenVoiceButton = document.querySelector('.screen-voice-assistant');
+
+            if (!screenVoiceButton) {
+                return;
+            }
+
+            screenVoiceButton.addEventListener('click', function () {
+                const texto = screenVoiceButton.getAttribute('data-screen-summary') || 'Esta tela faz parte do CaixaVerso Assistivo.';
+                falarResumoTela(texto);
+            });
+        });
+    })();
+</script>
+
 </body>
 </html>

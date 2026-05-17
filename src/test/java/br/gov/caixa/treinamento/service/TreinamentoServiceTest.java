@@ -48,7 +48,7 @@ class TreinamentoServiceTest {
         progressoExistente.id = 1L;
         progressoExistente.usuario = usuarioExistente;
         progressoExistente.codigoTreinamento = TreinamentoService.CODIGO_ABERTURA_CONTA;
-        progressoExistente.tituloTreinamento = "Abertura de Conta Bancária";
+        progressoExistente.tituloTreinamento = "Conta Fácil: Jornada Assistiva PcD";
         progressoExistente.etapaAtual = 0;
         progressoExistente.totalEtapas = 8;
         progressoExistente.progressoPercentual = 0;
@@ -68,7 +68,7 @@ class TreinamentoServiceTest {
         assertThat(trilha)
                 .isNotNull()
                 .extracting(TrilhaTreinamentoDTO::getCodigo, TrilhaTreinamentoDTO::getTitulo)
-                .containsExactly(TreinamentoService.CODIGO_ABERTURA_CONTA, "Abertura de Conta Bancária");
+                .containsExactly(TreinamentoService.CODIGO_ABERTURA_CONTA, "Conta Fácil: Jornada Assistiva PcD");
     }
 
     @Test

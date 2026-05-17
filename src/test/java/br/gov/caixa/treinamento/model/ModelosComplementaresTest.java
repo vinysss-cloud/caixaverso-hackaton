@@ -110,7 +110,7 @@ class ModelosComplementaresTest {
 
         progresso.usuario = usuario;
         progresso.codigoTreinamento = "abertura-conta";
-        progresso.tituloTreinamento = "Abertura de Conta Bancária";
+        progresso.tituloTreinamento = "Conta Fácil: Jornada Assistiva PcD";
         progresso.etapaAtual = 5;
         progresso.totalEtapas = 5;
         progresso.progressoPercentual = 100;

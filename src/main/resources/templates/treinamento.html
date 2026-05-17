@@ -3,50 +3,65 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Treinamento Guiado - CaixaVerso</title>
+    <title>Assistente Guiado - CaixaVerso</title>
     <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .assistive-course-subtitle {
+            display: block;
+            margin-top: -0.35rem;
+            margin-bottom: 0.75rem;
+            color: #005CA9;
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1.35;
+        }
+    </style>
 </head>
 
 <body>
 
+<a class="skip-link" href="#conteudo-principal">
+    Pular para o conteúdo principal
+</a>
+
 <header class="topnav" role="banner">
     <div class="topnav-inner">
-        <a class="brand" href="/home" aria-label="CaixaVerso - Início">
+        <a class="brand" href="/home" aria-label="CaixaVerso Assistivo - Início">
             <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
-            <span class="brand-name">CaixaVerso</span>
+            <span class="brand-name">CaixaVerso Assistivo</span>
         </a>
 
         <nav class="nav-links" role="navigation" aria-label="Menu principal">
             <a href="/home">Início</a>
-            <a href="/treinamento" class="active">Treinamento Guiado</a>
-            <a href="/desafio">Modo Desafio</a>
-            <a href="/dashboard">Dashboard</a>
+            <a href="/treinamento" class="active" aria-current="page">Assistente Guiado</a>
+            <a href="/desafio">Validação</a>
+            <a href="/dashboard">Painel Assistivo</a>
         </nav>
 
         <a class="nav-action" href="/logout">Sair</a>
     </div>
 </header>
 
-<main>
+<main id="conteudo-principal" class="assistive-training-page" tabindex="-1">
 
     <section class="training-blue-zone">
         <div class="training-blue-inner">
 
             <header class="training-blue-header">
-                <span class="section-kicker light">Central de treinamento</span>
-                <h1>Escolha uma trilha para começar</h1>
+                <span class="section-kicker light">Central de assistência inteligente</span>
+                <h1>Escolha um fluxo para receber orientação assistiva</h1>
                 <p>
-                    Selecione uma funcionalidade para iniciar uma simulação guiada.
-                    Ao concluir todas as etapas, o quiz associado será desbloqueado.
+                    Selecione um fluxo bancário para receber orientação contextual, com apoio por voz, transcrição, foco visual e validação de autonomia.
                 </p>
             </header>
 
             <section id="trainingSelector" class="training-selector">
                 <div class="training-section-heading">
-                    <span>Trilhas disponíveis</span>
-                    <h2>Qual treinamento você deseja fazer?</h2>
+                    <span>Fluxos assistivos disponíveis</span>
+                    <h2>Qual processo você deseja praticar com assistência?</h2>
                     <p>
-                        Escolha uma trilha disponível para iniciar. Novos treinamentos serão liberados em breve.
+                        Escolha um fluxo disponível para iniciar. O assistente explica cada campo, reduz barreiras e orienta a execução de forma segura.
                     </p>
                 </div>
 
@@ -54,24 +69,25 @@
 
                     <article class="training-choice-card available"
                              tabindex="0"
-                             aria-label="Selecionar treinamento de abertura de conta bancária">
+                             aria-label="Selecionar trilha Conta Fácil: Jornada Assistiva PcD">
 
                         <div class="choice-top">
                             <span class="feature-icon">🏦</span>
                             <span class="feature-tag">Disponível</span>
                         </div>
 
-                        <h3>{trilha.titulo}</h3>
+                        <h3>Conta Fácil: Jornada Assistiva PcD</h3>
+
+                        <span class="assistive-course-subtitle">Abertura de conta com orientação acessível, simples e inclusiva</span>
 
                         <p>
-                            Aprenda o fluxo de criação e abertura de uma conta bancária em ambiente simulado,
-                            com foco em acessibilidade, validação de dados e atendimento inclusivo.
+                            Pratique o fluxo Conta Fácil em ambiente simulado, com instruções inteligentes, leitura por voz, transcrição, validação de dados e acessibilidade real.
                         </p>
 
                         <div class="choice-meta">
                             <span>🧭 {trilha.etapas.size} etapas</span>
                             <span>⭐ {trilha.xpConclusao} XP</span>
-                            <span>🔓 Desbloqueia quiz</span>
+                            <span>✅ Libera validação</span>
                         </div>
 
                         <div class="progress-label">
@@ -89,7 +105,7 @@
                                     id="startTraining"
                                     class="btn btn-primary training-main-action"
                                     data-progresso="{progresso.progressoPercentual}">
-                                Iniciar treinamento
+                                Iniciar assistência
                             </button>
 
                             <form method="post"
@@ -101,7 +117,7 @@
                                         id="restartTrainingButton"
                                         class="btn btn-danger training-restart-action"
                                         data-progresso="{progresso.progressoPercentual}">
-                                    Refazer treinamento
+                                    Refazer fluxo assistido
                                 </button>
                             </form>
 
@@ -141,14 +157,14 @@
 
                     <article class="training-choice-card coming-soon"
                              aria-disabled="true"
-                             aria-label="Treinamento de Segurança Digital no Atendimento em breve">
+                             aria-label="Treinamento de Segurança Digital Assistida em breve">
 
                         <div class="choice-top">
                             <span class="feature-icon">🔐</span>
                             <span class="feature-tag soon">Em breve</span>
                         </div>
 
-                        <h3>Segurança Digital no Atendimento</h3>
+                        <h3>Segurança Digital Assistida</h3>
 
                         <p>
                             Trilha voltada para boas práticas de segurança, proteção de dados
@@ -185,16 +201,15 @@
 
             <div class="training-started-header cadastro-guidado-header">
                 <div>
-                    <span class="section-kicker">Treinamento selecionado</span>
-                    <h2>{trilha.titulo}</h2>
+                    <span class="section-kicker">Fluxo assistivo selecionado</span>
+                    <h2>Conta Fácil: Jornada Assistiva PcD</h2>
                     <p>
-                        O treinamento agora ocorre em uma única tela de cadastro.
-                        O popup orienta o usuário etapa por etapa, destacando o campo correto com uma seta.
+                        O assistente acompanha o usuário em uma tela simulada, destaca o campo correto, explica a ação esperada e oferece texto, voz e transcrição.
                     </p>
                 </div>
 
                 <button type="button" id="changeTraining" class="btn btn-secondary">
-                    Trocar treinamento
+                    Trocar fluxo assistido
                 </button>
             </div>
 
@@ -202,8 +217,8 @@
 
                 <div class="sim-header">
                     <div>
-                        <strong>Sistema Simulado de Abertura de Conta</strong>
-                        <span>Ambiente fictício e seguro para prática</span>
+                        <strong>Sistema simulado com assistência contextual</strong>
+                        <span>Ambiente fictício e seguro para prática assistida</span>
                     </div>
 
                     <div class="sim-badge" id="simStatusBadge">
@@ -211,9 +226,9 @@
                     </div>
                 </div>
 
-                <div class="cadastro-progress-area" aria-label="Progresso do treinamento">
+                <div class="cadastro-progress-area" aria-label="Progresso da assistência">
                     <div>
-                        <span class="coach-label">Progresso do treinamento</span>
+                        <span class="coach-label">Progresso da assistência</span>
                         <strong id="etapaTitulo">Carregando etapa...</strong>
                     </div>
 
@@ -232,7 +247,8 @@
                          class="guided-popup"
                          role="dialog"
                          aria-live="polite"
-                         aria-label="Instrução da etapa do treinamento">
+                         aria-labelledby="guidedCalloutTitle"
+                         aria-describedby="guidedCalloutText voiceInstructionText voiceInstructionTranscript">
 
                         <div class="guided-panel-icon" aria-hidden="true">
                             🎧
@@ -272,11 +288,18 @@
                         </p>
 
                         <div class="voice-instruction-box">
-                            <strong>Texto preparado para voz</strong>
+                            <strong>Instrução em voz e texto</strong>
 
                             <p id="voiceInstructionText">
-                                Futuramente este conteúdo será lido por voz para apoiar o usuário PCD.
+                                Este conteúdo pode ser ouvido e também está disponível em transcrição textual.
                             </p>
+
+                            <details class="audio-transcription">
+                                <summary>Ver transcrição desta instrução</summary>
+                                <p id="voiceInstructionTranscript">
+                                    A transcrição da etapa será exibida aqui.
+                                </p>
+                            </details>
                         </div>
 
                         <p class="popup-dica" id="dicaEtapa">
@@ -285,24 +308,27 @@
 
                         <p id="validationMessage"
                            class="validation-message"
+                           role="alert"
+                           aria-live="assertive"
+                           aria-atomic="true"
                            style="display:none;">
                             Preencha o campo desta etapa para avançar.
                         </p>
 
                         <div class="popup-actions smart-actions">
-                            <button type="button" class="btn btn-secondary step-nav-action" id="prev">
+                            <button type="button" class="btn btn-secondary step-nav-action" id="prev" aria-label="Voltar para etapa anterior">
                                 ← Anterior
                             </button>
 
-                            <button type="button" class="btn btn-audio-action" id="repeatInstruction">
+                            <button type="button" class="btn btn-audio-action" id="repeatInstruction" aria-label="Ouvir instrução da etapa atual">
                                 🔊 Ouvir instrução
                             </button>
 
-                            <button type="button" class="btn btn-secondary step-nav-action" id="next">
+                            <button type="button" class="btn btn-secondary step-nav-action" id="next" aria-label="Avançar para próxima etapa">
                                 Próxima →
                             </button>
 
-                            <button type="button" class="btn btn-primary step-complete-action" id="completeStep">
+                            <button type="button" class="btn btn-primary step-complete-action" id="completeStep" aria-label="Concluir etapa atual">
                                 Concluir etapa
                             </button>
                         </div>
@@ -312,7 +338,7 @@
                             class="show-popup-button"
                             id="showPopupButton"
                             style="display:none;">
-                        Mostrar instrução da etapa
+                        Mostrar orientação da etapa
                     </button>
 
                     <div class="fake-form-grid cadastro-form-grid">
@@ -434,7 +460,7 @@
                         <div class="fake-form-field full" id="step-target-acessibilidade">
                             <label>Necessidade de acessibilidade</label>
 
-                            <div class="fake-chip-group" aria-label="Necessidades de acessibilidade">
+                            <div class="fake-chip-group" role="group" aria-label="Necessidades de acessibilidade">
                                 <label class="fake-chip selectable">
                                     <input type="checkbox"
                                            name="acessibilidadeFake"
@@ -526,21 +552,23 @@
 
             <div id="trainingToast"
                  class="feedback-card training-toast"
+                 role="status"
+                 aria-live="polite"
+                 aria-atomic="true"
                  style="display:none;">
             </div>
 
             {#if progresso.desafioDesbloqueado}
             <div class="feedback-card training-unlock-card">
-                <h3>Quiz desbloqueado!</h3>
+                <h3>Validação desbloqueada!</h3>
 
                 <p>
-                    Você concluiu o treinamento de abertura de conta.
-                    Agora pode responder o desafio associado ou refazer a trilha do zero.
+                    Você concluiu a trilha Conta Fácil: Jornada Assistiva PcD. Agora pode fazer a validação de autonomia ou refazer a orientação do zero.
                 </p>
 
                 <div class="unlock-actions">
                     <a href="/desafio" class="btn btn-primary">
-                        Ir para o quiz
+                        Ir para validação
                     </a>
 
                     <form method="post"
@@ -548,7 +576,7 @@
                           class="restart-training-form"
                           onsubmit="return confirm('Tem certeza que deseja refazer a trilha? Sua pontuação, progresso, badges e histórico desta jornada serão zerados.');">
                         <button type="submit" class="btn btn-danger">
-                            Refazer treinamento
+                            Refazer fluxo assistido
                         </button>
                     </form>
                 </div>
@@ -560,10 +588,57 @@
 
 </main>
 
-<div class="accessibility-toolbar" aria-label="Ferramentas de acessibilidade">
-    <button type="button" id="fontPlus">A+</button>
-    <button type="button" id="fontMinus">A-</button>
-    <button type="button" id="contrastToggle">Alto contraste</button>
+<button type="button"
+        class="screen-voice-assistant"
+        data-screen-summary="Você está na central de assistência guiada. Escolha um fluxo de treinamento acessível. O fluxo Conta Fácil orienta a abertura de conta em ambiente simulado, com texto, voz, transcrição, foco visual e apoio passo a passo."
+        aria-label="Ouvir resumo desta tela com assistente de voz">
+    <span class="screen-voice-icon" aria-hidden="true">🎧</span>
+    <span class="screen-voice-text">Ouvir tela</span>
+</button>
+
+<div class="accessibility-toolbar"
+     role="region"
+     aria-label="Ferramentas de acessibilidade">
+
+    <button type="button"
+            id="fontPlus"
+            aria-label="Aumentar tamanho da fonte">
+        A+
+    </button>
+
+    <button type="button"
+            id="fontMinus"
+            aria-label="Diminuir tamanho da fonte">
+        A-
+    </button>
+
+    <button type="button"
+            id="contrastToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar alto contraste">
+        Alto contraste
+    </button>
+
+    <button type="button"
+            id="lowVisionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar modo baixa visão">
+        Baixa visão
+    </button>
+
+    <button type="button"
+            id="motionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar redução de animações">
+        Reduzir animações
+    </button>
+</div>
+
+<div id="accessibilityStatus"
+     class="sr-only"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
 </div>
 
 <script>
@@ -654,14 +729,14 @@
         },
         {
             ordem: 8,
-            titulo: "Confirmar abertura da conta",
-            instrucao: "Revise a proposta e confirme a conclusão da abertura simulada.",
-            dica: "Ao concluir esta etapa, o desafio será desbloqueado.",
+            titulo: "Confirmar o fluxo Conta Fácil",
+            instrucao: "Revise a proposta e confirme a conclusão do fluxo piloto de abertura de conta.",
+            dica: "Ao concluir esta etapa, a validação de aprendizagem será desbloqueada.",
             campoSimulado: "Confirmação",
-            acaoEsperada: "Concluir treinamento",
+            acaoEsperada: "Concluir fluxo assistido",
             targetId: "step-target-confirmacao",
-            calloutTitle: "Finalize a abertura",
-            calloutText: "Leia o resumo, confirme a revisão dos dados e conclua a simulação.",
+            calloutTitle: "Finalize o Conta Fácil",
+            calloutText: "Leia o resumo, confirme a revisão dos dados e conclua a simulação assistiva.",
             instrucaoVoz: "Etapa 8. Revise os dados da proposta. Depois marque a confirmação e execute a ação simulada para finalizar."
         }
     ];
@@ -675,6 +750,66 @@
 </script>
 
 <script src="/js/app.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const voiceText = document.getElementById('voiceInstructionText');
+        const transcript = document.getElementById('voiceInstructionTranscript');
+
+        if (voiceText && transcript) {
+            const atualizarTranscricao = function () {
+                transcript.textContent = voiceText.textContent || 'Transcrição ainda não disponível para esta etapa.';
+            };
+
+            atualizarTranscricao();
+
+            const observer = new MutationObserver(atualizarTranscricao);
+            observer.observe(voiceText, { childList: true, subtree: true, characterData: true });
+        }
+    });
+</script>
+
+<script>
+    (function () {
+        function falarResumoTela(texto) {
+            const status = document.getElementById('accessibilityStatus');
+
+            if (!('speechSynthesis' in window)) {
+                if (status) {
+                    status.textContent = 'Seu navegador não oferece suporte nativo à leitura por voz.';
+                } else {
+                    alert('Seu navegador não oferece suporte nativo à leitura por voz.');
+                }
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            fala.onend = function () {};
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const screenVoiceButton = document.querySelector('.screen-voice-assistant');
+
+            if (!screenVoiceButton) {
+                return;
+            }
+
+            screenVoiceButton.addEventListener('click', function () {
+                const texto = screenVoiceButton.getAttribute('data-screen-summary') || 'Esta tela faz parte do CaixaVerso Assistivo.';
+                falarResumoTela(texto);
+            });
+        });
+    })();
+</script>
 
 </body>
 </html>

@@ -3,54 +3,69 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Dashboard do Gestor</title>
+    <title>Painel Assistivo - CaixaVerso</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
+<a class="skip-link" href="#conteudo-principal">
+    Pular para o conteúdo principal
+</a>
+
 <header class="topnav" role="banner">
     <div class="topnav-inner">
-        <a class="brand" href="/home" aria-label="CaixaVerso - Início">
+        <a class="brand" href="/home" aria-label="CaixaVerso Assistivo - Início">
             <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
-            <span class="brand-name">CaixaVerso</span>
+            <span class="brand-name">CaixaVerso Assistivo</span>
         </a>
 
         <nav class="nav-links" role="navigation" aria-label="Menu principal">
             <a href="/home">Início</a>
-            <a href="/treinamento">Treinamento Guiado</a>
-            <a href="/desafio">Modo Desafio</a>
-            <a href="/dashboard" aria-current="page">Dashboard</a>
+            <a href="/treinamento">Assistente Guiado</a>
+            <a href="/desafio">Validação</a>
+            <a href="/dashboard" aria-current="page" class="active">Painel Assistivo</a>
         </nav>
 
         <a class="nav-action" href="/logout">Sair</a>
     </div>
 </header>
 
-<main class="page-shell dashboard-game-page">
+<main id="conteudo-principal" class="page-shell dashboard-game-page assistive-dashboard-page" tabindex="-1">
 
     <section class="dashboard-hero" aria-labelledby="dashboard-title">
         <div class="dashboard-hero-copy">
-            <span class="section-kicker light">Painel gamificado</span>
-            <h1 id="dashboard-title">Dashboard da Jornada</h1>
+            <span class="section-kicker light">Painel de solução assistiva</span>
+            <h1 id="dashboard-title">Painel de autonomia e acessibilidade</h1>
             <p>
-                Acompanhe pontuação, nível, medalhas, ranking fictício e próximos passos de aprendizagem.
-                Tudo em uma visão simples, com apoio de áudio para pessoas PCD.
+                Acompanhe evolução do usuário, recursos assistivos utilizados, pontos de dificuldade,
+                validações concluídas e próximos passos recomendados pelo assistente.
             </p>
 
             <div class="dashboard-hero-actions">
-                <button class="audio-help-button" type="button"
-                        data-audio="Dashboard da Jornada. Esta tela mostra sua evolução no CaixaVerso, incluindo pontos, nível, progresso, medalhas conquistadas, regras de pontuação e ranking fictício.">
-                    🔊 Ouvir resumo
+                <button class="audio-help-button"
+                        type="button"
+                        aria-label="Ouvir resumo do painel assistivo"
+                        data-audio="Painel de autonomia e acessibilidade. Esta tela mostra evolução do usuário, recursos assistivos, progresso, validações e próximos passos recomendados.">
+                    <span aria-hidden="true">🔊</span> Ouvir resumo
                 </button>
-                <a class="btn btn-primary" href="/treinamento">Continuar trilha</a>
+                <a class="btn btn-primary" href="/treinamento">Continuar assistência guiada</a>
             </div>
+
+            <details class="audio-transcription">
+                <summary>Ver transcrição do áudio</summary>
+                <p>
+                    Painel de autonomia e acessibilidade. Esta tela mostra evolução do usuário,
+                    recursos assistivos, progresso, validações e próximos passos recomendados.
+                </p>
+            </details>
         </div>
 
         <aside class="dashboard-player-card" aria-label="Resumo do usuário logado">
             <div class="dashboard-player-top">
-                <span class="dashboard-avatar" aria-hidden="true">🏆</span>
+                <span class="dashboard-avatar" aria-hidden="true">♿</span>
                 <div>
-                    <span>Sua posição</span>
-                    <strong>#{dados.posicaoUsuario} de {dados.totalCompetidores}</strong>
+                    <span>Status assistivo</span>
+                    <strong>Usuário acompanhado</strong>
                 </div>
             </div>
 
@@ -60,46 +75,46 @@
             </div>
 
             <div class="dashboard-level-panel">
-                <span>Nível atual</span>
-                <strong>Nível {dados.nivelUsuario}</strong>
+                <span>Modo atual</span>
+                <strong>Assistência contextual</strong>
             </div>
 
             <div class="dashboard-progress-line">
                 <div>
-                    <span>Progresso até o próximo nível</span>
+                    <span>Progresso no fluxo orientado</span>
                     <strong>{dados.progressoNivel}%</strong>
                 </div>
-                <div class="dashboard-progress-track" aria-label="Progresso para o próximo nível">
+                <div class="dashboard-progress-track" aria-label="Progresso no fluxo orientado">
                     <i style="width:{dados.progressoNivel}%"></i>
                 </div>
-                <small>Faltam {dados.xpFaltante} XP para o próximo nível.</small>
+                <small>{dados.xpFaltante} XP para o próximo marco de prática.</small>
             </div>
         </aside>
     </section>
 
-    <section class="dashboard-kpi-grid" aria-label="Indicadores principais">
+    <section class="dashboard-kpi-grid" aria-label="Indicadores principais da solução assistiva">
         <article class="dashboard-kpi-card">
-            <span>Pontos atuais</span>
+            <span>Pontos de prática</span>
             <strong>{dados.pontosUsuario} XP</strong>
-            <small>Somatório da sua jornada.</small>
+            <small>Engajamento no ambiente simulado.</small>
         </article>
 
         <article class="dashboard-kpi-card">
-            <span>Trilhas concluídas</span>
+            <span>Fluxos assistidos concluídos</span>
             <strong>{dados.trilhasUsuario}</strong>
-            <small>Treinamentos finalizados.</small>
+            <small>Treinamentos finalizados com orientação.</small>
         </article>
 
         <article class="dashboard-kpi-card">
-            <span>Desafios respondidos</span>
+            <span>Validações realizadas</span>
             <strong>{dados.desafiosUsuario}</strong>
-            <small>Missões práticas realizadas.</small>
+            <small>Conferências de aprendizagem.</small>
         </article>
 
         <article class="dashboard-kpi-card">
-            <span>Progresso da trilha</span>
+            <span>Progresso da assistência</span>
             <strong>{dados.progressoTrilha}%</strong>
-            <small>Abertura de Conta Bancária.</small>
+            <small>Conta Fácil: Jornada Assistiva PcD.</small>
         </article>
     </section>
 
@@ -108,12 +123,14 @@
         <article class="dashboard-card dashboard-mission-card">
             <div class="dashboard-card-title">
                 <div>
-                    <span class="section-kicker">Próxima missão</span>
+                    <span class="section-kicker">Recomendação do assistente</span>
                     <h2>{dados.missaoRecomendada.titulo}</h2>
                 </div>
-                <button class="audio-icon-button" type="button"
-                        data-audio="Próxima missão. {dados.missaoRecomendada.titulo}. {dados.missaoRecomendada.descricao}">
-                    🔊
+                <button class="audio-icon-button"
+                        type="button"
+                        aria-label="Ouvir recomendação do assistente"
+                        data-audio="Recomendação do assistente. {dados.missaoRecomendada.titulo}. {dados.missaoRecomendada.descricao}">
+                    <span aria-hidden="true">🔊</span>
                 </button>
             </div>
 
@@ -122,35 +139,49 @@
                 <p>{dados.missaoRecomendada.descricao}</p>
                 <a class="btn btn-primary" href="{dados.missaoRecomendada.link}">{dados.missaoRecomendada.acao}</a>
             </div>
+
+            <details class="audio-transcription">
+                <summary>Ver transcrição da recomendação</summary>
+                <p>{dados.missaoRecomendada.titulo}. {dados.missaoRecomendada.descricao}</p>
+            </details>
         </article>
 
         <article class="dashboard-card dashboard-ranking-card">
             <div class="dashboard-card-title">
                 <div>
-                    <span class="section-kicker">Competição saudável</span>
-                    <h2>Ranking fictício de pontos</h2>
+                    <span class="section-kicker">Mapa de evolução</span>
+                    <h2>Comparativo fictício de prática assistida</h2>
                 </div>
-                <button class="audio-icon-button" type="button"
-                        data-audio="Ranking fictício de pontos. Sua posição atual é {dados.posicaoUsuario} de {dados.totalCompetidores}. O ranking compara sua pontuação com usuários simulados para deixar a jornada mais gamificada.">
-                    🔊
+                <button class="audio-icon-button"
+                        type="button"
+                        aria-label="Ouvir resumo do comparativo fictício"
+                        data-audio="Comparativo fictício de prática assistida. Sua posição atual é {dados.posicaoUsuario} de {dados.totalCompetidores}. O objetivo é demonstrar evolução, não competição real.">
+                    <span aria-hidden="true">🔊</span>
                 </button>
             </div>
 
-            <div class="ranking-list" role="list" aria-label="Ranking fictício de usuários por pontuação">
+            <p>
+                O comparativo foi mantido apenas como elemento de engajamento. O indicador principal é a evolução
+                da autonomia do usuário durante o fluxo assistido.
+            </p>
+
+            <div class="ranking-list" role="list" aria-label="Comparativo fictício de usuários por prática assistida">
                 {#for item in dados.ranking}
                 <div class="ranking-row {#if item.usuarioLogado}current-user{/if}" role="listitem">
                     <div class="ranking-position">#{item.posicao}</div>
                     <div class="ranking-user">
                         <strong>{item.nome}</strong>
-                        <span>{item.matricula} • Nível {item.nivel} • {item.badges} medalhas</span>
+                        <span>{item.matricula} • Nível {item.nivel} • {item.badges} recursos/medalhas</span>
                     </div>
                     <div class="ranking-points">
                         <strong>{item.pontos}</strong>
                         <span>XP</span>
                     </div>
-                    <button class="audio-mini-button" type="button"
+                    <button class="audio-mini-button"
+                            type="button"
+                            aria-label="Ouvir resumo de {item.nome}"
                             data-audio="Posição {item.posicao}. {item.nome}. {item.pontos} pontos. {item.descricaoAcessivel}">
-                        🔊
+                        <span aria-hidden="true">🔊</span>
                     </button>
                 </div>
                 {/for}
@@ -162,55 +193,100 @@
         <article class="dashboard-card">
             <div class="dashboard-card-title">
                 <div>
-                    <span class="section-kicker">Como ganhar XP</span>
-                    <h2>Regras de pontuação</h2>
+                    <span class="section-kicker">Recursos assistivos</span>
+                    <h2>Como o usuário é apoiado</h2>
                 </div>
-                <button class="audio-icon-button" type="button"
-                        data-audio="Regras de pontuação. Você ganha pontos ao fazer login, iniciar treinamento, concluir etapas e acertar desafios. A pontuação ajuda a subir de nível e liberar medalhas.">
-                    🔊
+                <button class="audio-icon-button"
+                        type="button"
+                        aria-label="Ouvir recursos assistivos disponíveis"
+                        data-audio="Recursos assistivos. O usuário pode navegar por teclado, usar foco visível, alto contraste, baixa visão, redução de animações, áudio e transcrições.">
+                    <span aria-hidden="true">🔊</span>
                 </button>
             </div>
 
             <div class="points-rules-grid">
-                {#for regra in dados.regrasPontuacao}
                 <div class="points-rule-card">
-                    <span class="rule-icon" aria-hidden="true">{regra.icone}</span>
+                    <span class="rule-icon" aria-hidden="true">⌨️</span>
                     <div>
-                        <strong>{regra.titulo}</strong>
-                        <p>{regra.descricao}</p>
+                        <strong>Navegação por teclado</strong>
+                        <p>Fluxo principal acessível com Tab, Shift Tab, Enter e Espaço.</p>
                     </div>
-                    <span class="rule-points">{regra.pontos}</span>
+                    <span class="rule-points">Ativo</span>
                 </div>
-                {/for}
+
+                <div class="points-rule-card">
+                    <span class="rule-icon" aria-hidden="true">👁️</span>
+                    <div>
+                        <strong>Baixa visão e contraste</strong>
+                        <p>Texto ampliado, alto contraste e foco visual consistente.</p>
+                    </div>
+                    <span class="rule-points">Ativo</span>
+                </div>
+
+                <div class="points-rule-card">
+                    <span class="rule-icon" aria-hidden="true">🎧</span>
+                    <div>
+                        <strong>Voz e transcrição</strong>
+                        <p>Instruções disponíveis para ouvir e ler em formato textual.</p>
+                    </div>
+                    <span class="rule-points">Ativo</span>
+                </div>
+
+                <div class="points-rule-card">
+                    <span class="rule-icon" aria-hidden="true">🧘</span>
+                    <div>
+                        <strong>Redução de animações</strong>
+                        <p>Permite experiência mais estável para usuários sensíveis a movimento.</p>
+                    </div>
+                    <span class="rule-points">Ativo</span>
+                </div>
             </div>
         </article>
 
         <article class="dashboard-card">
             <div class="dashboard-card-title">
                 <div>
-                    <span class="section-kicker">Medalhas</span>
-                    <h2>Conquistas e critérios</h2>
+                    <span class="section-kicker">Evidências</span>
+                    <h2>Critérios acompanhados</h2>
                 </div>
-                <button class="audio-icon-button" type="button"
-                        data-audio="Medalhas e critérios. Esta área mostra quais medalhas você já conquistou e o que precisa fazer para liberar as próximas conquistas.">
-                    🔊
+                <button class="audio-icon-button"
+                        type="button"
+                        aria-label="Ouvir critérios de acessibilidade acompanhados"
+                        data-audio="Critérios acompanhados. A solução considera navegação por teclado, foco visível, ARIA, leitor de tela, baixa visão, redução de animações, transcrições e contraste.">
+                    <span aria-hidden="true">🔊</span>
                 </button>
             </div>
 
             <div class="medal-rules-list">
-                {#for medalha in dados.regrasMedalhas}
-                <div class="medal-rule {#if medalha.conquistada}earned{/if}">
-                    <span class="medal-icon" aria-hidden="true">{medalha.icone}</span>
+                <div class="medal-rule earned">
+                    <span class="medal-icon" aria-hidden="true">✅</span>
                     <div class="medal-info">
-                        <strong>{medalha.nome}</strong>
-                        <p>{medalha.criterio}</p>
-                        <div class="medal-progress-track">
-                            <i style="width:{medalha.progresso}%"></i>
-                        </div>
+                        <strong>Foco visível e teclado</strong>
+                        <p>Base global aplicada às telas principais.</p>
+                        <div class="medal-progress-track"><i style="width:100%"></i></div>
                     </div>
-                    <span class="medal-status">{medalha.status}</span>
+                    <span class="medal-status">Implementado</span>
                 </div>
-                {/for}
+
+                <div class="medal-rule earned">
+                    <span class="medal-icon" aria-hidden="true">✅</span>
+                    <div class="medal-info">
+                        <strong>Transcrição e voz</strong>
+                        <p>Áudios com alternativa textual nas áreas principais.</p>
+                        <div class="medal-progress-track"><i style="width:100%"></i></div>
+                    </div>
+                    <span class="medal-status">Implementado</span>
+                </div>
+
+                <div class="medal-rule earned">
+                    <span class="medal-icon" aria-hidden="true">✅</span>
+                    <div class="medal-info">
+                        <strong>Contraste e baixa visão</strong>
+                        <p>Controles disponíveis na barra de acessibilidade.</p>
+                        <div class="medal-progress-track"><i style="width:100%"></i></div>
+                    </div>
+                    <span class="medal-status">Implementado</span>
+                </div>
             </div>
         </article>
     </section>
@@ -219,16 +295,16 @@
         <article class="dashboard-card">
             <div class="dashboard-card-title">
                 <div>
-                    <span class="section-kicker">Gestão</span>
+                    <span class="section-kicker">Gestão inclusiva</span>
                     <h2>Indicadores gerais</h2>
                 </div>
             </div>
 
             <div class="manager-metrics-grid">
-                <div><span>Usuários treinados</span><strong>{dados.usuariosSimulados}</strong></div>
-                <div><span>Trilhas concluídas</span><strong>{dados.trilhasConcluidasGerais}</strong></div>
-                <div><span>Média de pontuação</span><strong>{dados.mediaPontuacao}</strong></div>
-                <div><span>Funcionalidades ativas</span><strong>{dados.funcionalidadesAtivas}</strong></div>
+                <div><span>Usuários assistidos</span><strong>{dados.usuariosSimulados}</strong></div>
+                <div><span>Fluxos concluídos</span><strong>{dados.trilhasConcluidasGerais}</strong></div>
+                <div><span>Média de prática</span><strong>{dados.mediaPontuacao}</strong></div>
+                <div><span>Recursos ativos</span><strong>{dados.funcionalidadesAtivas}</strong></div>
             </div>
         </article>
 
@@ -236,7 +312,7 @@
             <div class="dashboard-card-title">
                 <div>
                     <span class="section-kicker">Acesso rápido</span>
-                    <h2>Funcionalidades mais acessadas</h2>
+                    <h2>Funcionalidades assistivas mais acessadas</h2>
                 </div>
             </div>
 
@@ -250,10 +326,57 @@
 
 </main>
 
-<div class="accessibility-toolbar" role="group" aria-label="Ferramentas de acessibilidade">
-    <button id="fontPlus" type="button">A+</button>
-    <button id="fontMinus" type="button">A-</button>
-    <button id="contrastToggle" type="button">Alto contraste</button>
+<button type="button"
+        class="screen-voice-assistant"
+        data-screen-summary="Você está no painel assistivo. Esta tela apresenta progresso, recursos acessíveis utilizados, validações concluídas, pontos de prática e próximos passos recomendados para fortalecer a autonomia digital."
+        aria-label="Ouvir resumo desta tela com assistente de voz">
+    <span class="screen-voice-icon" aria-hidden="true">🎧</span>
+    <span class="screen-voice-text">Ouvir tela</span>
+</button>
+
+<div class="accessibility-toolbar"
+     role="region"
+     aria-label="Ferramentas de acessibilidade">
+
+    <button type="button"
+            id="fontPlus"
+            aria-label="Aumentar tamanho da fonte">
+        A+
+    </button>
+
+    <button type="button"
+            id="fontMinus"
+            aria-label="Diminuir tamanho da fonte">
+        A-
+    </button>
+
+    <button type="button"
+            id="contrastToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar alto contraste">
+        Alto contraste
+    </button>
+
+    <button type="button"
+            id="lowVisionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar modo baixa visão">
+        Baixa visão
+    </button>
+
+    <button type="button"
+            id="motionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar redução de animações">
+        Reduzir animações
+    </button>
+</div>
+
+<div id="accessibilityStatus"
+     class="sr-only"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
 </div>
 
 <script src="/js/app.js"></script>
@@ -285,5 +408,47 @@
         });
     });
 </script>
+<script>
+    (function () {
+        function falarResumoTela(texto) {
+            const status = document.getElementById('accessibilityStatus');
+
+            if (!('speechSynthesis' in window)) {
+                if (status) {
+                    status.textContent = 'Seu navegador não oferece suporte nativo à leitura por voz.';
+                } else {
+                    alert('Seu navegador não oferece suporte nativo à leitura por voz.');
+                }
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            fala.onend = function () {};
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const screenVoiceButton = document.querySelector('.screen-voice-assistant');
+
+            if (!screenVoiceButton) {
+                return;
+            }
+
+            screenVoiceButton.addEventListener('click', function () {
+                const texto = screenVoiceButton.getAttribute('data-screen-summary') || 'Esta tela faz parte do CaixaVerso Assistivo.';
+                falarResumoTela(texto);
+            });
+        });
+    })();
+</script>
+
 </body>
 </html>

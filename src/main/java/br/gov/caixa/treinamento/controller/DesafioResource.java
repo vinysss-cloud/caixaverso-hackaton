@@ -54,7 +54,7 @@ public class DesafioResource {
                 .data("desafio", desafioService.buscarDesafioAberturaConta())
                 .data("resultado", null)
                 .data("desbloqueado", desbloqueado)
-                .data("treinamentoTitulo", "Abertura de Conta Bancária");
+                .data("treinamentoTitulo", TreinamentoService.TITULO_TRILHA_CONTA_FACIL);
     }
 
     @POST
@@ -78,7 +78,7 @@ public class DesafioResource {
                     .data("desafio", desafioService.buscarDesafioAberturaConta())
                     .data("resultado", null)
                     .data("desbloqueado", false)
-                    .data("treinamentoTitulo", "Abertura de Conta Bancária");
+                    .data("treinamentoTitulo", TreinamentoService.TITULO_TRILHA_CONTA_FACIL);
         }
 
         ResultadoDesafio resultado = desafioService.validarRespostaAberturaConta(resposta);
@@ -93,6 +93,6 @@ public class DesafioResource {
                 .data("desafio", desafioService.buscarDesafioAberturaConta())
                 .data("resultado", resultado)
                 .data("desbloqueado", true)
-                .data("treinamentoTitulo", "Abertura de Conta Bancária");
+                .data("treinamentoTitulo", TreinamentoService.TITULO_TRILHA_CONTA_FACIL);
     }
 }

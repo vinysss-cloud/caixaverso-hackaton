@@ -3,143 +3,147 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Desafios - CaixaVerso</title>
+    <title>Validação Assistiva - CaixaVerso</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
+<a class="skip-link" href="#conteudo-principal">
+    Pular para o conteúdo principal
+</a>
+
 <header class="topnav" role="banner">
     <div class="topnav-inner">
-        <a class="brand" href="/home" aria-label="CaixaVerso - Início">
+        <a class="brand" href="/home" aria-label="CaixaVerso Assistivo - Início">
             <img class="brand-logo-symbol" src="/img/simbolo-caixa.jpg" alt="" aria-hidden="true">
-            <span class="brand-name">CaixaVerso</span>
+            <span class="brand-name">CaixaVerso Assistivo</span>
         </a>
 
         <nav class="nav-links" role="navigation" aria-label="Menu principal">
             <a href="/home">Início</a>
-            <a href="/treinamento">Treinamento Guiado</a>
-            <a href="/desafio">Modo Desafio</a>
-            <a href="/dashboard">Dashboard</a>
+            <a href="/treinamento">Assistente Guiado</a>
+            <a href="/desafio" aria-current="page" class="active">Validação</a>
+            <a href="/dashboard">Painel Assistivo</a>
         </nav>
 
         <a class="nav-action" href="/logout">Sair</a>
     </div>
 </header>
 
-<main class="container">
+<main id="conteudo-principal" class="container assistive-validation-page" tabindex="-1">
 
-    <header class="mission-panel card challenge-hero">
-        <span class="section-kicker">Central de desafios</span>
-        <h1>Escolha um quiz para validar seu aprendizado</h1>
+    <header class="mission-panel card challenge-hero" aria-labelledby="desafio-title">
+        <span class="section-kicker">Validação assistiva</span>
+        <h1 id="desafio-title">Confirme se o usuário compreendeu o fluxo orientado</h1>
         <p>
-            Os quizzes são liberados conforme você conclui os treinamentos guiados.
-            Cada desafio está associado a uma trilha específica.
+            Esta área deixa de ser apenas um questionário gamificado e passa a funcionar como validação de autonomia:
+            o usuário revisa uma situação, responde com calma e recebe feedback acessível.
         </p>
     </header>
 
-    <section id="challengeSelector" class="challenge-selector">
+    <section id="challengeSelector" class="challenge-selector" aria-labelledby="seletor-validacao-title">
 
         <div class="section-heading">
-            <span class="section-kicker">Quizzes disponíveis</span>
-            <h2>Desafios por treinamento</h2>
+            <span class="section-kicker">Fluxos disponíveis</span>
+            <h2 id="seletor-validacao-title">Escolha uma validação de aprendizagem</h2>
             <p>
-                Conclua uma trilha guiada para liberar o quiz correspondente.
-                No MVP, o desafio disponível é associado à abertura de conta bancária.
+                A validação é liberada após a conclusão do assistente guiado correspondente.
+                No MVP, a validação disponível é <strong>Conta Fácil: Jornada Assistiva PcD</strong>. Fluxo piloto: abertura de conta bancária.
             </p>
         </div>
 
         <div class="challenge-choice-grid">
 
             {#if desbloqueado}
-            <article class="challenge-choice-card available" tabindex="0" aria-label="Selecionar quiz de abertura de conta bancária">
+            <article class="challenge-choice-card available" aria-label="Validação Conta Fácil Jornada Assistiva PcD liberada">
                 <div class="choice-top">
-                    <span class="feature-icon">🏦</span>
+                    <span class="feature-icon" aria-hidden="true">🏦</span>
                     <span class="feature-tag">Liberado</span>
                 </div>
 
                 <h3>{desafio.titulo}</h3>
 
                 <p>
-                    Quiz associado ao treinamento guiado:
+                    Validação vinculada ao assistente guiado:
                     <strong>{treinamentoTitulo}</strong>.
                 </p>
 
                 <div class="choice-meta">
-                    <span>🎯 Quiz prático</span>
-                    <span>⭐ Até 100 XP</span>
-                    <span>✅ Treinamento concluído</span>
+                    <span>✅ Feedback acessível</span>
+                    <span>🎧 Pode ser lido por voz</span>
+                    <span>♿ Fluxo concluído</span>
                 </div>
 
                 <button type="button" id="startChallenge" class="btn btn-primary">
-                    Iniciar quiz
+                    Iniciar validação
                 </button>
             </article>
             {#else}
-            <article class="challenge-choice-card locked" aria-label="Quiz de abertura de conta bloqueado">
+            <article class="challenge-choice-card locked" aria-label="Validação Conta Fácil Jornada Assistiva PcD bloqueada">
                 <div class="choice-top">
-                    <span class="feature-icon">🏦</span>
+                    <span class="feature-icon" aria-hidden="true">🏦</span>
                     <span class="feature-tag">Bloqueado</span>
                 </div>
 
                 <h3>{desafio.titulo}</h3>
 
                 <p>
-                    Este quiz será liberado após concluir o treinamento guiado:
+                    Esta validação será liberada após concluir o assistente guiado:
                     <strong>{treinamentoTitulo}</strong>.
                 </p>
 
                 <div class="choice-meta">
-                    <span>🔒 Requer treinamento</span>
-                    <span>🧭 Concluir trilha primeiro</span>
+                    <span>🔒 Requer fluxo assistido</span>
+                    <span>🧭 Concluir orientação primeiro</span>
                 </div>
 
                 <a href="/treinamento" class="btn btn-primary">
-                    Fazer treinamento
+                    Abrir assistente guiado
                 </a>
             </article>
             {/if}
 
-            <article class="challenge-choice-card locked" aria-label="Quiz em breve">
+            <article class="challenge-choice-card locked" aria-label="Validação de cartões e serviços em breve">
                 <div class="choice-top">
-                    <span class="feature-icon">💳</span>
+                    <span class="feature-icon" aria-hidden="true">💳</span>
                     <span class="feature-tag">Em breve</span>
                 </div>
 
-                <h3>Quiz: Cartões e Serviços</h3>
+                <h3>Validação: Cartões e Serviços</h3>
 
                 <p>
-                    Validação futura para solicitação de cartão, orientação de atendimento
-                    e conferência de informações.
+                    Conferência futura para solicitação de cartão, orientação de atendimento
+                    e acessibilidade no uso dos canais.
                 </p>
 
                 <div class="choice-meta">
                     <span>🔒 Bloqueado no MVP</span>
                 </div>
 
-                <button type="button" class="btn btn-secondary" disabled>
+                <button type="button" class="btn btn-secondary" disabled aria-disabled="true">
                     Em breve
                 </button>
             </article>
 
-            <article class="challenge-choice-card locked" aria-label="Quiz em breve">
+            <article class="challenge-choice-card locked" aria-label="Validação de atualização cadastral em breve">
                 <div class="choice-top">
-                    <span class="feature-icon">📄</span>
+                    <span class="feature-icon" aria-hidden="true">📄</span>
                     <span class="feature-tag">Em breve</span>
                 </div>
 
-                <h3>Quiz: Atualização Cadastral</h3>
+                <h3>Validação: Atualização Cadastral</h3>
 
                 <p>
-                    Validação futura para revisão de dados, atualização cadastral
-                    e identificação de campos obrigatórios.
+                    Conferência futura para revisão de dados, campos obrigatórios
+                    e apoio assistivo durante atualização cadastral.
                 </p>
 
                 <div class="choice-meta">
                     <span>🔒 Bloqueado no MVP</span>
                 </div>
 
-                <button type="button" class="btn btn-secondary" disabled>
+                <button type="button" class="btn btn-secondary" disabled aria-disabled="true">
                     Em breve
                 </button>
             </article>
@@ -148,40 +152,40 @@
     </section>
 
     {#if desbloqueado}
-    <section id="challengeExperience" class="challenge-experience" style="display:none;">
+    <section id="challengeExperience" class="challenge-experience" style="display:none;" aria-labelledby="validacao-selecionada-title">
 
         <div class="challenge-started-header">
             <div>
-                <span class="section-kicker">Quiz selecionado</span>
-                <h2>{desafio.titulo}</h2>
+                <span class="section-kicker">Validação selecionada</span>
+                <h2 id="validacao-selecionada-title">{desafio.titulo}</h2>
                 <p>
-                    Este desafio valida o aprendizado do treinamento:
+                    Esta etapa verifica se o usuário entendeu o fluxo:
                     <strong>{treinamentoTitulo}</strong>.
                 </p>
             </div>
 
             <button type="button" id="changeChallenge" class="btn btn-secondary">
-                Trocar desafio
+                Trocar validação
             </button>
         </div>
 
         <div class="desafio-layout">
 
-            <section class="card desafio-card">
+            <section class="card desafio-card" aria-labelledby="quiz-title">
 
                 <div class="quiz-status-bar">
-                    <span>Missão liberada</span>
-                    <strong>Até 100 XP</strong>
+                    <span>Validação liberada</span>
+                    <strong>Feedback imediato</strong>
                 </div>
 
-                <h2>Responda o quiz</h2>
+                <h2 id="quiz-title">Responda com base na orientação recebida</h2>
 
                 <p class="training-instruction">
                     {desafio.descricao}
                 </p>
 
                 <form method="POST" action="/desafio/responder">
-                    <div role="radiogroup" aria-label="Alternativas" class="alternativas">
+                    <div role="radiogroup" aria-label="Alternativas da validação" class="alternativas">
                         {#for alternativa in desafio.alternativas}
                         <label class="alternativa-card">
                             <input type="radio" name="resposta" value="{alternativa}">
@@ -192,27 +196,27 @@
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
-                            Responder quiz
+                            Enviar resposta
                         </button>
                     </div>
                 </form>
 
                 {#if resultado}
-                <div class="feedback-card">
-                    <h3>Resultado</h3>
+                <div class="feedback-card" role="status" aria-live="polite" aria-atomic="true">
+                    <h3>Resultado da validação</h3>
                     <p>{resultado.mensagemFeedback}</p>
                     <p>
-                        Pontos ganhos:
+                        Pontos de prática:
                         <strong>{resultado.pontuacao}</strong>
                     </p>
 
                     {#if resultado.acertou}
                     <p class="alert sucesso">
-                        Parabéns! Você validou o aprendizado da trilha.
+                        Muito bem. O fluxo foi compreendido e validado.
                     </p>
                     {#else}
                     <p class="alert erro">
-                        Revise o treinamento de abertura de conta e tente novamente.
+                        Revise a jornada Conta Fácil: Jornada Assistiva PcD e tente novamente.
                     </p>
                     {/if}
                 </div>
@@ -220,20 +224,20 @@
 
             </section>
 
-            <aside class="card desafio-regras">
-                <h2>Regras da missão</h2>
+            <aside class="card desafio-regras" aria-labelledby="regras-validacao-title">
+                <h2 id="regras-validacao-title">Regras da validação</h2>
 
                 <ul>
-                    <li>O quiz só libera após concluir o treinamento associado.</li>
-                    <li>A resposta correta vale mais XP.</li>
-                    <li>O resultado fica salvo no seu histórico.</li>
-                    <li>Use apenas o ambiente simulado.</li>
+                    <li>A validação só libera após concluir o fluxo assistido vinculado.</li>
+                    <li>O foco é confirmar autonomia, não apenas gerar pontuação.</li>
+                    <li>O resultado fica salvo no histórico de evolução.</li>
+                    <li>Use apenas ambiente simulado e dados fictícios.</li>
                 </ul>
 
                 <div class="linked-training-box">
-                    <span>Treinamento vinculado</span>
+                    <span>Assistente vinculado</span>
                     <strong>{treinamentoTitulo}</strong>
-                    <a href="/treinamento">Revisar treinamento</a>
+                    <a href="/treinamento">Revisar orientação</a>
                 </div>
             </aside>
 
@@ -243,12 +247,101 @@
 
 </main>
 
-<div class="accessibility-toolbar" aria-label="Ferramentas de acessibilidade">
-    <button type="button" id="fontPlus">A+</button>
-    <button type="button" id="fontMinus">A-</button>
-    <button type="button" id="contrastToggle">Alto contraste</button>
+<button type="button"
+        class="screen-voice-assistant"
+        data-screen-summary="Você está na validação assistiva. Esta tela confirma se o usuário compreendeu o fluxo orientado. Responda com calma, use os recursos de acessibilidade e consulte o feedback para revisar sua aprendizagem."
+        aria-label="Ouvir resumo desta tela com assistente de voz">
+    <span class="screen-voice-icon" aria-hidden="true">🎧</span>
+    <span class="screen-voice-text">Ouvir tela</span>
+</button>
+
+<div class="accessibility-toolbar"
+     role="region"
+     aria-label="Ferramentas de acessibilidade">
+
+    <button type="button"
+            id="fontPlus"
+            aria-label="Aumentar tamanho da fonte">
+        A+
+    </button>
+
+    <button type="button"
+            id="fontMinus"
+            aria-label="Diminuir tamanho da fonte">
+        A-
+    </button>
+
+    <button type="button"
+            id="contrastToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar alto contraste">
+        Alto contraste
+    </button>
+
+    <button type="button"
+            id="lowVisionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar modo baixa visão">
+        Baixa visão
+    </button>
+
+    <button type="button"
+            id="motionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar redução de animações">
+        Reduzir animações
+    </button>
+</div>
+
+<div id="accessibilityStatus"
+     class="sr-only"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
 </div>
 
 <script src="/js/app.js"></script>
+<script>
+    (function () {
+        function falarResumoTela(texto) {
+            const status = document.getElementById('accessibilityStatus');
+
+            if (!('speechSynthesis' in window)) {
+                if (status) {
+                    status.textContent = 'Seu navegador não oferece suporte nativo à leitura por voz.';
+                } else {
+                    alert('Seu navegador não oferece suporte nativo à leitura por voz.');
+                }
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            fala.onend = function () {};
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const screenVoiceButton = document.querySelector('.screen-voice-assistant');
+
+            if (!screenVoiceButton) {
+                return;
+            }
+
+            screenVoiceButton.addEventListener('click', function () {
+                const texto = screenVoiceButton.getAttribute('data-screen-summary') || 'Esta tela faz parte do CaixaVerso Assistivo.';
+                falarResumoTela(texto);
+            });
+        });
+    })();
+</script>
+
 </body>
 </html>

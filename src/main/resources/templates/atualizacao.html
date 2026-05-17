@@ -3,39 +3,162 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Nova Funcionalidade</title>
+    <title>Nova Funcionalidade Assistiva - CaixaVerso</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<nav class="topnav" role="navigation" aria-label="Menu principal">
-    <div class="brand"><span class="brand-symbol" aria-hidden="true"></span><span style="margin-left:0.5rem;font-weight:900;color:#fff">CaixaVerso</span></div>
-    <div class="nav-links"><a href="/home">Início</a><a href="/treinamento">Treinamento Guiado</a><a href="/desafio">Modo Desafio</a><a href="/atualizacao">Nova Funcionalidade</a><a href="/dashboard">Dashboard</a></div>
-    <a class="nav-action" href="/logout">Sair</a>
-</nav>
 
-<main class="container">
-    <header class="mission-panel">
-      <h1 class="hero-title">Nova Funcionalidade</h1>
-      <p class="hero-subtitle">{modulo.resumo}</p>
+<a class="skip-link" href="#conteudo-principal">
+    Pular para o conteúdo principal
+</a>
+
+<header class="topnav" role="banner">
+    <div class="topnav-inner">
+        <a class="brand" href="/home" aria-label="CaixaVerso Assistivo - Início">
+            <span class="brand-symbol" aria-hidden="true"></span>
+            <span class="brand-name">CaixaVerso Assistivo</span>
+        </a>
+
+        <nav class="nav-links" role="navigation" aria-label="Menu principal">
+            <a href="/home">Início</a>
+            <a href="/treinamento">Assistente Guiado</a>
+            <a href="/desafio">Validação</a>
+            <a href="/atualizacao" aria-current="page" class="active">Nova Funcionalidade</a>
+            <a href="/dashboard">Painel Assistivo</a>
+        </nav>
+
+        <a class="nav-action" href="/logout">Sair</a>
+    </div>
+</header>
+
+<main id="conteudo-principal" class="container assistive-update-page" tabindex="-1">
+    <header class="mission-panel" aria-labelledby="atualizacao-title">
+      <span class="section-kicker">Evolução da solução</span>
+      <h1 id="atualizacao-title" class="hero-title">Nova funcionalidade assistiva</h1>
+      <p class="hero-subtitle">
+        {modulo.resumo}
+      </p>
     </header>
 
-    <section class="card" style="margin-top:1rem">
-        <h2>{modulo.nome}</h2>
+    <section class="card" style="margin-top:1rem" aria-labelledby="modulo-title">
+        <span class="section-kicker">Assistência inteligente</span>
+        <h2 id="modulo-title">{modulo.nome}</h2>
 
-        <h3 style="margin-top:0.8rem">Linha do tempo</h3>
+        <p>
+            Esta área apresenta a evolução do CaixaVerso como solução assistiva:
+            menos dependente de gamificação e mais focada em orientação contextual,
+            autonomia do usuário PCD e redução de barreiras no uso de sistemas.
+        </p>
+
+        <h3 style="margin-top:0.8rem">Linha do tempo de implantação</h3>
         <ol class="timeline">
             {#for passo in modulo.passos}
             <li class="timeline-item">{passo}</li>
             {/for}
         </ol>
 
-        <div style="display:flex;gap:0.6rem;margin-top:0.8rem">
-            <a href="/treinamento" id="iniciar-atualizacao" class="btn-primary">Iniciar simulação</a>
-            <a href="/dashboard" class="btn">Ver impacto no dashboard</a>
+        <div style="display:flex;gap:0.6rem;margin-top:0.8rem;flex-wrap:wrap">
+            <a href="/treinamento" id="iniciar-atualizacao" class="btn-primary">Abrir simulação assistiva</a>
+            <a href="/dashboard" class="btn">Ver impacto no painel</a>
         </div>
     </section>
 </main>
 
+<button type="button"
+        class="screen-voice-assistant"
+        data-screen-summary="Você está na tela de nova funcionalidade assistiva. Esta área mostra a evolução do CaixaVerso para apoiar empregados CAIXA com foco em acessibilidade, autonomia, orientação contextual e redução de barreiras digitais."
+        aria-label="Ouvir resumo desta tela com assistente de voz">
+    <span class="screen-voice-icon" aria-hidden="true">🎧</span>
+    <span class="screen-voice-text">Ouvir tela</span>
+</button>
+
+<div class="accessibility-toolbar"
+     role="region"
+     aria-label="Ferramentas de acessibilidade">
+
+    <button type="button"
+            id="fontPlus"
+            aria-label="Aumentar tamanho da fonte">
+        A+
+    </button>
+
+    <button type="button"
+            id="fontMinus"
+            aria-label="Diminuir tamanho da fonte">
+        A-
+    </button>
+
+    <button type="button"
+            id="contrastToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar alto contraste">
+        Alto contraste
+    </button>
+
+    <button type="button"
+            id="lowVisionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar modo baixa visão">
+        Baixa visão
+    </button>
+
+    <button type="button"
+            id="motionToggle"
+            aria-pressed="false"
+            aria-label="Ativar ou desativar redução de animações">
+        Reduzir animações
+    </button>
+</div>
+
+<div id="accessibilityStatus"
+     class="sr-only"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
+</div>
+
 <script src="/js/app.js"></script>
+<script>
+    (function () {
+        function falarResumoTela(texto) {
+            const status = document.getElementById('accessibilityStatus');
+
+            if (!('speechSynthesis' in window)) {
+                if (status) {
+                    status.textContent = 'Seu navegador não oferece suporte nativo à leitura por voz.';
+                } else {
+                    alert('Seu navegador não oferece suporte nativo à leitura por voz.');
+                }
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = 'pt-BR';
+            fala.rate = 0.92;
+            fala.pitch = 1;
+            fala.volume = 1;
+
+            fala.onend = function () {};
+
+            window.speechSynthesis.speak(fala);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const screenVoiceButton = document.querySelector('.screen-voice-assistant');
+
+            if (!screenVoiceButton) {
+                return;
+            }
+
+            screenVoiceButton.addEventListener('click', function () {
+                const texto = screenVoiceButton.getAttribute('data-screen-summary') || 'Esta tela faz parte do CaixaVerso Assistivo.';
+                falarResumoTela(texto);
+            });
+        });
+    })();
+</script>
+
 </body>
 </html>

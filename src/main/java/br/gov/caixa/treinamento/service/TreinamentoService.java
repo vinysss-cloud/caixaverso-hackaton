@@ -18,6 +18,7 @@ import java.util.Optional;
 public class TreinamentoService {
 
     public static final String CODIGO_ABERTURA_CONTA = "abertura-conta";
+    public static final String TITULO_TRILHA_CONTA_FACIL = "Conta Fácil: Jornada Assistiva PcD";
 
     @Inject
     UsuarioRepository usuarioRepository;
@@ -28,8 +29,8 @@ public class TreinamentoService {
     public TrilhaTreinamentoDTO buscarTrilhaAberturaConta() {
         return new TrilhaTreinamentoDTO(
                 CODIGO_ABERTURA_CONTA,
-                "Abertura de Conta Bancária",
-                "Aprenda o fluxo de criação e abertura de uma conta bancária em ambiente simulado, com foco em acessibilidade e atendimento seguro.",
+                TITULO_TRILHA_CONTA_FACIL,
+                "Fluxo piloto: abertura de conta bancária em ambiente simulado, com orientação assistiva, acessibilidade e atendimento seguro.",
                 "Novos colaboradores e público PCD em treinamento",
                 150,
                 List.of(
@@ -91,11 +92,11 @@ public class TreinamentoService {
                         ),
                         new EtapaTreinamentoDTO(
                                 8,
-                                "Confirmar abertura da conta",
-                                "Finalize a simulação de abertura de conta e libere o quiz associado.",
+                                "Confirmar o fluxo Conta Fácil",
+                                "Finalize a simulação do fluxo piloto de abertura de conta e libere a validação assistiva associada.",
                                 "Após concluir esta etapa, o desafio será desbloqueado.",
                                 "Confirmação",
-                                "Concluir treinamento"
+                                "Concluir jornada assistiva"
                         )
                 )
         );

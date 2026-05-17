@@ -67,7 +67,7 @@ class DTOsComplementaresTest {
 
         TrilhaTreinamentoDTO trilha = new TrilhaTreinamentoDTO(
                 "abertura-conta",
-                "Abertura de Conta Bancária",
+                "Conta Fácil: Jornada Assistiva PcD",
                 "Trilha guiada para abertura de conta.",
                 "Empregados PCD",
                 100,
@@ -75,7 +75,7 @@ class DTOsComplementaresTest {
         );
 
         assertThat(trilha.codigo).isEqualTo("abertura-conta");
-        assertThat(trilha.titulo).isEqualTo("Abertura de Conta Bancária");
+        assertThat(trilha.titulo).isEqualTo("Conta Fácil: Jornada Assistiva PcD");
         assertThat(trilha.descricao).contains("Trilha guiada");
         assertThat(trilha.publicoAlvo).isEqualTo("Empregados PCD");
         assertThat(trilha.xpConclusao).isEqualTo(100);

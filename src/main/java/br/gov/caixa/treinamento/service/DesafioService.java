@@ -12,8 +12,8 @@ public class DesafioService {
     public Desafio buscarDesafioAberturaConta() {
         return new Desafio(
                 "quiz-abertura-conta",
-                "Quiz: Abertura de Conta Bancária",
-                "Após concluir o treinamento guiado, responda: qual etapa deve ocorrer antes da confirmação final da abertura da conta?",
+                "Validação: Conta Fácil - Jornada Assistiva PcD",
+                "Após concluir a jornada assistiva, responda: qual etapa deve ocorrer antes da confirmação final do fluxo piloto de abertura de conta?",
                 Arrays.asList(
                         "Revisar os dados da proposta",
                         "Ignorar alertas de documentação",
@@ -40,14 +40,14 @@ public class DesafioService {
             return new ResultadoDesafio(
                     true,
                     100,
-                    "Correto! Antes de confirmar a abertura da conta, é necessário revisar os dados da proposta."
+                    "Correto! Antes de confirmar o fluxo Conta Fácil, é necessário revisar os dados da proposta."
             );
         }
 
         return new ResultadoDesafio(
                 false,
                 40,
-                "Resposta incorreta. Revise o treinamento guiado sobre a etapa de conferência da proposta."
+                "Resposta incorreta. Revise a jornada assistiva Conta Fácil sobre a etapa de conferência da proposta."
         );
     }
 }
